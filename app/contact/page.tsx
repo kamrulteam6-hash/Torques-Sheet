@@ -1,0 +1,2 @@
+import { StaticPage } from "../ui";
+export default function Page(){return <StaticPage eyebrow="Contact" title="Contact TorqueSheet"><p>Found a value that needs review, or want to suggest a vehicle reference? Email <a href="mailto:hello@torquesheet.com">hello@torquesheet.com</a> with the page URL, model year, engine code and source details.</p><p>We prioritize corrections that include manufacturer service information or other traceable technical documentation.</p></StaticPage>}

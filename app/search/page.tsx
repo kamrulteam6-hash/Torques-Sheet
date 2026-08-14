@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { specs } from "../data";
+import { Footer, Header } from "../ui";
+
+export default async function SearchPage({searchParams}:{searchParams:Promise<{q?:string}>}){const {q=""}=await searchParams;const query=q.toLowerCase();const rows=query?specs.filter(s=>`${s.title} ${s.make} ${s.model} ${s.category}`.toLowerCase().includes(query)):specs;return <><Header/><main className="inner-page"><section className="page-hero"><div className="shell"><div className="breadcrumbs"><Link href="/">Home</Link> / Search</div><h1>Search TorqueSheet</h1><p>{q?`${rows.length} reference${rows.length===1?"":"s"} for “${q}”`:"Browse all available reference pages."}</p></div></section><section className="shell page-content"><div className="search-results">{rows.map(s=><Link className="search-result" href={`/specs/${s.slug}`} key={s.slug}><small>{s.category}</small><h3>{s.title}</h3><p>{s.answer}</p></Link>)}{!rows.length&&<div className="safety-note"><span>!</span><p>No exact reference is available yet. Try a make, model, engine, or specification type.</p></div>}</div></section></main><Footer/></>}
