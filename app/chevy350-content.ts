@@ -22,6 +22,7 @@ export type SpecRecord = {
   faqs: { q: string; a: string }[];
   sources: Source[];
   reviewed: string;
+  featureImage?: string;
 };
 
 const chevrolet350Ho = {

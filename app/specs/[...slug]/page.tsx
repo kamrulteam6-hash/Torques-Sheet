@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { specs, slugify } from "../../data";
@@ -34,11 +35,15 @@ export async function generateMetadata({
       description: s.metaDescription,
       url,
       type: "article",
+      ...(s.featureImage
+        ? { images: [{ url: `https://torquesheet.com${s.featureImage}`, width: 1536, height: 1024, alt: s.title }] }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: s.title,
       description: s.metaDescription,
+      ...(s.featureImage ? { images: [`https://torquesheet.com${s.featureImage}`] } : {}),
     },
   };
 }
@@ -184,6 +189,20 @@ export default async function SpecPage({
                   <p key={p}>{p}</p>
                 ))}
               </div>
+              {s.featureImage && (
+                <figure className="spec-feature-image">
+                  <Image
+                    src={s.featureImage}
+                    alt={`${s.title} — TorqueSheet technical feature image`}
+                    width={1536}
+                    height={1024}
+                    sizes="(max-width: 900px) 100vw, 800px"
+                  />
+                  <figcaption>
+                    TorqueSheet technical reference artwork · torquesheet.com
+                  </figcaption>
+                </figure>
+              )}
               <section id="diagram">
                 <SpecVisual
                   diagram={s.diagram}

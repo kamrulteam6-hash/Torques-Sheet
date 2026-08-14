@@ -112,7 +112,7 @@ const jeepManual: Source = {
   note: "Primary Jeep owner information for JL-platform wheel service and safety guidance.",
 };
 
-type Base = Pick<
+export type Base = Pick<
   SpecRecord,
   | "slug"
   | "keyword"
@@ -129,9 +129,10 @@ type Base = Pick<
 > & {
   identity: string;
   distinctions: string[];
+  featureImage?: string;
 };
 
-function lugGuide(base: Base): SpecRecord {
+export function lugGuide(base: Base): SpecRecord {
   const primary = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
@@ -231,7 +232,7 @@ function lugGuide(base: Base): SpecRecord {
   };
 }
 
-function oilGuide(base: Base): SpecRecord {
+export function oilGuide(base: Base): SpecRecord {
   const primary = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
@@ -332,7 +333,7 @@ function oilGuide(base: Base): SpecRecord {
   };
 }
 
-function firingGuide(base: Base): SpecRecord {
+export function firingGuide(base: Base): SpecRecord {
   const order = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
@@ -430,7 +431,7 @@ function firingGuide(base: Base): SpecRecord {
   };
 }
 
-function sparkGuide(base: Base): SpecRecord {
+export function sparkGuide(base: Base): SpecRecord {
   const primary = base.values[0]?.value ?? "See the application table";
   return {
     ...base,

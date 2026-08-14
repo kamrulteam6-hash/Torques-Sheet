@@ -131,8 +131,9 @@ export const vehicleData: Record<string, Record<string, string[]>> = {
 
 import { chevy350Specs } from "./chevy350-content";
 import { extendedSpecs } from "./extended-content";
+import { additionalSpecs } from "./additional-content";
 
-export const specs = [...chevy350Specs, ...extendedSpecs];
+export const specs = [...chevy350Specs, ...extendedSpecs, ...additionalSpecs];
 export type { SpecRecord } from "./chevy350-content";
 
 export const slugify = (value: string) =>
