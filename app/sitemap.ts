@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { categories, makes, specs, slugify } from "./data";
+import { comparisons, comparisonPath } from "./compare-data";
+import { troubleCodeGuides, troubleCodePath } from "./trouble-code-data";
 
 const origin = "https://torquesheet.com";
 
@@ -12,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    ...["about", "contact", "diagrams", "editorial-policy", "privacy", "search", "terms"].map(
+    ...["about", "compare", "contact", "diagrams", "editorial-policy", "privacy", "search", "terms", "trouble-codes"].map(
       (path) => ({
         url: `${origin}/${path}`,
         lastModified: updated,
@@ -31,6 +33,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: updated,
       changeFrequency: "weekly" as const,
       priority: 0.75,
+    })),
+    ...comparisons.map((comparison) => ({
+      url: `${origin}${comparisonPath(comparison)}`,
+      lastModified: updated,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+    ...troubleCodeGuides.map((guide) => ({
+      url: `${origin}${troubleCodePath(guide)}`,
+      lastModified: updated,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
     })),
     ...specs.map((spec) => ({
       url: `${origin}/specs/${spec.slug}`,
