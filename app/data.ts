@@ -418,8 +418,13 @@ const researchedServiceSlugs = new Set([
   "nissan/altima/2-5/oil-capacity",
   "nissan/rogue/2-5/oil-capacity",
   "subaru/forester/2-5/oil-capacity",
+  "subaru/outback/2-5/oil-capacity",
   "ford/mustang/5-0/oil-capacity",
   "chevrolet/camaro/6-2/oil-capacity",
+  "toyota/highlander/3-5/oil-capacity",
+  "toyota/4runner/4-0/oil-capacity",
+  "toyota/tundra/5-7/oil-capacity",
+  "honda/pilot/3-5/oil-capacity",
 ]);
 
 export const specs = [

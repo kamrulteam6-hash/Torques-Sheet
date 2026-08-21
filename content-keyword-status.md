@@ -4,9 +4,9 @@ Audit date: 2026-08-21
 
 This report classifies pages by writing quality, not merely whether a route exists. “Individually researched” means the page has topic-specific long-form copy, application boundaries, procedures, FAQs, sources, schema-ready structure, and a dedicated diagram/controller. “Template-based” means the route exists, but its text should be replaced or independently upgraded before being treated as finished editorial content.
 
-Current backlog: 480 submitted keywords total. Of these, 328 are individually researched and 152 have a working template route but still need an editorial upgrade. Every submitted keyword now has a page route.
+Current backlog: 480 submitted keywords total. Of these, 333 are individually researched and 147 have a working template route but still need an editorial upgrade. Every submitted keyword now has a page route.
 
-## Individually researched long-form pages (328)
+## Individually researched long-form pages (333)
 
 - chevy 350 firing order
 - chevy 350 oil capacity
@@ -348,10 +348,15 @@ Current backlog: 480 submitted keywords total. Of these, 328 are individually re
 - nissan altima 2.5 oil capacity
 - nissan rogue 2.5 oil capacity
 - subaru forester 2.5 oil capacity
+- subaru outback 2.5 oil capacity
 - ford mustang 5.0 oil capacity
 - chevy camaro 6.2 oil capacity
+- toyota highlander oil capacity 3.5
+- toyota 4runner 4.0 oil capacity
+- toyota tundra 5.7 oil capacity
+- honda pilot 3.5 oil capacity
 
-## Template-based pages still needing supplied or individually researched text (152)
+## Template-based pages still needing supplied or individually researched text (147)
 
 - subaru ej20 head bolt torque specs
 - ford 7.3 powerstroke head bolt torque specs
@@ -475,11 +480,6 @@ Current backlog: 480 submitted keywords total. Of these, 328 are individually re
 - chevy silverado 5.3 spark plug gap
 - ram 1500 5.7 hemi spark plug gap
 - toyota tacoma spark plug gap 4.0
-- subaru outback 2.5 oil capacity
-- toyota highlander oil capacity 3.5
-- toyota 4runner 4.0 oil capacity
-- toyota tundra 5.7 oil capacity
-- honda pilot 3.5 oil capacity
 - jeep grand cherokee lug nut torque spec
 - subaru wrx lug nut torque spec
 - ford mustang gt lug nut torque spec
