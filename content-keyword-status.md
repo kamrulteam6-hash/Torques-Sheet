@@ -4,9 +4,9 @@ Audit date: 2026-08-21
 
 This report classifies pages by writing quality, not merely whether a route exists. “Individually researched” means the page has topic-specific long-form copy, application boundaries, procedures, FAQs, sources, schema-ready structure, and a dedicated diagram/controller. “Template-based” means the route exists, but its text should be replaced or independently upgraded before being treated as finished editorial content.
 
-Current backlog: 480 submitted keywords total. Of these, 333 are individually researched and 147 have a working template route but still need an editorial upgrade. Every submitted keyword now has a page route.
+Current backlog: 480 submitted keywords total. Of these, 338 are individually researched and 142 have a working template route but still need an editorial upgrade. Every submitted keyword now has a page route.
 
-## Individually researched long-form pages (333)
+## Individually researched long-form pages (338)
 
 - chevy 350 firing order
 - chevy 350 oil capacity
@@ -355,8 +355,13 @@ Current backlog: 480 submitted keywords total. Of these, 333 are individually re
 - toyota 4runner 4.0 oil capacity
 - toyota tundra 5.7 oil capacity
 - honda pilot 3.5 oil capacity
+- toyota crown oil capacity specs
+- ford transit oil capacity chart
+- toyota sienna oil capacity specs
+- nissan armada towing capacity chart
+- jeep compass tire pressure specs
 
-## Template-based pages still needing supplied or individually researched text (147)
+## Template-based pages still needing supplied or individually researched text (142)
 
 - subaru ej20 head bolt torque specs
 - ford 7.3 powerstroke head bolt torque specs
@@ -380,24 +385,19 @@ Current backlog: 480 submitted keywords total. Of these, 333 are individually re
 - dodge dart firing order specifications
 - bmw x3 brake rotor size chart
 - nissan titan towing capacity specs
-- jeep compass tire pressure specs
 - dodge ram 3500 towing capacity chart
 - honda hr-v spark plug torque specs
 - bmw 7 series battery replacement specs
 - jeep renegade tire size specifications
 - subaru brz wheel torque specs
 - chevy camaro horsepower specs by year
-- toyota crown oil capacity specs
 - bmw m5 horsepower specs by year
 - nissan murano spark plug gap specs
-- ford transit oil capacity chart
 - toyota prius tire pressure specifications
 - honda civic brake rotor torque specs
 - bmw 4 series wheel torque specs
-- nissan armada towing capacity chart
 - hyundai sonata spark plug gap specs
 - chevy corvette horsepower specs by year
-- toyota sienna oil capacity specs
 - dodge grand caravan spark plug specs
 - bmw x1 wheel torque specifications
 - nissan versa tire pressure specs

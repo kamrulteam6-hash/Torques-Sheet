@@ -377,6 +377,11 @@ const researchedGeneralBatch2Slugs = new Set([
   "hyundai/kona/oil-capacity",
   "nissan/frontier/oil-capacity",
   "subaru/wrx/oil-capacity",
+  "toyota/crown/oil-capacity",
+  "ford/transit/oil-capacity",
+  "toyota/sienna/oil-capacity",
+  "nissan/armada/towing-capacity",
+  "jeep/compass/tire-pressure",
 ]);
 
 const researchedGeneralVehicleSlugs = new Set([
