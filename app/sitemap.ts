@@ -4,7 +4,7 @@ import { categories, makes, specs, slugify } from "./data";
 const origin = "https://torquesheet.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const updated = new Date("2026-08-14T00:00:00Z");
+  const updated = new Date("2026-08-21T00:00:00Z");
   return [
     {
       url: origin,
@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    ...["about", "contact", "diagrams", "privacy", "search", "terms"].map(
+    ...["about", "contact", "diagrams", "editorial-policy", "privacy", "search", "terms"].map(
       (path) => ({
         url: `${origin}/${path}`,
         lastModified: updated,

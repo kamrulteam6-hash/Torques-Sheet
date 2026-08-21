@@ -10,6 +10,7 @@
     "build": "vinext build",
     "start": "vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "seo:audit": "node tests/seo-audit.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern work --ignore-pattern outputs",
     "db:generate": "drizzle-kit generate"
   },

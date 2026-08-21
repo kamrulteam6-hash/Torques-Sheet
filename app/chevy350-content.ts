@@ -1,7 +1,20 @@
 export type SpecValue = { label: string; value: string; note: string };
 export type ContentSection = { heading: string; paragraphs?: string[]; bullets?: string[] };
 export type Source = { label: string; url: string; note: string };
-export type Diagram = { type: "firing" | "wheel" | "spark" | "intake" | "head" | "oil" | "timing" | "valve" | "main" | "rod"; title: string; caption: string; points: string[] };
+export type Diagram = {
+  type: "firing" | "wheel" | "spark" | "intake" | "exhaust" | "head" | "oil" | "timing" | "valve" | "main" | "rod";
+  title: string;
+  caption: string;
+  points: string[];
+  /** Physical cylinder rows, only when the source establishes their orientation. */
+  banks?: string[][];
+  /** Physical fastener rows, only when a manufacturer figure establishes the layout. */
+  layout?: string[][];
+  /** Source-established fastener coordinates, expressed as percentages of the diagram panel. */
+  positions?: { label: string; x: number; y: number }[];
+  engineLabel?: string;
+  orientation?: string;
+};
 
 export type SpecRecord = {
   slug: string;
@@ -22,7 +35,10 @@ export type SpecRecord = {
   faqs: { q: string; a: string }[];
   sources: Source[];
   reviewed: string;
+  /** Explicit editorial hold for pages that still need an application-specific source. */
+  indexReady?: boolean;
   featureImage?: string;
+  featureOverlay?: boolean;
 };
 
 const chevrolet350Ho = {
@@ -69,7 +85,7 @@ export const chevy350Specs: SpecRecord[] = [
       { label: "Passenger-side bank", value: "2-4-6-8", note: "Front to rear" },
       { label: "HEI rotor direction", value: "Clockwise", note: "Viewed from above" },
     ],
-    diagram: { type: "firing", title: "Interactive Chevy 350 firing-order diagram", caption: "Select a cylinder to follow the firing sequence. The front of the engine is at the top.", points: ["1", "8", "4", "3", "6", "5", "7", "2"] },
+    diagram: { type: "firing", title: "Interactive Chevy 350 firing-order diagram", caption: "Select a cylinder to follow the firing sequence. The front of the engine is at the top.", points: ["1", "8", "4", "3", "6", "5", "7", "2"], banks: [["1", "3", "5", "7"], ["2", "4", "6", "8"]], engineLabel: "350 / 5.7L V8", orientation: "Driver bank | Passenger bank" },
     intro: [
       "A crossed pair of plug wires can make a Chevy 350 pop through the carburetor, misfire under load, or refuse to start. The sequence itself is simple, but the cylinder banks and distributor indexing are where mistakes happen.",
       "Use the diagram and table together. First locate compression top dead center on cylinder 1, identify the cap terminal directly above the rotor, and then route the remaining wires clockwise in the 1-8-4-3-6-5-7-2 order.",
@@ -412,7 +428,7 @@ export const chevy350Specs: SpecRecord[] = [
     model: "350 Small-Block (5.7L V8)",
     category: "Torque Specs",
     title: "Chevy 350 Intake Manifold Torque Specs and Sequence",
-    metaDescription: "Chevy 350 intake manifold torque chart, center-out tightening sequence, Vortec differences, sealant notes, and installation checklist.",
+    metaDescription: "Chevy 350 intake manifold bolt torque sequence and chart, including Vortec differences, sealant notes, application limits, and installation checks.",
     answer: "Chevrolet Performance lists an 11 lb-ft (15 N·m) final intake-manifold bolt torque for its 350/290 and SP350/357 crate-engine combinations. That value is not universal: traditional 12-bolt heads, eight-bolt Vortec heads, manifold material, gasket design, bolt kit, lubricant, and the intake manufacturer's instructions can change the procedure.",
     detail: "Use the final value supplied with the exact manifold and gasket whenever it differs from a generic engine chart. Tighten gradually from the center outward to distribute gasket load.",
     scope: "The documented 11 lb-ft value applies to the cited Chevrolet Performance crate combinations. Aftermarket manifold instructions supersede it for their components.",
@@ -452,12 +468,12 @@ export const chevy350Specs: SpecRecord[] = [
   },
   {
     slug: "chevrolet/350/cylinder-head-torque",
-    keyword: "chevy 350 cylinder head torque specs",
+    keyword: "chevy 350 cylinder head torque specs and head bolt torque sequence diagram",
     make: "Chevrolet",
     model: "350 Small-Block (5.7L V8)",
     category: "Torque Specs",
-    title: "Chevy 350 Cylinder Head Torque Specs and Pattern",
-    metaDescription: "Chevy 350 head bolt torque reference, center-out tightening pattern, sealant and fastener cautions for small-block 5.7L engines.",
+    title: "Chevy 350 Head Bolt Torque Specs and 17-Bolt Sequence",
+    metaDescription: "Chevy 350 head bolt torque sequence guide for 17-bolt Gen I heads, including Chevrolet Performance 65 lb-ft applications, stages, sealant and L31 cautions.",
     answer: "Chevrolet Performance specifies 65 lb-ft (88 N·m) for the cylinder-head bolts on its 350 HO, 350/290, and SP350/357 crate engines using the documented production-style fasteners and procedure. Aftermarket bolts or studs, aluminum heads, different gaskets, and alternate lubricants require the component manufacturer's specification.",
     detail: "A torque number is valid only with its fastener, lubricant or sealant, washer, gasket, and tightening sequence. Head bolts that enter coolant passages require the approved thread sealer specified for the build.",
     scope: "The 65 lb-ft reference is tied to the cited Chevrolet Performance crate-engine manuals. Do not transfer it to ARP hardware or an aftermarket cylinder head without its instructions.",
@@ -467,23 +483,33 @@ export const chevy350Specs: SpecRecord[] = [
       { label: "SP350/357 production-style bolts", value: "65 lb-ft / 88 N·m", note: "Chevrolet Performance specification" },
       { label: "Aftermarket bolts/studs", value: "Use fastener maker's spec", note: "Lube and hardware change clamp load" },
     ],
-    diagram: { type: "head", title: "Interactive center-out head-bolt pattern", caption: "Select the numbered positions to visualize a balanced center-out pattern. Use the exact head manufacturer's diagram for final assembly.", points: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"] },
+    diagram: { type: "head", title: "Interactive 17-step center-out head-bolt sequence", caption: "Advance through positions 1-17 as a tightening-order checklist. The grid is a sequence controller, not a physical bolt-location drawing; keep the exact Chevrolet/head-maker pattern beside the engine.", points: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"] },
     intro: [
-      "Cylinder-head clamping seals combustion pressure, coolant, and oil across a large deck surface. Uneven tightening can distort the head or gasket and contribute to sealing failure.",
-      "The safest workflow is to identify the block and head castings, gasket, fastener kit, and thread treatment before assembly. Use several incremental passes in the exact numbered pattern supplied with the head or service manual.",
+      "A traditional Gen I small-block Chevrolet cylinder head uses 17 main bolt positions. The tightening order begins near the center combustion chambers and alternates outward so clamp load spreads across the deck instead of bowing the head from one end. The sequence is repeated for every torque stage; it is not a path used only for the final pass.",
+      "For the cited Chevrolet Performance 350 HO, 350/290 and SP350/357 crate-engine combinations, Chevrolet lists 65 lb-ft (88 N·m) for the documented production-style cylinder-head bolts. That number belongs to the fasteners, iron-head/gasket combination and thread treatment in those guides. It is not a universal setting for every engine that displaces 350 cubic inches.",
+      "Late L31 Vortec production engines can use length-grouped torque-angle procedures, while aluminum aftermarket heads, studs and specialty gaskets publish their own values. Identify block casting, head casting, engine RPO or crate part number, gasket and fastener kit before choosing the chart. A correct 17-position picture paired with the wrong fastener method is still an incorrect repair.",
     ],
     steps: [
-      "Verify block and head flatness, clean the deck and bolt holes, and chase threads only with the correct cleaning tool.",
-      "Blow out blind holes safely; trapped oil or coolant can hydraulically crack the block or create a false torque reading.",
-      "Place the correct gasket in the marked orientation and lower the head without sliding it across the fire rings.",
-      "Apply only the thread sealer or lubricant specified for the chosen fasteners, including the underside of bolt heads or washers when directed.",
-      "Start all bolts by hand, then tighten in the exact center-out sequence through multiple equal stages.",
-      "Complete any angle step, heat-cycle retorque, or no-retorque instruction required by the gasket and fastener manufacturers.",
+      "Record the block casting/engine ID, cylinder-head casting and material, gasket part number, bolt or stud kit and the instruction revision supplied with each component.",
+      "Measure block and head flatness with the specified straightedge and feeler-gauge method. Verify surface finish is compatible with the selected composite, MLS or specialty gasket.",
+      "Clean decks without rounding fire-deck edges or leaving abrasive debris. Protect cylinders and oil/coolant passages, then remove every cleaning residue before assembly.",
+      "Clean each block thread with the approved thread-cleaning tool. Clear fluid and debris from blind areas; trapped liquid can create false torque or crack a casting hydraulically.",
+      "Check dowel condition and compare every gasket opening with the block and head. Install the gasket in its marked orientation and lower the head vertically without sliding across the fire rings.",
+      "Sort all 17 fasteners by length and location. Inspect reusable production bolts under the exact manual; replace torque-to-yield hardware and any bolt with damaged threads, necking, corrosion or questionable history.",
+      "Apply only the specified sealer or lubricant to the threads and underside of the head/washer. Traditional small-block holes that communicate with coolant need the documented non-hardening sealer; do not substitute dry, oil, anti-seize or moly conditions.",
+      "Hand-start every fastener to full free-thread depth. Stop on resistance rather than pulling a wrong-length or cross-threaded bolt down with the wrench.",
+      "Tighten the full 17-position center-out sequence in equal incremental passes appropriate to the chosen hardware. For a 65 lb-ft production-style procedure, use conservative staged passes rather than jumping directly from snug to final torque.",
+      "Repeat the exact sequence for the final pass, mark each completed bolt, then follow only the gasket/fastener maker's explicit retorque or no-retorque rule. Pressure-test, prime and monitor coolant, oil and combustion sealing after startup.",
     ],
     sections: [
-      { heading: "Why aftermarket hardware changes the number", paragraphs: ["Torque is an indirect way to create fastener stretch. Thread pitch, material, washer friction, and lubricant determine how much of the applied torque becomes clamp load. A value written for production bolts can over- or under-load a stud kit."] },
-      { heading: "Preparation checklist", bullets: ["Correct head and gasket for bore and coolant passages", "Clean, flat deck and head surfaces", "Clean, dry bolt holes with no trapped fluid", "Known fasteners with matching washers", "Specified sealer or assembly lubricant", "Calibrated torque wrench and angle gauge if required"] },
-      { heading: "When to stop", paragraphs: ["Stop if a bolt feels soft, continues turning without increasing torque, bottoms early, pulls threads, or gives a reading that differs sharply from adjacent bolts. Diagnose the thread, fastener length, and hole condition before continuing."] },
+      { heading: "What the 65 lb-ft specification actually covers", paragraphs: ["Chevrolet Performance publishes 65 lb-ft for the cylinder-head bolts in the cited 350 HO, 350/290 and SP350/357 guides. Those are known crate-engine assemblies using their documented production-style hardware. The value is credible because the engine configuration is identified, not because 65 is a universal small-block number.", "If the engine has a different head casting, aluminum head, stud kit, MLS gasket or late production torque-angle bolt, use the matched component procedure. Do not average two charts or stop an angle-style bolt when a torque wrench happens to display 65 lb-ft."] },
+      { heading: "How to use the 17-position sequence", paragraphs: ["Place the exact physical Chevrolet or head-manufacturer diagram beside the engine with front/rear orientation marked. Begin at position 1 near the center, then follow every number through 17. On the opposite head, use the manufacturer view rather than mentally mirroring a photograph taken from the wrong side.", "Complete position 1 through 17 at the first stage, reset the wrench, and repeat 1 through 17 at each later stage. Mark bolt heads with a removable paint pen after each completed pass so an interruption does not create a missed or double-tightened position."] },
+      { heading: "Production Gen I versus L31 Vortec procedures", paragraphs: ["The L31 5.7L Vortec remains a Chevrolet small-block 350, but late production service information can divide head bolts into long, medium and short groups and add different angle turns after an initial torque. That method must not be replaced with an older all-bolts-to-65 chart.", "Vortec intake-bolt count does not by itself identify the cylinder-head fastener procedure. Use VIN/RPO, casting numbers and the actual bolt design, then obtain the year-specific GM service sequence."] },
+      { heading: "Why aftermarket hardware changes the number", paragraphs: ["Torque is an indirect way to create fastener stretch. Thread pitch, bolt or stud material, washer friction and lubricant determine how much applied torque becomes clamp load. A value written for production bolts can over- or under-load a stud kit.", "ARP and other fastener makers commonly specify their own lubricant and may publish different values for oil. Use the sheet shipped with the exact part number and verify whether it supersedes the head or gasket instruction before assembly."] },
+      { heading: "Thread sealant and coolant passages", paragraphs: ["Many traditional small-block Chevrolet head-bolt holes enter the water jacket. A pliable non-hardening thread sealer prevents coolant migration and also establishes the friction condition used by the torque procedure.", "Do not flood holes with sealer. Excess material can create hydraulic resistance, contaminate coolant or alter clamp load. Apply the specified amount to clean threads and the underside of the head/washer only where instructed."] },
+      { heading: "Preparation checklist", bullets: ["Block, head and engine application positively identified", "Correct gasket bore, passages, thickness and orientation", "Head and deck flatness/surface finish within limits", "All 17 bolt locations and lengths mapped", "Clean threads with no trapped oil, coolant or debris", "Known fasteners and correct matching washers", "Specified sealer or assembly lubricant available", "Calibrated torque wrench and angle gauge when required", "Physical sequence diagram oriented to engine front", "Written stages ready for technician initials"] },
+      { heading: "When to stop", paragraphs: ["Stop if a bolt feels soft, continues turning without increasing torque, bottoms early, pulls threads or differs sharply from adjacent bolts. Possible causes include the wrong length, dirty/wet hole, damaged washer face, cross-threading, cracked casting or yielding hardware.", "Do not compensate by adding torque to neighboring bolts or completing the pass for appearance. Record the stopped stage and position, unload or restart only as the component instructions direct, and repair the thread or replace hardware before proceeding."] },
+      { heading: "Retorque and first heat cycle", paragraphs: ["Modern composition and MLS gaskets often specify no retorque, while some performance gasket/head combinations require a heat-cycle check. Follow the exact gasket and fastener instructions; loosening a completed joint without authorization can damage its seal.", "Before first start, restore valve adjustment, intake sealing, coolant and lubrication. Watch oil pressure and temperature, inspect for external coolant at bolt bosses and check for combustion leakage, misfire or coolant pressurization instead of assuming a clean exterior proves the gasket sealed."] },
     ],
     faqs: [
       { q: "What is the head bolt torque on a Chevy 350?", a: "Chevrolet Performance lists 65 lb-ft (88 N·m) for production-style bolts on the cited 350 HO, 350/290, and SP350/357 crate engines." },
@@ -491,6 +517,9 @@ export const chevy350Specs: SpecRecord[] = [
       { q: "Do Chevy 350 head bolts need sealer?", a: "Some small-block head-bolt holes communicate with coolant. Apply the exact thread sealer specified by the engine, head, gasket, or fastener instructions." },
       { q: "Should head bolts be tightened in stages?", a: "Yes. Multiple incremental passes in a center-out pattern distribute clamp load more evenly than jumping directly to final torque." },
       { q: "Do cylinder heads need to be retorqued?", a: "That depends on the gasket, head material, and fastener instructions. Follow the component manufacturers; do not assume every modern gasket requires retorque." },
+      { q: "Does a Chevy 350 head use a 17-bolt sequence?", a: "Traditional Gen I small-block Chevrolet heads use 17 main head-bolt positions per head. Follow the exact physical center-out diagram supplied for the head and application." },
+      { q: "Is the L31 Vortec 5.7 head-bolt procedure 65 lb-ft?", a: "Do not assume so. Late L31 procedures can separate long, medium and short bolts and use torque-plus-angle stages; use the year/RPO-specific GM service chart." },
+      { q: "Should every pass follow all 17 positions?", a: "Yes. Complete the entire numbered sequence at each torque or angle stage unless the exact procedure explicitly separates bolt families." },
     ],
     sources: [chevrolet350Ho, chevrolet350290, { label: "Chevrolet Performance SP350/357 Deluxe guide", url: "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/performance/resources/installation-guides/crate-engines/02-pdf/sp-350-357-deluxe-19367083.pdf", note: "Primary Chevrolet guide listing 65 lb-ft for cylinder-head bolts." }], reviewed: "2026-08-14",
   },

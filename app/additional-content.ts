@@ -24,10 +24,15 @@ const nissanRogue: Source = {
   url: "https://www.nissanusa.com/content/dam/Nissan/us/manuals-and-guides/rogue/2024/2024-nissan-rogue-owner-manual.pdf",
   note: "Primary Nissan owner information for the 83 ft-lb wheel-nut specification and alternating pattern.",
 };
-const subaruManual: Source = {
-  label: "Subaru owner information — tire and wheel specifications",
-  url: "https://techinfo.subaru.com/stis/doc/ownerManual/MSA5M2405A_STIS-opt.pdf",
-  note: "Primary Subaru owner documentation listing 89 lbf-ft (120 N·m) wheel-nut torque.",
+const subaruOutbackManual: Source = {
+  label: "2024 Subaru Outback Owner's Manual — tire and wheel specifications",
+  url: "https://techinfo.subaru.com/stis/doc/ownerManual/MSA5M2404A_STIS.pdf",
+  note: "Application-specific Subaru owner documentation for the Outback wheel-installation procedure and 89 lbf-ft (120 N·m) specification.",
+};
+const subaruForesterManual: Source = {
+  label: "2024 Subaru Forester Owner's Manual — tire and wheel specifications",
+  url: "https://techinfo.subaru.com/stis/doc/ownerManual/MSA5M2402A_STIS.pdf",
+  note: "Application-specific Subaru owner documentation for the Forester wheel-installation procedure and 89 lbf-ft (120 N·m) specification.",
 };
 const subaruEngine: Source = {
   label: "Subaru technical specifications — horizontally opposed engine",
@@ -65,9 +70,9 @@ const gm454Torque: Source = {
   note: "Primary Chevrolet Performance procedure listing separate long/short bolt stages, sealant requirement, pattern, and heat-cycle guidance.",
 };
 const gm305: Source = {
-  label: "1980 Chevrolet Camaro technical data — 305 V8",
-  url: "https://news.chevrolet.com/content/dam/company/no_search/heritage-archive-docs/vehicle-information-kits/chevrolet/1980-Chevrolet-Camaro.pdf",
-  note: "Primary Chevrolet heritage specification identifying the 305 cylinder banks and 1-8-4-3-6-5-7-2 order.",
+  label: "1983 Chevrolet Truck technical data — 305 V8",
+  url: "https://news.chevrolet.com/content/dam/company/no_search/heritage-archive-docs/vehicle-information-kits/chevrolet-trucks/1983-Chevrolet-Truck.pdf",
+  note: "Primary Chevrolet heritage specification explicitly identifying the 5.0L/305 applications and their 1-8-4-3-6-5-7-2 firing order.",
 };
 const gm36Chain: Source = {
   label: "GM TechLink — High Feature V6 timing-chain installation",
@@ -79,10 +84,15 @@ const gm36Service: Source = {
   url: "https://static.nhtsa.gov/odi/tsbs/2013/MC-10134650-9999.pdf",
   note: "GM bulletin identifying LY7, LLT, LFX and related 3.6L applications as timing-chain engines.",
 };
-const toyotaWheel: Source = {
-  label: "Toyota Owner's Manual — tire and wheel specifications",
-  url: "https://assets.sia.toyota.com/publications/en/om/OM32445U/pdf/6-3_186.pdf",
-  note: "Primary Toyota specification listing 76 ft-lb (103 N·m) wheel-nut torque.",
+const toyotaCorollaWheel: Source = {
+  label: "Toyota 2024 Corolla alloy-wheel installation instructions",
+  url: "https://toyotaparts.sparkstoyota.com/install/PT946-02210inst.pdf",
+  note: "Toyota accessory instructions require hand-starting, a numbered five-lug star pattern, 76 ft-lbf (103 N·m), a full re-torque pass, and no impact wrench.",
+};
+const toyotaHighlanderWheel: Source = {
+  label: "Toyota genuine wheel-lock application and torque chart",
+  url: "https://toyotaparts.sparkstoyota.com/install/PT276-34231-02inst-various.pdf",
+  note: "Toyota's application chart identifies regular 2023 Highlander/Hybrid at 103 N·m (76 ft-lb) and separately lists Grand Highlander at 140 N·m (103 ft-lb).",
 };
 
 const guides: SpecRecord[] = [
@@ -102,30 +112,30 @@ const guides: SpecRecord[] = [
   lugGuide({
     slug: "nissan/altima/lug-nut-torque", keyword: "nissan altima lug nut torque spec", make: "Nissan", model: "Altima", category: "Torque Specs",
     title: "Nissan Altima Lug Nut Torque Spec and Tightening Pattern", metaDescription: "Nissan Altima lug nut torque reference: 83 ft-lb (113 N·m) for common factory applications, plus star pattern, dry-thread, and recheck guidance.",
-    answer: "The common factory Nissan Altima wheel-nut torque specification is 83 ft-lb (113 N·m). Confirm the exact year and wheel instructions before service.", detail: "Use the owner manual for the VIN and any separate aftermarket-wheel instructions.", scope: "Original-equipment-style Altima studs, nuts, and wheels with clean, dry threads and seats.",
-    values: [{ label: "Common Nissan Altima factory application", value: "83 ft-lb / 113 N·m", note: "Tighten alternately in a star pattern" }, { label: "Thread condition", value: "Clean and dry", note: "Do not oil or grease studs or nut seats" }, { label: "Pattern", value: "5-lug star", note: "Hand-start all five nuts before staged tightening" }],
+    answer: "The cited 2024 Nissan Altima owner manual specifies 83 ft-lb (113 N·m) for the wheel nuts. Many nearby years use the same value, but confirm the VIN-specific manual before service.", detail: "Use the owner manual for the VIN and any separate aftermarket-wheel instructions.", scope: "2024 Altima original-equipment-style studs, nuts, and wheels with clean, dry threads and seats; other years require confirmation.",
+    values: [{ label: "2024 Nissan Altima factory application", value: "83 ft-lb / 113 N·m", note: "Tighten alternately in a star pattern" }, { label: "Thread condition", value: "Clean and dry", note: "Do not oil or grease studs or nut seats" }, { label: "Pattern", value: "5-lug star", note: "Hand-start all five nuts before staged tightening" }],
     sources: [nissanAltima], identity: "Nissan Altima factory wheel", distinctions: ["The 83 ft-lb value is widely specified across modern Altima owner manuals, but the VIN-specific manual remains the authority.", "Locking nuts, conversion studs, spacers, or aftermarket wheels can carry separate requirements."], featureImage: feature("nissan-altima-lug-nut-torque"),
   }),
   lugGuide({
     slug: "nissan/rogue/lug-nut-torque", keyword: "nissan rogue lug nut torque spec", make: "Nissan", model: "Rogue", category: "Torque Specs",
     title: "Nissan Rogue Lug Nut Torque Spec and Star Pattern", metaDescription: "Nissan Rogue lug nut torque guide: 83 ft-lb (113 N·m) for common factory wheels, with safe dry-thread prep, staged passes, and torque recheck.",
-    answer: "The common Nissan Rogue factory wheel-nut torque is 83 ft-lb (113 N·m). Verify the exact model-year manual and wheel hardware before tightening.", detail: "The Rogue, Rogue Sport, and different-market variants are not automatically interchangeable applications.", scope: "Factory Rogue wheel fasteners and wheel seats in serviceable condition; excludes aftermarket wheel or stud instructions.",
-    values: [{ label: "Common Nissan Rogue factory application", value: "83 ft-lb / 113 N·m", note: "Final torque using an alternating pattern" }, { label: "Fastener preparation", value: "Clean and dry", note: "Oil or grease changes clamp load" }, { label: "Confirmation", value: "Full second pattern", note: "Check every nut with a calibrated wrench" }],
+    answer: "The cited 2024 Nissan Rogue owner manual specifies 83 ft-lb (113 N·m) for the wheel nuts. Verify the exact model-year manual and wheel hardware before tightening.", detail: "The Rogue, Rogue Sport, and different-market variants are not automatically interchangeable applications.", scope: "2024 Rogue factory wheel fasteners and wheel seats in serviceable condition; excludes Rogue Sport and aftermarket instructions.",
+    values: [{ label: "2024 Nissan Rogue factory application", value: "83 ft-lb / 113 N·m", note: "Final torque using an alternating pattern" }, { label: "Fastener preparation", value: "Clean and dry", note: "Oil or grease changes clamp load" }, { label: "Confirmation", value: "Full second pattern", note: "Check every nut with a calibrated wrench" }],
     sources: [nissanRogue], identity: "Nissan Rogue factory wheel", distinctions: ["Confirm that the vehicle is a Rogue rather than Rogue Sport and match the exact year.", "Nissan instructs users not to oil or grease wheel studs or nuts."], featureImage: feature("nissan-rogue-lug-nut-torque"),
   }),
   lugGuide({
     slug: "subaru/outback/lug-nut-torque", keyword: "subaru outback lug nut torque spec", make: "Subaru", model: "Outback", category: "Torque Specs",
     title: "Subaru Outback Lug Nut Torque Spec: 89 ft-lb Guide", metaDescription: "Subaru Outback lug nut torque reference: 89 ft-lb (120 N·m) for current factory applications, with star pattern, wheel seating, and recheck steps.",
-    answer: "Subaru specifies 89 lbf-ft (120 N·m) for the wheel nuts on current Outback factory applications. Always confirm the exact model-year manual.", detail: "Subaru also advises having owner-tightened wheel nuts checked by an automotive service facility as soon as practical.", scope: "Current factory Outback wheels and original-equipment-style nuts; confirm earlier years and aftermarket wheels separately.",
-    values: [{ label: "Current Subaru Outback factory wheel", value: "89 lbf-ft / 120 N·m", note: "12 kgf·m" }, { label: "Pattern", value: "5-lug star", note: "Draw the wheel evenly onto the hub" }, { label: "Threads and seats", value: "Clean and dry", note: "Replace damaged or cross-threaded hardware" }],
-    sources: [subaruManual], identity: "current Subaru Outback factory wheel", distinctions: ["The Subaru value is 89 lbf-ft after rounding from the metric specification; do not confuse it with an 89 N·m figure.", "Older model years and non-factory wheels must be checked in their own documentation."], featureImage: feature("subaru-outback-lug-nut-torque"),
+    answer: "The cited 2024 Subaru Outback owner manual specifies 89 lbf-ft (120 N·m) for the wheel nuts. Always confirm the exact model-year manual.", detail: "Subaru also advises having owner-tightened wheel nuts checked by an automotive service facility as soon as practical.", scope: "2024 factory Outback wheels, including the manual's listed Outback branches, with original-equipment-style nuts; confirm other years separately.",
+    values: [{ label: "2024 Subaru Outback factory wheel", value: "89 lbf-ft / 120 N·m", note: "12.2 kgf·m" }, { label: "Pattern", value: "5-lug star", note: "Draw the wheel evenly onto the hub" }, { label: "Threads and seats", value: "Clean and dry", note: "Replace damaged or cross-threaded hardware" }],
+    sources: [subaruOutbackManual], identity: "current Subaru Outback factory wheel", distinctions: ["The Subaru value is 89 lbf-ft after rounding from the metric specification; do not confuse it with an 89 N·m figure.", "Older model years and non-factory wheels must be checked in their own documentation."], featureImage: feature("subaru-outback-lug-nut-torque"),
   }),
   lugGuide({
     slug: "subaru/forester/lug-nut-torque", keyword: "subaru forester lug nut torque spec", make: "Subaru", model: "Forester", category: "Torque Specs",
     title: "Subaru Forester Lug Nut Torque Spec: 89 ft-lb Guide", metaDescription: "Subaru Forester lug nut torque reference: 89 ft-lb (120 N·m) for current factory applications, plus star pattern and safe wheel-installation steps.",
-    answer: "Subaru specifies 89 lbf-ft (120 N·m) for current Forester factory wheel nuts. Verify the exact year, wheel, and owner manual before service.", detail: "Torque is applied only after the wheel is correctly centered and every nut is started by hand.", scope: "Current original-equipment Forester wheels and fasteners; excludes aftermarket hardware and unverified older applications.",
-    values: [{ label: "Current Subaru Forester factory wheel", value: "89 lbf-ft / 120 N·m", note: "12 kgf·m" }, { label: "Tightening method", value: "Staged star pattern", note: "Finish with a calibrated torque wrench" }, { label: "Post-service check", value: "Recommended", note: "Have self-tightened nuts checked promptly" }],
-    sources: [subaruManual], identity: "current Subaru Forester factory wheel", distinctions: ["Use 120 N·m, not 89 N·m; the 89 figure is pounds-force feet.", "Trim level and wheel diameter alone do not establish the torque—use the exact vehicle documentation."], featureImage: feature("subaru-forester-lug-nut-torque"),
+    answer: "The cited 2024 Subaru Forester owner manual specifies 89 lbf-ft (120 N·m) for factory wheel nuts. Verify the exact year, wheel, and owner manual before service.", detail: "Torque is applied only after the wheel is correctly centered and every nut is started by hand.", scope: "2024 Forester and Forester Wilderness original-equipment wheels and fasteners; excludes aftermarket hardware and unverified older applications.",
+    values: [{ label: "2024 Subaru Forester factory wheel", value: "89 lbf-ft / 120 N·m", note: "12 kgf·m" }, { label: "Tightening method", value: "Staged star pattern", note: "Finish with a calibrated torque wrench" }, { label: "Post-service check", value: "Recommended", note: "Have self-tightened nuts checked promptly" }],
+    sources: [subaruForesterManual], identity: "current Subaru Forester factory wheel", distinctions: ["Use 120 N·m, not 89 N·m; the 89 figure is pounds-force feet.", "Trim level and wheel diameter alone do not establish the torque—use the exact vehicle documentation."], featureImage: feature("subaru-forester-lug-nut-torque"),
   }),
   firingGuide({
     slug: "subaru/ej20/firing-order", keyword: "subaru ej20 firing order", make: "Subaru", model: "EJ20 Boxer Four", category: "Firing Orders",
@@ -172,7 +182,7 @@ const guides: SpecRecord[] = [
   firingGuide({
     slug: "chevrolet/305/firing-order", keyword: "chevy 305 firing order", make: "Chevrolet", model: "305 Small-Block V8", category: "Firing Orders",
     title: "Chevy 305 Firing Order and Distributor Diagram", metaDescription: "Chevy 305 firing order 1-8-4-3-6-5-7-2 with odd/even cylinder banks, clockwise distributor routing, and TDC verification.",
-    answer: "The traditional Chevrolet 305 small-block firing order is 1-8-4-3-6-5-7-2. Driver-side cylinders are 1-3-5-7 and passenger-side cylinders are 2-4-6-8, front to rear.", detail: "Electronic-feedback carburetor and later EFI systems can change diagnostic and timing procedures without changing the mechanical firing order.", scope: "Traditional Chevrolet 305/5.0L small-block V8s with the production camshaft firing order.",
+    answer: "The cited 1983 Chevrolet 5.0L/305 V8 specification gives the traditional 1-8-4-3-6-5-7-2 firing order. Driver-side cylinders are 1-3-5-7 and passenger-side cylinders are 2-4-6-8, front to rear.", detail: "Electronic-feedback carburetor and later EFI systems can change diagnostic and timing procedures without changing the mechanical firing order.", scope: "Traditional Chevrolet 305/5.0L Gen I small-block V8s retaining the production camshaft firing order; verify an unknown rebuilt engine's cam card.",
     values: [{ label: "305 firing order", value: "1-8-4-3-6-5-7-2", note: "Factory small-block sequence" }, { label: "Driver bank", value: "1-3-5-7", note: "Front to rear" }, { label: "Passenger bank", value: "2-4-6-8", note: "Front to rear" }, { label: "Distributor rotation", value: "Clockwise", note: "Conventional HEI viewed from above" }],
     sources: [gm305], identity: "traditional Chevrolet 305/5.0L small-block V8", distinctions: ["Do not confuse the Gen I 305 with a later 5.0L engine family or an LS engine.", "A rebuilt engine can have an alternate-order camshaft; verify the cam card when history is unknown."], featureImage: feature("chevy-305-firing-order"),
   }),
@@ -186,16 +196,16 @@ const guides: SpecRecord[] = [
   lugGuide({
     slug: "toyota/corolla/lug-nut-torque", keyword: "toyota corolla lug nut torque spec", make: "Toyota", model: "Corolla", category: "Torque Specs",
     title: "Toyota Corolla Lug Nut Torque Spec: 76 ft-lb Guide", metaDescription: "Toyota Corolla lug nut torque reference: 76 ft-lb (103 N·m) for common factory applications, with star pattern, dry-thread prep, and recheck steps.",
-    answer: "The common factory Toyota Corolla wheel-nut torque is 76 ft-lb (103 N·m). Verify the exact year, body style, and owner manual before service.", detail: "Corolla sedan, hatchback, hybrid, GR, and older-market variants should be matched to their specific manual.", scope: "Common factory Corolla wheels and original-equipment-style fasteners; performance and aftermarket wheels may specify differently.",
-    values: [{ label: "Common Toyota Corolla factory wheel", value: "76 ft-lb / 103 N·m", note: "10.5 kgf·m" }, { label: "Pattern", value: "5-lug star", note: "Use staged opposite-side passes" }, { label: "Final tool", value: "Calibrated torque wrench", note: "Impact tools are not final measuring tools" }],
-    sources: [toyotaWheel], identity: "common Toyota Corolla factory wheel", distinctions: ["Confirm GR Corolla and unusual performance-wheel applications separately.", "Wheel diameter does not by itself change the published value; fastener and seat design control."], featureImage: feature("toyota-corolla-lug-nut-torque"),
+    answer: "Toyota's cited 2024 Corolla genuine-wheel instructions specify 76 ft-lbf (103 N·m), followed by a second complete pass in the same star sequence. Verify the exact year and wheel instructions before service.", detail: "Corolla sedan, hatchback, hybrid, GR, and older-market variants should be matched to their specific documentation.", scope: "2024 Corolla Toyota genuine-accessory/factory-style wheel application; aftermarket hardware follows its maker.",
+    values: [{ label: "2024 Toyota Corolla cited wheel", value: "76 ft-lb / 103 N·m", note: "10.5 kgf·m" }, { label: "Pattern", value: "5-lug star", note: "Use numbered 1-through-5 passes" }, { label: "Confirmation", value: "Repeat complete pattern", note: "Toyota installation instruction" }],
+    sources: [toyotaCorollaWheel], identity: "2024 Toyota Corolla factory/genuine-accessory wheel", distinctions: ["The cited Toyota instructions explicitly include a second full torque pass and prohibit impact-wrench installation or removal.", "Wheel diameter does not by itself change the published value; fastener and seat design control."], featureImage: feature("toyota-corolla-lug-nut-torque"),
   }),
   lugGuide({
     slug: "toyota/highlander/lug-nut-torque", keyword: "toyota highlander lug nut torque spec", make: "Toyota", model: "Highlander", category: "Torque Specs",
     title: "Toyota Highlander Lug Nut Torque Spec: 76 ft-lb Guide", metaDescription: "Toyota Highlander lug nut torque reference: 76 ft-lb (103 N·m) for common factory applications, plus star pattern and safe wheel-installation guidance.",
-    answer: "The common factory Toyota Highlander wheel-nut torque is 76 ft-lb (103 N·m). Confirm the exact model-year owner manual, especially for a different market or wheel package.", detail: "Hybrid powertrain choice normally does not identify wheel torque; use the wheel/fastener application in the exact manual.", scope: "Common original-equipment Highlander wheels and factory-style nuts with clean, dry threads and seats.",
-    values: [{ label: "Common Toyota Highlander factory wheel", value: "76 ft-lb / 103 N·m", note: "10.5 kgf·m" }, { label: "Tightening order", value: "5-lug star", note: "Seat the wheel evenly" }, { label: "Thread condition", value: "Clean and dry", note: "Do not compensate for corrosion with extra torque" }],
-    sources: [toyotaWheel], identity: "common Toyota Highlander factory wheel", distinctions: ["Highlander and Grand Highlander are separate applications and must not be assumed identical.", "Aftermarket wheels, spacers, conversion studs, and locking hardware can carry their own instructions."], featureImage: feature("toyota-highlander-lug-nut-torque"),
+    answer: "Toyota's cited genuine wheel-lock chart specifies 76 ft-lb (103 N·m) for the 2023 regular Highlander and Highlander Hybrid. It separately specifies 103 ft-lb (140 N·m) for the 2024 Grand Highlander, so do not merge the two model families.", detail: "Hybrid powertrain choice does not establish wheel torque by itself; use the wheel/fastener application in the exact manual or accessory instruction.", scope: "2023 regular Highlander/Highlander Hybrid factory-style hardware in the cited Toyota chart; other years require confirmation and Grand Highlander is excluded.",
+    values: [{ label: "2023 Highlander / Hybrid", value: "76 ft-lb / 103 N·m", note: "Cited Toyota application chart" }, { label: "2024 Grand Highlander", value: "103 ft-lb / 140 N·m", note: "Different model; shown to prevent confusion" }, { label: "Tightening order", value: "5-lug star", note: "Seat the wheel evenly" }],
+    sources: [toyotaHighlanderWheel], identity: "2023 Toyota Highlander/Highlander Hybrid genuine wheel hardware", distinctions: ["Toyota's own chart separates regular Highlander at 76 ft-lb from Grand Highlander at 103 ft-lb; the names are not interchangeable.", "Aftermarket wheels, spacers, conversion studs, and locking hardware can carry their own instructions."], featureImage: feature("toyota-highlander-lug-nut-torque"),
   }),
 ];
 

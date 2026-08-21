@@ -3,9 +3,9 @@ import type { SpecRecord, Source } from "./chevy350-content";
 const reviewed = "2026-08-14";
 
 const fordManual: Source = {
-  label: "Ford Owner's Manual — capacities and specifications",
-  url: "https://www.fordservicecontent.com/Ford_Content/vdirsnet/OwnerManual/Home/Content?ProcUid=G2135187&Uid=G2135181&buildtype=web&countryCode=USA&div=f&languageCode=en&moidRef=G2133834&vFilteringEnabled=True&variantid=7320",
-  note: "Primary Ford owner-manual data for F-150 capacities and service specifications.",
+  label: "2024 Ford F-150 Owner's Manual — 5.0L oil capacity",
+  url: "https://www.fordservicecontent.com/Ford_Content/vdirsnet/OwnerManual/Home/Content?ProcUid=G2229361&Uid=G2229355&buildtype=web&countryCode=USA&div=f&languageCode=en&moidRef=G2133834&userMarket=usa&vFilteringEnabled=False&variantid=9537",
+  note: "Primary Ford table listing 7.75 qt (7.33 L), including the filter, for the 5.0L.",
 };
 const fordWheel: Source = {
   label: "Ford F-150 Owner's Manual — wheel nuts",
@@ -38,6 +38,11 @@ const toyotaRav4: Source = {
   url: "https://assets.sia.toyota.com/publications/en/om-s/OM24V1QRG/pdf/OM24V1QRG.pdf",
   note: "Primary Toyota owner information for RAV4 maintenance and engine identification.",
 };
+const toyotaRav42019Oil: Source = {
+  label: "2019 Toyota RAV4 Owner's Manual — engine oil capacity",
+  url: "https://assets.sia.toyota.com/publications/en/om-s/OM0R009U/pdf/OM0R009U.pdf",
+  note: "Primary Toyota manual listing 4.8 US qt (4.5 L) with filter for the gasoline A25A-FKS, with separate hybrid maintenance data and refill-check instructions.",
+};
 const toyotaWheel: Source = {
   label: "Toyota Owner's Manual — wheel installation specification",
   url: "https://assets.sia.toyota.com/publications/en/om/OM32464U/pdf/4_142.pdf",
@@ -47,6 +52,21 @@ const toyotaTacoma: Source = {
   label: "Toyota Tacoma Owner's Manual — specifications",
   url: "https://assets.sia.toyota.com/publications/en/om/OM35704U/pdf/omsource/1996om/96tacom/sect8/81.pdf",
   note: "Primary Toyota Tacoma specification listing 83 lb-ft (110 N·m).",
+};
+const toyotaTacomaCurrent: Source = {
+  label: "2021 Toyota Tacoma Owner's Manual — wheel installation",
+  url: "https://assets.sia.toyota.com/publications/en/om-s/OM04029U/pdf/OM04029U.pdf",
+  note: "Primary Toyota manual listing 83 ft-lbf (113 N·m), six-lug tightening order, and factory wheel-installation cautions.",
+};
+const toyotaRav4Current: Source = {
+  label: "2020 Toyota RAV4 Owner's Manual — wheel installation",
+  url: "https://assets.sia.toyota.com/publications/en/om-s/OM0R024U/pdf/OM0R024U.pdf",
+  note: "Primary Toyota manual listing 76 ft-lbf (103 N·m), tapered-seat orientation, incremental tightening, and a post-installation check.",
+};
+const toyotaCamryCurrent: Source = {
+  label: "2017 Toyota Camry Owner's Manual — wheel nut torque",
+  url: "https://assets.sia.toyota.com/publications/en/om-s/OM33C64U/pdf/OM33C64U.pdf",
+  note: "Primary Toyota manual listing 76 ft-lbf (103 N·m) for original factory wheel nuts and the staged five-lug tightening method.",
 };
 
 const hondaCrv: Source = {
@@ -71,19 +91,19 @@ const hondaOlderSpark: Source = {
 };
 
 const gm2020: Source = {
-  label: "2020 Chevrolet Silverado Owner's Manual",
-  url: "https://contentdelivery.ext.gm.com/content/dam/cope/en_us/public/pdf_assets/active/owners_manuals_browse/20_CHEV_Silverado_OM_en_US_U_84186886C_2020JAN30_3P.pdf",
-  note: "Primary GM owner manual covering 5.3L capacity, wheel-nut torque, fluids, and engine specifications.",
+  label: "GM Owner Center manuals",
+  url: "https://experience.gm.com/support/vehicle/manuals-guides",
+  note: "Official GM lookup for the applicable model-year Silverado owner manual.",
 };
 const gm2024: Source = {
-  label: "2024 Chevrolet Silverado 1500 Owner's Manual",
-  url: "https://contentdelivery.ext.gm.com/content/dam/cope/en_us/public/pdf_assets/active/owners_manuals_browse/24_CHEV_Silverado_1500_OM_en_US_U_85516379D_2025JUN26_4P.pdf",
-  note: "Current primary GM owner-manual reference for Silverado 1500 service specifications.",
+  label: "GM Owner Center manuals",
+  url: "https://experience.gm.com/support/vehicle/manuals-guides",
+  note: "Official GM lookup for the applicable model-year Silverado owner manual.",
 };
 const gmSierra2020: Source = {
-  label: "2020 GMC Sierra/Sierra Denali Owner's Manual",
-  url: "https://contentdelivery.ext.gm.com/content/dam/cope/en_us/public/pdf_assets/active/owners_manuals_browse/20_GMC_Sierra_OM_en_US_U_84186890A_2019APR11.pdf",
-  note: "Primary GMC owner manual covering Sierra wheel torque, 5.3L capacity, fluids, and technical specifications.",
+  label: "GM Owner Center manuals",
+  url: "https://experience.gm.com/support/vehicle/manuals-guides",
+  note: "Official GM lookup for the applicable model-year Sierra owner manual.",
 };
 const gmFiring: Source = {
   label: "Chevrolet Performance LS-family installation guide",
@@ -130,6 +150,7 @@ export type Base = Pick<
   identity: string;
   distinctions: string[];
   featureImage?: string;
+  featureOverlay?: boolean;
 };
 
 export function lugGuide(base: Base): SpecRecord {
@@ -627,11 +648,11 @@ const fordF150Oil = oilGuide({
 
 const ford302 = firingGuide({
   slug: "ford/302/firing-order",
-  keyword: "ford 302 firing order",
+  keyword: "ford 302 v8 firing order diagram",
   make: "Ford",
   model: "302 / 5.0L",
   category: "Firing Order",
-  title: "Ford 302 Firing Order: Standard vs. 5.0 HO",
+  title: "Ford 302 V8 Firing Order Diagram: Standard vs. 5.0 HO",
   metaDescription:
     "Ford 302 firing order guide covering early 1-5-4-2-6-3-7-8 and 5.0 HO 1-3-7-2-6-5-4-8 orders, cylinder numbering, and distributor routing.",
   answer:
@@ -660,15 +681,17 @@ const ford302 = firingGuide({
     "Ford used two legitimate orders: the standard 289/302 order and the 351W-style order used by the 5.0 HO and matching camshafts.",
     "Ford small-block cylinders 1–4 are on the passenger side and 5–8 on the driver side, both front to rear.",
   ],
+  featureImage: "/features/shared-firing-engine.png",
+  featureOverlay: true,
 });
 
 const ford351 = firingGuide({
   slug: "ford/351-windsor/firing-order",
-  keyword: "ford 351 windsor firing order",
+  keyword: "ford 351 windsor firing order diagram",
   make: "Ford",
   model: "351 Windsor",
   category: "Firing Order",
-  title: "Ford 351 Windsor Firing Order and Cylinder Numbering",
+  title: "Ford 351 Windsor Firing Order Diagram and Cylinder Numbering",
   metaDescription:
     "Ford 351 Windsor firing order 1-3-7-2-6-5-4-8 with cylinder-bank numbering, counterclockwise distributor routing, TDC procedure, and diagram.",
   answer:
@@ -697,6 +720,8 @@ const ford351 = firingGuide({
     "Do not identify a 351W only by displacement; the 351 Cleveland and 351 Modified are different engine families.",
     "Ford small-block bank numbering places 1–4 on the passenger side and 5–8 on the driver side.",
   ],
+  featureImage: "/features/shared-firing-engine.png",
+  featureOverlay: true,
 });
 
 const fordEcoBoostGap = sparkGuide({
@@ -781,7 +806,7 @@ const rav4Lug = lugGuide({
       note: "May supersede factory value",
     },
   ],
-  sources: [toyotaWheel, toyotaRav4],
+  sources: [toyotaRav4Current, toyotaWheel, toyotaRav4],
   identity: "Toyota RAV4",
   distinctions: [
     "Gas, hybrid, and Prime powertrains do not by themselves change the factory wheel torque; the wheel/fastener application controls.",
@@ -799,26 +824,26 @@ const rav4Oil = oilGuide({
   metaDescription:
     "Toyota RAV4 2.5 oil capacity chart for A25A-FKS, A25A-FXS hybrid, and earlier 2AR-FE engines, with filter distinction and dipstick procedure.",
   answer:
-    "A 2019–2025 RAV4 2.5L gas A25A-FKS commonly takes about 4.8 qt (4.5 L) with filter; the A25A-FXS hybrid is commonly about 4.5 qt (4.3 L). Earlier 2AR-FE applications are commonly about 4.6 qt (4.4 L). Verify the exact manual.",
+    "Toyota specifies 4.8 US qt (4.5 L) with a new filter for the gasoline 2019 RAV4 2.5L A25A-FKS. Related hybrid and earlier 2AR-FE models must use their own model-year manual rather than this gasoline-engine figure.",
   detail:
-    "Toyota lists approximate drain-and-refill quantities. Gas and hybrid 2.5L engines share displacement but not every service specification.",
+    "Toyota labels the capacity as a drain-and-refill reference. Add slightly less than 4.8 qt, run the engine while checking for leakage, switch it off on level ground, wait more than five minutes and finish at the dipstick.",
   scope:
-    "Covers common U.S.-market factory 2.5L RAV4 gas and hybrid engines. Plug-in hybrid, market, production, and replacement-engine differences must be confirmed by VIN.",
+    "The exact numerical answer covers the U.S.-market 2019 gasoline RAV4 with the A25A-FKS. Hybrid A25A-FXS, Prime, earlier 2AR-FE, later model-year revisions and other markets must be confirmed separately.",
   values: [
     {
-      label: "2019–2025 A25A-FKS gas",
+      label: "2019 A25A-FKS gasoline",
       value: "4.8 qt (4.5 L)",
       note: "Approximate with filter",
     },
     {
-      label: "2019–2025 A25A-FXS hybrid",
-      value: "4.5 qt (4.3 L)",
-      note: "Approximate with filter; verify year",
+      label: "A25A-FXS hybrid / Prime",
+      value: "Use exact hybrid manual",
+      note: "Do not transfer the gasoline row",
     },
     {
       label: "2013–2018 2AR-FE",
-      value: "4.6 qt (4.4 L)",
-      note: "Approximate with filter",
+      value: "Use exact model-year row",
+      note: "Different engine family",
     },
     {
       label: "Final setting",
@@ -826,7 +851,7 @@ const rav4Oil = oilGuide({
       note: "Level ground after drain-back",
     },
   ],
-  sources: [toyotaRav4],
+  sources: [toyotaRav42019Oil, toyotaRav4],
   identity: "RAV4 2.5L",
   distinctions: [
     "A25A-FKS gasoline and A25A-FXS hybrid engines are related but use different published refill quantities.",
@@ -871,7 +896,7 @@ const camryLug = lugGuide({
       note: "Impact is not a measuring tool",
     },
   ],
-  sources: [toyotaWheel],
+  sources: [toyotaCamryCurrent, toyotaWheel],
   identity: "Toyota Camry",
   distinctions: [
     "Four-cylinder, V6, and hybrid trims commonly share the factory-wheel value, but application and wheel hardware still control.",
@@ -916,7 +941,7 @@ const tacomaLug = lugGuide({
       note: "Follow exact manual/wheel instructions",
     },
   ],
-  sources: [toyotaTacoma],
+  sources: [toyotaTacomaCurrent, toyotaTacoma],
   identity: "Toyota Tacoma",
   distinctions: [
     "Tacoma history includes both five- and six-lug configurations, so identify the axle and wheel rather than relying only on the model name.",
@@ -1139,11 +1164,11 @@ const silveradoOil = oilGuide({
 
 const chevy53Firing = firingGuide({
   slug: "chevrolet/5-3/firing-order",
-  keyword: "chevy 5.3 firing order",
+  keyword: "chevy 5.3 vortec firing order diagram",
   make: "Chevrolet",
   model: "5.3L V8",
   category: "Firing Order",
-  title: "Chevy 5.3 Firing Order and Cylinder Numbering",
+  title: "Chevy 5.3 Vortec Firing Order Diagram and Cylinder Numbering",
   metaDescription:
     "Chevy 5.3 firing order 1-8-7-2-6-5-4-3 with LS/EcoTec3 cylinder numbering, bank diagram, coil identification, and misfire troubleshooting steps.",
   answer:
@@ -1172,7 +1197,12 @@ const chevy53Firing = firingGuide({
     "The modern 5.3L order differs from the traditional Chevrolet small-block 1-8-4-3-6-5-7-2 sequence.",
     "GM numbers odd cylinders on the left/driver bank and even cylinders on the right/passenger bank, front to rear.",
   ],
+  featureImage: "/features/shared-firing-engine.png",
+  featureOverlay: true,
 });
+chevy53Firing.diagram.banks = [["1", "3", "5", "7"], ["2", "4", "6", "8"]];
+chevy53Firing.diagram.engineLabel = "GM 5.3L V8";
+chevy53Firing.diagram.orientation = "Driver/left bank | Passenger/right bank";
 
 const ramLug = lugGuide({
   slug: "ram/1500/lug-nut-torque",
@@ -1307,6 +1337,9 @@ const hemiOrder = firingGuide({
     "Cylinder numbering uses odd cylinders on the driver/left bank and even cylinders on the passenger/right bank.",
   ],
 });
+hemiOrder.diagram.banks = [["1", "3", "5", "7"], ["2", "4", "6", "8"]];
+hemiOrder.diagram.engineLabel = "5.7L HEMI V8";
+hemiOrder.diagram.orientation = "Driver/left bank | Passenger/right bank";
 
 const sierraLug = lugGuide({
   slug: "gmc/sierra-1500/lug-nut-torque",

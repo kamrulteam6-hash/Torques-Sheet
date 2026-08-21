@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { specs, slugify } from "../../data";
 import { SpecVisual } from "../../spec-visual";
 import { Footer, Header } from "../../ui";
+import { editorialStatus } from "../../content-quality";
 
 const findSpec = (parts: string[]) =>
   specs.find((s) => s.slug === parts.join("/"));
@@ -20,6 +21,9 @@ export async function generateMetadata({
   const s = findSpec(slug);
   if (!s) return { title: "Specification not found" };
   const url = `https://torquesheet.com/specs/${s.slug}`;
+  const socialImage = s.featureImage
+    ? `https://torquesheet.com${s.featureImage}`
+    : "https://torquesheet.com/og.png";
   return {
     title: s.title,
     description: s.metaDescription,
@@ -30,20 +34,24 @@ export async function generateMetadata({
       `${s.model} technical specifications`,
     ],
     alternates: { canonical: url },
+    robots: { index: true, follow: true },
     openGraph: {
       title: `${s.title} | TorqueSheet`,
       description: s.metaDescription,
       url,
       type: "article",
-      ...(s.featureImage
-        ? { images: [{ url: `https://torquesheet.com${s.featureImage}`, width: 1536, height: 1024, alt: s.title }] }
-        : {}),
+      images: [{
+        url: socialImage,
+        width: s.featureImage ? 1536 : 1200,
+        height: s.featureImage ? 1024 : 630,
+        alt: s.featureImage ? s.title : "TorqueSheet exact vehicle specifications",
+      }],
     },
     twitter: {
       card: "summary_large_image",
       title: s.title,
       description: s.metaDescription,
-      ...(s.featureImage ? { images: [`https://torquesheet.com${s.featureImage}`] } : {}),
+      images: [socialImage],
     },
   };
 }
@@ -72,6 +80,7 @@ export default async function SpecPage({
     .filter((item, position, list) => list.indexOf(item) === position)
     .slice(0, 5);
   const url = `https://torquesheet.com/specs/${s.slug}`;
+  const status = editorialStatus(s);
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -83,7 +92,11 @@ export default async function SpecPage({
         dateModified: s.reviewed,
         datePublished: s.reviewed,
         mainEntityOfPage: url,
-        author: { "@type": "Organization", name: "TorqueSheet" },
+        author: {
+          "@type": "Organization",
+          name: "TorqueSheet Research Desk",
+          url: "https://torquesheet.com/editorial-policy",
+        },
         publisher: {
           "@type": "Organization",
           name: "TorqueSheet",
@@ -140,13 +153,13 @@ export default async function SpecPage({
               </div>
               <div className="spec-label">
                 <span>{s.category}</span>
-                <span>Verified source trail</span>
+                <span>{status.label}</span>
               </div>
               <h1>{s.title}</h1>
               <p>{s.metaDescription}</p>
               <div className="review-line">
                 <span>
-                  Reviewed{" "}
+                  Source checked{" "}
                   {new Date(s.reviewed + "T00:00:00").toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "long", day: "numeric" },
@@ -154,11 +167,16 @@ export default async function SpecPage({
                 </span>
                 <span>·</span>
                 <span>
-                  {s.sources.length} primary source
+                  {s.sources.length} source reference
                   {s.sources.length === 1 ? "" : "s"}
                 </span>
                 <span>·</span>
                 <span>Print-friendly</span>
+              </div>
+              <div className={`editorial-status ${status.indexReady ? "ready" : "draft"}`}>
+                <strong>{status.label}</strong>
+                <span>{status.note}</span>
+                <Link href="/editorial-policy">How TorqueSheet prepares references</Link>
               </div>
             </div>
           </section>
@@ -198,6 +216,13 @@ export default async function SpecPage({
                     height={1024}
                     sizes="(max-width: 900px) 100vw, 800px"
                   />
+                  {s.featureOverlay && (
+                    <div className="spec-feature-overlay" aria-hidden="true">
+                      <span>TORQUESHEET SOURCE-LINKED REFERENCE</span>
+                      <strong>{s.title}</strong>
+                      <small>{s.make} · {s.category} · TORQUESHEET.COM</small>
+                    </div>
+                  )}
                   <figcaption>
                     TorqueSheet technical reference artwork · torquesheet.com
                   </figcaption>
@@ -317,7 +342,7 @@ export default async function SpecPage({
                   </a>
                 ))}
                 <div className="reviewed">
-                  LAST TECHNICAL REVIEW · {s.reviewed}
+                  LAST SOURCE CHECK · {s.reviewed}
                 </div>
               </section>
               <section className="related-section">

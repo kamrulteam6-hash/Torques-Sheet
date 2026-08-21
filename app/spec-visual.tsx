@@ -134,6 +134,59 @@ function sequence(
     ctx.textAlign = "left";
   });
 }
+function physicalPattern(
+  ctx: CanvasRenderingContext2D,
+  diagram: Diagram,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+) {
+  const rows = diagram.layout ?? [];
+  ctx.fillStyle = MUTED;
+  ctx.font = "700 12px monospace";
+  ctx.textAlign = "center";
+  ctx.fillText(diagram.orientation ?? "FRONT OF ENGINE AT LEFT", x + w / 2, y + 25);
+  ctx.fillStyle = "rgba(16,27,33,.75)";
+  ctx.strokeStyle = LINE;
+  box(ctx, x + 95, y + 58, w - 190, h - 116, 34);
+  if (diagram.positions?.length) {
+    diagram.positions.forEach(({ label, x: normalizedX, y: normalizedY }) => {
+      const px = x + 125 + (normalizedX / 100) * (w - 250);
+      const py = y + 90 + (normalizedY / 100) * (h - 180);
+      const sequenceIndex = diagram.points.indexOf(label);
+      ctx.fillStyle = sequenceIndex === 0 ? "#44220e" : "#111d23";
+      ctx.strokeStyle = sequenceIndex === 0 ? ORANGE : "#426171";
+      ctx.beginPath();
+      ctx.arc(px, py, 30, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = sequenceIndex === 0 ? ORANGE : BLUE;
+      ctx.font = "800 20px Arial";
+      ctx.fillText(label, px, py + 7);
+    });
+    ctx.textAlign = "left";
+    return;
+  }
+  rows.forEach((row, rowIndex) => {
+    const usable = w - 250;
+    row.forEach((label, columnIndex) => {
+      const px = x + 125 + (row.length === 1 ? usable / 2 : (columnIndex * usable) / (row.length - 1));
+      const py = y + 105 + rowIndex * (h - 210);
+      const sequenceIndex = diagram.points.indexOf(label);
+      ctx.fillStyle = sequenceIndex === 0 ? "#44220e" : "#111d23";
+      ctx.strokeStyle = sequenceIndex === 0 ? ORANGE : "#426171";
+      ctx.beginPath();
+      ctx.arc(px, py, 30, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = sequenceIndex === 0 ? ORANGE : BLUE;
+      ctx.font = "800 20px Arial";
+      ctx.fillText(label, px, py + 7);
+    });
+  });
+  ctx.textAlign = "left";
+}
 function wheel(
   ctx: CanvasRenderingContext2D,
   points: string[],
@@ -187,39 +240,41 @@ function banks(
   w: number,
   h: number,
 ) {
+  if (!diagram.banks?.length) {
+    sequence(ctx, diagram, x, y, w, h);
+    return;
+  }
   const cx = x + w / 2,
     top = y + 38,
-    gap = 200,
+    gap = diagram.banks.length === 2 ? 200 : 0,
     cw = 105,
     ch = 58;
   ctx.fillStyle = MUTED;
   ctx.font = "700 12px monospace";
   ctx.textAlign = "center";
   ctx.fillText("FRONT OF ENGINE", cx, top - 13);
-  [
-    [1, 3, 5, 7],
-    [2, 4, 6, 8],
-  ].forEach((bank, bi) =>
+  diagram.banks.forEach((bank, bi) =>
     bank.forEach((c, i) => {
-      const bx = cx + (bi ? gap / 2 : -gap / 2) - cw / 2,
+      const bx = diagram.banks!.length === 2
+        ? cx + (bi ? gap / 2 : -gap / 2) - cw / 2
+        : cx - cw / 2,
         by = top + i * 68;
-      ctx.fillStyle = c === Number(diagram.points[0]) ? "#44220e" : "#111d23";
-      ctx.strokeStyle = c === Number(diagram.points[0]) ? ORANGE : "#426171";
+      ctx.fillStyle = c === diagram.points[0] ? "#44220e" : "#111d23";
+      ctx.strokeStyle = c === diagram.points[0] ? ORANGE : "#426171";
       box(ctx, bx, by, cw, ch, 29);
       ctx.fillStyle = TEXT;
       ctx.font = "800 21px Arial";
-      ctx.fillText(String(c), bx + cw / 2, by + 37);
+      ctx.fillText(c, bx + cw / 2, by + 37);
     }),
   );
-  ctx.fillStyle = "#142127";
-  ctx.strokeStyle = LINE;
-  box(ctx, cx - 55, top + 65, 110, 150, 18);
-  ctx.fillStyle = TEXT;
-  ctx.font = "800 25px Arial";
-  ctx.fillText("350", cx, top + 135);
-  ctx.fillStyle = MUTED;
-  ctx.font = "700 12px monospace";
-  ctx.fillText("5.7L V8", cx, top + 157);
+  if (diagram.banks.length === 2) {
+    ctx.fillStyle = "#142127";
+    ctx.strokeStyle = LINE;
+    box(ctx, cx - 70, top + 65, 140, 150, 18);
+    ctx.fillStyle = TEXT;
+    ctx.font = "800 17px Arial";
+    wrap(ctx, diagram.engineLabel ?? "ENGINE", cx - 55, top + 130, 110, 22, 2);
+  }
   const sy = y + h - 92,
     chip = 67,
     total = diagram.points.length * chip + (diagram.points.length - 1) * 8,
@@ -304,7 +359,9 @@ function makeAsset(
   ctx.fillStyle = "#0b1317";
   ctx.strokeStyle = LINE;
   box(ctx, dx, dy, dw, dh, 18);
-  if (diagram.type === "firing" || diagram.type === "valve")
+  if (diagram.positions?.length || diagram.layout?.length)
+    physicalPattern(ctx, diagram, dx + 20, dy + 25, dw - 40, dh - 50);
+  else if (diagram.type === "firing" || diagram.type === "valve")
     banks(ctx, diagram, dx + 20, dy + 25, dw - 40, dh - 50);
   else if (diagram.type === "wheel")
     wheel(ctx, diagram.points, dx + 20, dy + 20, dw - 40, dh - 40);
@@ -383,41 +440,76 @@ function DiagramGraphic({
       <span>{p}</span>
     </button>
   ));
+  if (diagram.positions?.length || diagram.layout?.length)
+    return (
+      <div className={`diagram-graphic physical-pattern ${diagram.type}-graphic`}>
+        <div className="pattern-orientation">{diagram.orientation ?? "FRONT OF ENGINE AT LEFT"}</div>
+        {diagram.positions?.length ? (
+          <div className="pattern-component coordinate-component" aria-label={diagram.title}>
+            {diagram.positions.map(({ label, x, y }) => {
+              const sequenceIndex = diagram.points.indexOf(label);
+              return (
+                <button
+                  key={`position-${label}`}
+                  className={active === sequenceIndex ? "diagram-point active" : "diagram-point"}
+                  style={{ left: `${x}%`, top: `${y}%` }}
+                  onClick={() => setActive(sequenceIndex)}
+                  aria-label={`Tightening position ${label}`}
+                >
+                  <b>{label}</b>
+                  <span>Position {label}</span>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="pattern-component" aria-label={diagram.title}>
+          {diagram.layout!.map((row, rowIndex) => (
+            <div className="pattern-row" key={rowIndex}>
+              {row.map((label) => {
+                const sequenceIndex = diagram.points.indexOf(label);
+                return (
+                  <button
+                    key={`${rowIndex}-${label}`}
+                    className={active === sequenceIndex ? "diagram-point active" : "diagram-point"}
+                    onClick={() => setActive(sequenceIndex)}
+                    aria-label={`Tightening position ${label}`}
+                  >
+                    <b>{label}</b>
+                    <span>Position {label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+          <span className="pattern-front-arrow" aria-hidden="true">FRONT →</span>
+          </div>
+        )}
+      </div>
+    );
   if (diagram.type === "firing" || diagram.type === "valve")
     return (
       <div className={`diagram-graphic ${diagram.type}-graphic`}>
-        <div className="engine-front">FRONT OF ENGINE</div>
-        <div className="engine-banks">
-          <div>
-            {[1, 3, 5, 7].map((c) => (
+        {diagram.banks?.length ? <>
+          <div className="engine-front">{diagram.orientation ?? "FRONT OF ENGINE"}</div>
+          <div className={`engine-banks banks-${diagram.banks.length}`}>
+          {diagram.banks.map((bank, bankIndex) => (
+            <div key={bankIndex}>
+            {bank.map((c) => (
               <span
                 key={c}
                 className={
-                  diagram.points[active] === String(c) ? "active" : undefined
+                  diagram.points[active] === c ? "active" : undefined
                 }
               >
                 {c}
               </span>
             ))}
+            </div>
+          ))}
+          {diagram.banks.length === 2 && <div className="engine-valley">{diagram.engineLabel ?? "ENGINE"}</div>}
           </div>
-          <div className="engine-valley">
-            350
-            <br />
-            <small>5.7L V8</small>
-          </div>
-          <div>
-            {[2, 4, 6, 8].map((c) => (
-              <span
-                key={c}
-                className={
-                  diagram.points[active] === String(c) ? "active" : undefined
-                }
-              >
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
+        </> : <div className="engine-front">VERIFIED FIRING SEQUENCE</div>}
         <div className="sequence-strip">{buttons}</div>
       </div>
     );

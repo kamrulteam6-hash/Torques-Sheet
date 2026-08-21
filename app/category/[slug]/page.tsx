@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { categories, specs } from "../../data";
+import { pageMetadata } from "../../seo";
 import { Footer, Header, LineIcon } from "../../ui";
+import { editorialStatus } from "../../content-quality";
+
+export function generateStaticParams() {
+  return categories.map((category) => ({ slug: category.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const category = categories.find((item) => item.slug === slug);
+  if (!category) return { title: "Specification Category Not Found" };
+  return pageMetadata({
+    title: `${category.title} by Vehicle and Engine`,
+    description: `Browse source-linked ${category.title.toLowerCase()} organized by vehicle, engine, model year, and application.`,
+    path: `/category/${category.slug}`,
+  });
+}
 
 export default async function CategoryPage({
   params,
@@ -40,6 +58,13 @@ export default async function CategoryPage({
           </div>
         </section>
         <section className="shell page-content">
+          <div className="critical-callout">
+            <span>i</span>
+            <div>
+              <strong>Review status is shown on every reference</strong>
+              <p>Every published reference is crawlable and included in the XML sitemap. The status label distinguishes pages with a direct application-specific source from broader reference pages that still require an exact vehicle-manual check before service work.</p>
+            </div>
+          </div>
           <div className="hub-grid">
             {matches.map((s) => (
               <Link className="hub-card" href={`/specs/${s.slug}`} key={s.slug}>
@@ -50,6 +75,7 @@ export default async function CategoryPage({
                 <p>
                   {s.make} · {s.model}
                 </p>
+                <small>{editorialStatus(s).label}</small>
                 <span className="mini-link">Open reference →</span>
               </Link>
             ))}

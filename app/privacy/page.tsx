@@ -1,2 +1,4 @@
 import { StaticPage } from "../ui";
+import { pageMetadata } from "../seo";
+export const metadata = pageMetadata({ title: "Privacy Policy", description: "Read the TorqueSheet privacy policy and learn how search activity and site analytics may be handled.", path: "/privacy" });
 export default function Page(){return <StaticPage eyebrow="Privacy" title="Privacy policy"><p>TorqueSheet is designed to collect as little personal information as practical. Search and vehicle selections may be processed to return the requested page and to understand which references are most useful.</p><h2>Your choices</h2><p>You may browse without creating an account. If analytics are enabled, they will be used in aggregate to improve coverage and performance. Contact us at hello@torquesheet.com with privacy questions.</p></StaticPage>}
