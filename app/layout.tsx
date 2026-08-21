@@ -13,7 +13,10 @@ export const metadata: Metadata = {
   category: "Automotive technical reference",
   referrer: "origin-when-cross-origin",
   robots: { index: true, follow: true },
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [{ url: "/favicon.svg?v=2", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg?v=2",
+  },
   openGraph: {
     type: "website",
     siteName: "TorqueSheet",
