@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      // /diagrams is the canonical diagram hub; the category route duplicated it.
+      { source: "/category/diagrams", destination: "/diagrams", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

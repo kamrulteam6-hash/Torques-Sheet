@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { categories, specs } from "../../data";
-import { pageMetadata } from "../../seo";
+import { categories, specsForCategory } from "../../data";
+import { JsonLd, collectionSchema, pageMetadata } from "../../seo";
 import { Footer, Header, LineIcon } from "../../ui";
 import { editorialStatus } from "../../content-quality";
 
 export function generateStaticParams() {
-  return categories.map((category) => ({ slug: category.slug }));
+  // /category/diagrams redirects to /diagrams (see next.config.ts).
+  return categories
+    .filter((category) => category.slug !== "diagrams")
+    .map((category) => ({ slug: category.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -29,17 +32,16 @@ export default async function CategoryPage({
   const { slug } = await params;
   const category = categories.find((c) => c.slug === slug);
   if (!category) notFound();
-  const matches = specs.filter((spec) => {
-    if (slug === "torque-specs") return spec.category === "Torque Specs";
-    if (slug === "firing-order") return spec.category === "Firing Order";
-    if (slug === "fluid-capacities") return spec.category === "Fluid Capacities";
-    if (slug === "ignition-specs") return spec.category === "Ignition Specs";
-    if (slug === "bolt-sequences")
-      return ["intake", "head", "main", "rod"].includes(spec.diagram.type);
-    if (slug === "timing-ignition") return spec.category === "Timing & Ignition";
-    if (slug === "valve-specs") return spec.category === "Valve Specifications";
-    if (slug === "diagrams") return true;
-    return false;
+  const matches = specsForCategory(slug);
+  const schema = collectionSchema({
+    name: category.title,
+    description: `Source-linked ${category.title.toLowerCase()} organized by vehicle and engine.`,
+    path: `/category/${category.slug}`,
+    trail: [
+      { name: "Home", path: "/" },
+      { name: category.title, path: `/category/${category.slug}` },
+    ],
+    items: matches.map((s) => ({ name: s.title, path: `/specs/${s.slug}` })),
   });
   return (
     <>
@@ -81,6 +83,7 @@ export default async function CategoryPage({
             ))}
           </div>
         </section>
+        <JsonLd data={schema} />
       </main>
       <Footer />
     </>

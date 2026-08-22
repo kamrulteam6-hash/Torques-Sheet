@@ -1,11 +1,11 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { categories, makes, popular, specs, vehicleData, slugify, type IconName } from "./data";
+import { categories, makes, popular, searchIndex, siteStats, slugify, specsForMake, vehicleData, type IconName } from "./data";
 import { comparisons, comparisonPath } from "./compare-data";
 import { troubleCodeGuides, troubleCodePath } from "./trouble-code-data";
+import { JsonLd, pageSchema } from "./seo";
+import { HeaderNav, SearchBox, SearchIcon, VehicleSelector } from "./ui-client";
+
+export { SearchIcon };
 
 const paths: Record<IconName, string> = {
   torque: "M5 17 15 7m-1-3 6 6-3 3-3-3-8 8-5 1 1-5 8-8Z",
@@ -18,12 +18,15 @@ const paths: Record<IconName, string> = {
   diagram: "M4 5h16v14H4V5Zm3 3h5v4H7V8Zm8 1h2m-2 4h2M7 16h10",
 };
 
+/** Client-side lookup payload: labels and hrefs only, never full spec records. */
+const lookupIndex = [
+  ...searchIndex,
+  ...comparisons.map((x) => ({ label: x.title, href: comparisonPath(x), text: `${x.title} ${x.rival}`.toLowerCase() })),
+  ...troubleCodeGuides.map((x) => ({ label: x.title, href: troubleCodePath(x), text: `${x.code} ${x.title} ${x.definition}`.toLowerCase() })),
+];
+
 export function LineIcon({ name, size = 32 }: { name: IconName; size?: number }) {
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d={paths[name]} /></svg>;
-}
-
-export function SearchIcon({ size = 20 }: { size?: number }) {
-  return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>;
 }
 
 export function Brand() {
@@ -31,44 +34,28 @@ export function Brand() {
 }
 
 export function Header() {
-  const [open, setOpen] = useState(false);
-  return <header className="site-header"><div className="shell header-inner"><Brand/><button className="menu-button" aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen(!open)}><span/><span/><span/></button><nav className={open ? "nav open" : "nav"}><Link href="/category/torque-specs">Specifications</Link><Link href="/compare">Compare</Link><Link href="/trouble-codes">Trouble Codes</Link><Link href="/makes/chevrolet">Makes</Link></nav></div></header>;
+  return <header className="site-header"><div className="shell header-inner"><Brand/><HeaderNav/></div></header>;
 }
 
 export function Footer() {
-  return <><section className="assurance"><div className="shell assurance-grid"><div><span className="trust-symbol">✓</span><p><strong>Sources shown.</strong><br/>Check the application.</p></div><div><span className="trust-symbol">▤</span><p><strong>{specs.length} reference pages.</strong><br/>{makes.length} vehicle makes.</p></div><div><span className="trust-symbol">◷</span><p><strong>Review status visible.</strong><br/>Drafts stay out of search.</p></div></div></section><footer><div className="shell footer-inner"><p>© 2026 TorqueSheet Mechanical Reference</p><nav><Link href="/about">About</Link><Link href="/editorial-policy">Editorial Policy</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy Policy</Link><Link href="/terms">Terms of Use</Link></nav></div></footer></>;
+  return <><section className="assurance"><div className="shell assurance-grid"><div><span className="trust-symbol">✓</span><p><strong>Sources shown.</strong><br/>Check the application.</p></div><div><span className="trust-symbol">▤</span><p><strong>{siteStats.specCount} reference pages.</strong><br/>{siteStats.makeCount} vehicle makes.</p></div><div><span className="trust-symbol">◷</span><p><strong>Review status visible.</strong><br/>Every page shows its source trail.</p></div></div></section><footer><div className="shell footer-inner"><p>© 2026 TorqueSheet Mechanical Reference</p><nav><Link href="/about">About</Link><Link href="/editorial-policy">Editorial Policy</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy Policy</Link><Link href="/terms">Terms of Use</Link></nav></div></footer></>;
 }
 
-export function StaticPage({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
-  return <><Header/><main className="inner-page"><section className="page-hero"><div className="shell"><div className="breadcrumbs"><Link href="/">Home</Link> / {eyebrow}</div><h1>{title}</h1></div></section><section className="shell page-content utility">{children}</section></main><Footer/></>;
-}
-
-function VehicleSelector() {
-  const router = useRouter();
-  const [year, setYear] = useState(""); const [make, setMake] = useState(""); const [model, setModel] = useState(""); const [engine, setEngine] = useState("");
-  const models = make ? Object.keys(vehicleData[make] || {}) : [];
-  const engines = make && model ? vehicleData[make]?.[model] || [] : [];
-  const submit = (e: React.FormEvent) => { e.preventDefault(); if (!make) return; const match = specs.find(s => s.make === make && s.model.toLowerCase().includes(model.toLowerCase().split(" ")[0])); router.push(match ? `/specs/${match.slug}` : `/makes/${slugify(make)}?model=${slugify(model)}&year=${year}&engine=${slugify(engine)}`); };
-  return <form className="selector" onSubmit={submit}><div className="selector-grid"><label>YEAR<select value={year} onChange={e=>setYear(e.target.value)} required><option value="">Select Year</option>{Array.from({length:31},(_,i)=>2026-i).map(y=><option key={y}>{y}</option>)}</select></label><label>MAKE<select value={make} onChange={e=>{setMake(e.target.value);setModel("");setEngine("");}} required><option value="">Select Make</option>{makes.map(m=><option key={m}>{m}</option>)}</select></label><label>MODEL<select value={model} onChange={e=>{setModel(e.target.value);setEngine("");}} required disabled={!make}><option value="">Select Model</option>{models.map(m=><option key={m}>{m}</option>)}</select></label><label>ENGINE<select value={engine} onChange={e=>setEngine(e.target.value)} required disabled={!model}><option value="">Select Engine</option>{engines.map(e=><option key={e}>{e}</option>)}</select></label></div><button className="primary" type="submit">FIND SPECS <span>→</span></button></form>;
-}
-
-function SearchBox() {
-  const router = useRouter(); const [query,setQuery]=useState("");
-  const results = useMemo(()=>{
-    if(query.length<2)return[];
-    const needle=query.toLowerCase();
-    return [
-      ...specs.map(x=>({label:x.title,href:`/specs/${x.slug}`,text:`${x.title} ${x.keyword}`})),
-      ...comparisons.map(x=>({label:x.title,href:comparisonPath(x),text:`${x.title} ${x.rival}`})),
-      ...troubleCodeGuides.map(x=>({label:x.title,href:troubleCodePath(x),text:`${x.code} ${x.title} ${x.definition}`})),
-    ].filter(x=>x.text.toLowerCase().includes(needle)).slice(0,5);
-  },[query]);
-  const submit=(e:React.FormEvent)=>{e.preventDefault(); if(results[0]) router.push(results[0].href); else router.push(`/search?q=${encodeURIComponent(query)}`)};
-  return <div className="search-wrap"><form className="search-box" onSubmit={submit}><SearchIcon size={24}/><input value={query} onChange={e=>setQuery(e.target.value)} aria-label="Search specifications" placeholder="Search by keyword (e.g., Chevy 350 firing order, F-150 lug nut torque…)"/><button type="submit">Search</button></form>{results.length>0&&<div className="search-suggestions">{results.map(r=><Link href={r.href} key={r.href}><SearchIcon size={16}/>{r.label}</Link>)}</div>}</div>;
+export function StaticPage({ title, eyebrow, children, path, description, pageType = "WebPage" }: { title: string; eyebrow: string; children: React.ReactNode; path?: string; description?: string; pageType?: "AboutPage" | "ContactPage" | "WebPage" }) {
+  const schema = path
+    ? pageSchema({
+        type: pageType,
+        name: title,
+        description: description ?? title,
+        path,
+        trail: [{ name: "Home", path: "/" }, { name: eyebrow, path }],
+      })
+    : null;
+  return <><Header/><main className="inner-page"><section className="page-hero"><div className="shell"><div className="breadcrumbs"><Link href="/">Home</Link> / {eyebrow}</div><h1>{title}</h1></div></section><section className="shell page-content utility">{children}</section>{schema && <JsonLd data={schema}/>}</main><Footer/></>;
 }
 
 function Stat({ icon, value, label }: { icon: IconName; value: string; label: string }) { return <div className="stat"><LineIcon name={icon}/><p><strong>{value}</strong><span>{label}</span></p></div>; }
 
 export function HomePage() {
-  return <div><Header/><main><section className="hero"><div className="grid-noise"/><div className="shell hero-inner"><div className="eyebrow">THE MECHANIC&apos;S QUICK REFERENCE</div><h1>Find the Exact Specs<br/>for Any Vehicle</h1><p className="hero-copy">Torque values, firing orders, fluid capacities, trouble-code diagnostics and vehicle comparisons—organized so the application and source stay visible.</p><VehicleSelector/><SearchBox/></div></section><section className="shell content"><div className="stats"><Stat icon="diagram" value={String(specs.length)} label="Specification pages"/><Stat icon="timing" value={String(makes.length)} label="Vehicle makes"/><Stat icon="sequence" value="Source-linked" label="Review status shown"/><Stat icon="firing" value="Interactive" label="Tools and diagrams"/></div><section className="section-block"><div className="section-heading"><div><span className="kicker">START WITH THE JOB</span><h2>Browse by specification</h2></div><Link href="/category/torque-specs">View all categories →</Link></div><div className="category-grid">{categories.map(c=><Link className="category-card" href={c.slug==="diagrams"?"/diagrams":`/category/${c.slug}`} key={c.slug}><span className="icon-box"><LineIcon name={c.icon}/></span><span className="category-copy"><strong>{c.title}</strong><small>{c.note}</small></span><span className="arrow">→</span></Link>)}</div></section><section className="section-block"><div className="section-heading"><div><span className="kicker">MAKE A SHORTLIST</span><h2>Compare full-size trucks</h2></div><Link href="/compare">All comparisons →</Link></div><div className="home-feature-grid">{comparisons.map((item)=><Link className="home-feature-card compare-entry" href={comparisonPath(item)} key={item.slug}><small>2025 COMPARISON</small><strong>F-150 vs. {item.rivalShort}</strong><span>Ratings, powertrains and buyer tool →</span></Link>)}</div></section><section className="section-block"><div className="section-heading"><div><span className="kicker">DIAGNOSE BEFORE REPLACING</span><h2>Ford F-150 5.0L trouble codes</h2></div><Link href="/trouble-codes">All trouble codes →</Link></div><div className="home-feature-grid">{troubleCodeGuides.map((guide)=><Link className="home-feature-card code-entry" href={troubleCodePath(guide)} key={guide.code}><span className="code-token">{guide.code}</span><strong>{guide.definition}</strong><small>Symptoms, scan data and test sequence</small></Link>)}</div></section><section className="section-block"><div className="section-heading"><div><span className="kicker">QUICK ACCESS</span><h2>Popular lookups</h2></div></div><div className="popular-grid">{popular.map(p=><Link href={p.href} key={p.href}><SearchIcon size={19}/><span>{p.label}</span><b>→</b></Link>)}</div></section><section className="section-block makes-block"><div className="section-heading"><div><span className="kicker">SHOP BY BRAND</span><h2>Browse popular makes</h2></div><Link href="/makes/chevrolet">All makes →</Link></div><div className="make-grid">{makes.map((m)=><Link href={`/makes/${slugify(m)}`} key={m}><span className="car-icon"><i/><i/><i/></span><strong>{m}</strong><small>{specs.filter((s)=>s.make===m).length} reference pages</small></Link>)}</div></section><div className="safety-note"><span>!</span><p><strong>Precision matters.</strong> Always match the model year, engine code and fastener before beginning service. Critical values should be confirmed against current manufacturer information.</p></div></section></main><Footer/></div>;
+  return <div><Header/><main><section className="hero"><div className="grid-noise"/><div className="shell hero-inner"><div className="eyebrow">THE MECHANIC&apos;S QUICK REFERENCE</div><h1>Find the Exact Specs<br/>for Any Vehicle</h1><p className="hero-copy">Torque values, firing orders, fluid capacities, trouble-code diagnostics and vehicle comparisons—organized so the application and source stay visible.</p><VehicleSelector makes={makes} vehicleData={vehicleData} index={lookupIndex}/><SearchBox index={lookupIndex}/></div></section><section className="shell content"><div className="stats"><Stat icon="diagram" value={String(siteStats.specCount)} label="Specification pages"/><Stat icon="timing" value={String(siteStats.makeCount)} label="Vehicle makes"/><Stat icon="sequence" value="Source-linked" label="Review status shown"/><Stat icon="firing" value="Interactive" label="Tools and diagrams"/></div><section className="section-block"><div className="section-heading"><div><span className="kicker">START WITH THE JOB</span><h2>Browse by specification</h2></div><Link href="/category/torque-specs">View all categories →</Link></div><div className="category-grid">{categories.map(c=><Link className="category-card" href={c.slug==="diagrams"?"/diagrams":`/category/${c.slug}`} key={c.slug}><span className="icon-box"><LineIcon name={c.icon}/></span><span className="category-copy"><strong>{c.title}</strong><small>{c.note}</small></span><span className="arrow">→</span></Link>)}</div></section><section className="section-block"><div className="section-heading"><div><span className="kicker">MAKE A SHORTLIST</span><h2>Compare full-size trucks</h2></div><Link href="/compare">All comparisons →</Link></div><div className="home-feature-grid">{comparisons.map((item)=><Link className="home-feature-card compare-entry" href={comparisonPath(item)} key={item.slug}><small>2025 COMPARISON</small><strong>F-150 vs. {item.rivalShort}</strong><span>Ratings, powertrains and buyer tool →</span></Link>)}</div></section><section className="section-block"><div className="section-heading"><div><span className="kicker">DIAGNOSE BEFORE REPLACING</span><h2>Ford F-150 5.0L trouble codes</h2></div><Link href="/trouble-codes">All trouble codes →</Link></div><div className="home-feature-grid">{troubleCodeGuides.map((guide)=><Link className="home-feature-card code-entry" href={troubleCodePath(guide)} key={guide.code}><span className="code-token">{guide.code}</span><strong>{guide.definition}</strong><small>Symptoms, scan data and test sequence</small></Link>)}</div></section><section className="section-block"><div className="section-heading"><div><span className="kicker">QUICK ACCESS</span><h2>Popular lookups</h2></div></div><div className="popular-grid">{popular.map(p=><Link href={p.href} key={p.href}><SearchIcon size={19}/><span>{p.label}</span><b>→</b></Link>)}</div></section><section className="section-block makes-block"><div className="section-heading"><div><span className="kicker">SHOP BY BRAND</span><h2>Browse popular makes</h2></div><Link href="/makes/chevrolet">All makes →</Link></div><div className="make-grid">{makes.map((m)=><Link href={`/makes/${slugify(m)}`} key={m}><span className="car-icon"><i/><i/><i/></span><strong>{m}</strong><small>{specsForMake(m).length} reference pages</small></Link>)}</div></section><div className="safety-note"><span>!</span><p><strong>Precision matters.</strong> Always match the model year, engine code and fastener before beginning service. Critical values should be confirmed against current manufacturer information.</p></div></section></main><Footer/></div>;
 }
