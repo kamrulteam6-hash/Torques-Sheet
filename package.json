@@ -15,7 +15,9 @@
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "seo:audit": "node tests/seo-audit.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern work --ignore-pattern outputs",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "content:audit": "node tests/content-audit.mjs",
+    "content:baseline": "node tests/content-audit.mjs --update"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

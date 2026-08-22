@@ -1,4 +1,5 @@
 import type { Source, SpecRecord, SpecValue } from "./chevy350-content";
+import { generalVehicleFaqs } from "./general-vehicle-faqs";
 
 const reviewed="2026-08-14";
 const engineImage="/features/shared-firing-engine.png";
@@ -79,9 +80,11 @@ function makePage(j:Job):SpecRecord{
     metaDescription:`${j.title} with application table, generation boundaries, verification steps, cautions and official manufacturer lookup.`,answer:j.answer,scope:j.scope,detail:j.detail,values:j.values,sources:[j.source],reviewed,
     featureImage:j.image==="engine"?engineImage:vehicleImage,featureOverlay:true,
     diagram:{type:j.diagram??"main",title:`Interactive ${j.model} specification guide`,caption:"Use this visual as an orientation aid. The exact VIN, engine, trim and manufacturer document control the specification.",points},
-    intro:[j.answer,j.scope],steps:["Identify model year, VIN, engine, trim, drivetrain and factory option codes.","Match the applicable row to the official manufacturer document and physical component.","Record the verified value, units and application before service, loading or parts purchase."],
+    intro:[j.answer,j.scope],steps:[],guides:["identifying-your-exact-vehicle"],
     sections:[{heading:`Application boundaries for ${j.model}`,paragraphs:[j.scope,j.detail]}],
-    faqs:[{q:`What are the ${j.keyword}?`,a:j.answer},{q:"Why does the specification vary?",a:j.scope},{q:"What should be checked before using the chart?",a:`${j.detail} Confirm the exact vehicle in the linked manufacturer source.`}]};
+    // Hand-written FAQs where they exist; the generated block otherwise, which
+    // faq-quality.ts correctly refuses to publish as FAQPage.
+    faqs:generalVehicleFaqs[j.slug]??[{q:`What are the ${j.keyword}?`,a:j.answer},{q:"Why does the specification vary?",a:j.scope},{q:"What should be checked before using the chart?",a:`${j.detail} Confirm the exact vehicle in the linked manufacturer source.`}]};
 }
 
 export const generalVehicleSpecs:SpecRecord[]=jobs.map(makePage);

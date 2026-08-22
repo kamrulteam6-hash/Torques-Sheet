@@ -874,9 +874,17 @@ const toyota1989_22reIntake = source(
   "The application-specific service record lists eight bolts plus two nuts and a 19 N-m (14 ft-lb) intake-to-head value for the 1989 Pickup 22R-E.",
 );
 
-const commonFaqs = [
-  { q: "Is this diagram a replacement for Ford workshop information?", a: "No. It is an orientation and diagnostic-flow aid. Use the VIN-, model-year-, and build-date-specific Ford workshop and wiring procedures before opening the system." },
-  { q: "Why does the build date matter on a 6.0L Power Stroke?", a: "The high-pressure oil hardware and sensor locations changed during production. An early-engine leak point or test connection may not exist in the same form on a later engine." },
+// These two pages previously shared one `commonFaqs` pair. Both questions are
+// worth answering on each, but the answer differs by circuit, so each page now
+// answers them against its own hardware.
+const hpopBuildFaqs = [
+  { q: "Can I diagnose the high-pressure oil system from this diagram alone?", a: "No. It is an orientation and diagnostic-flow aid for the HPOP, reservoir and ICP circuit. Confirm test-port locations and pressure specifications in the VIN-, model-year- and build-date-specific Ford workshop procedure before opening the system." },
+  { q: "Why does the build date matter when chasing a 6.0L high-pressure oil leak?", a: "The high-pressure oil hardware and sensor locations changed during production, so an early-engine leak point or test connection may not exist in the same form on a later engine. Identifying the build date first prevents testing at a port your engine does not have." },
+];
+
+const coolerBuildFaqs = [
+  { q: "Can I diagnose an oil-cooler restriction from this flow diagram alone?", a: "No. The diagram establishes the pump-to-cooler-to-filter order so the circuit is not reasoned about backwards. Restriction, an internal breach and an external housing leak are then separated using Ford's specified diagnostic procedure and values." },
+  { q: "Why does the build date matter on a 6.0L oil-cooler repair?", a: "Cooler, filter-housing and related cooling-system service information is model-year and build-date specific on this engine. Confirm the correct seals, priming and refill steps for your engine rather than carrying a procedure across build dates." },
 ];
 
 export const researchedSystemSpecs: SpecRecord[] = [
@@ -925,7 +933,7 @@ export const researchedSystemSpecs: SpecRecord[] = [
       { q: "What does HPOP mean on a 6.0 Power Stroke?", a: "High-pressure oil pump. It supplies the hydraulic pressure used by the HEUI injectors." },
       { q: "Does low ICP automatically mean the HPOP is bad?", a: "No. Ford's diagnostic process separates pump capability from IPR control, supply problems, branch/rail leaks, and injector-related losses." },
       { q: "Where does HPOP oil go after operating the injector?", a: "Oil discharged through the injector's spill/return path drains back into the base-engine oil system and crankcase." },
-      ...commonFaqs,
+      ...hpopBuildFaqs,
     ],
     sources: [fordNoStart, fordControl, fordInjector],
     reviewed,
@@ -977,7 +985,7 @@ export const researchedSystemSpecs: SpecRecord[] = [
       { q: "Does oil flow through the cooler before the filter on a 6.0 Power Stroke?", a: "Yes. The functional Ford flow is pump to oil cooler to oil filter, then out to the engine and HPOP reservoir branches." },
       { q: "Does the HPOP pull directly from the oil pan?", a: "No. The base lubrication system supplies filtered oil to the high-pressure reservoir, which supplies the HPOP." },
       { q: "Can a restricted oil cooler affect the EGR cooler?", a: "A coolant-side restriction can reduce coolant supply through the cooler circuit and contribute to related cooling-system problems; diagnose it using Ford's specified procedure." },
-      ...commonFaqs,
+      ...coolerBuildFaqs,
     ],
     sources: [fordControl, fordCooler, fordNoStart],
     reviewed,
@@ -1803,7 +1811,7 @@ export const researchedSystemSpecs: SpecRecord[] = [
       { heading: "Editorial verification status", paragraphs: ["TorqueSheet has verified the COP architecture against Honda's RSX documentation and provides Honda's official wiring-information path. This broad K20 page remains indexable but visibly limited until separate factory connector diagrams are attached for defined applications such as 2002-2004 RSX, 2004-2008 TSX and later K20C platforms."] },
     ],
     faqs: [
-      { q: "What is the Honda K20 firing order?", a: "The K20 inline-four firing order is 1-3-4-2." },
+      { q: "Does the K20 firing order tell me which coil connector is which?", a: "No. The firing order is 1-3-4-2, but that is the ignition event sequence, not the physical coil or harness order. Cylinders run in physical order along the head, so a coil must be matched by its cylinder position and connector, never by counting the firing sequence." },
       { q: "Where is cylinder 1 on a K20?", a: "Cylinder 1 is at the timing-chain end; cylinders then run 2, 3 and 4 toward the transmission." },
       { q: "Does a K20 use a distributor?", a: "No. Factory K20 applications use four individual coil-on-plug units controlled electronically." },
       { q: "Are all K20 coil connectors pinned the same?", a: "Do not assume so. Match the coil, engine harness, ECU and year/model electrical diagram by connector view and terminal number." },

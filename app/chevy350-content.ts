@@ -37,6 +37,12 @@ export type SpecRecord = {
   reviewed: string;
   /** Explicit editorial hold for pages that still need an application-specific source. */
   indexReady?: boolean;
+  /**
+   * Slugs of canonical /guides pages carrying the shared procedure this page
+   * used to inline. Linking them keeps the material available without pasting
+   * the same explainer onto dozens of pages.
+   */
+  guides?: string[];
   featureImage?: string;
   featureOverlay?: boolean;
 };

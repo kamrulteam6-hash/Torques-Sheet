@@ -1,3 +1,5 @@
+import { slugify } from "./slug";
+export { slugify };
 export type IconName =
   | "torque"
   | "firing"
@@ -56,6 +58,36 @@ export const categories = [
     title: "Mechanical Diagrams",
     note: "Exploded views · Assembly · More",
     icon: "diagram" as IconName,
+  },
+  {
+    slug: "vehicle-specs",
+    title: "Vehicle Specifications",
+    note: "Towing · Tire pressure · Capacities",
+    icon: "torque" as IconName,
+  },
+  {
+    slug: "engine-specs",
+    title: "Engine Specifications",
+    note: "Displacement · Bore · Output",
+    icon: "timing" as IconName,
+  },
+  {
+    slug: "brake-specs",
+    title: "Brake Specifications",
+    note: "Rotors · Pads · Caliper torque",
+    icon: "sequence" as IconName,
+  },
+  {
+    slug: "electrical-specs",
+    title: "Electrical Specifications",
+    note: "Charging · Starting · Wiring",
+    icon: "spark" as IconName,
+  },
+  {
+    slug: "performance-specs",
+    title: "Performance Specs",
+    note: "Horsepower · Torque · Ratings",
+    icon: "firing" as IconName,
   },
 ];
 
@@ -179,6 +211,22 @@ import { flywheelSpecs } from "./flywheel-content";
 import { frontServiceSpecs } from "./front-service-content";
 import { valveCoverSpecs } from "./valve-cover-content";
 import { reduceRepeatedCopy } from "./content-quality";
+import { sanitizeSpecSources } from "./source-quality";
+import { clampMetaDescription } from "./meta";
+import type { SpecRecord } from "./chevy350-content";
+
+/**
+ * Source sanitisation runs before reduceRepeatedCopy, because the generated
+ * copy names spec.sources[0] and must not reference a citation we removed.
+ */
+const prepare = (spec: SpecRecord, preserveLongForm: boolean) =>
+  reduceRepeatedCopy(
+    {
+      ...sanitizeSpecSources(spec),
+      metaDescription: clampMetaDescription(spec.metaDescription),
+    },
+    preserveLongForm,
+  );
 
 const researchedAdditionalSlugs = new Set([
   "jeep/wrangler/3-6/oil-capacity",
@@ -433,48 +481,99 @@ const researchedServiceSlugs = new Set([
 ]);
 
 export const specs = [
-  ...chevy350Specs.map((spec) => reduceRepeatedCopy(spec, true)),
+  ...chevy350Specs.map((spec) => prepare(spec, true)),
   ...extendedSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedExtendedSlugs.has(spec.slug)),
+    prepare(spec, researchedExtendedSlugs.has(spec.slug)),
   ),
   ...additionalSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedAdditionalSlugs.has(spec.slug)),
+    prepare(spec, researchedAdditionalSlugs.has(spec.slug)),
   ),
   ...editorialBatchSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedEditorialSlugs.has(spec.slug)),
+    prepare(spec, researchedEditorialSlugs.has(spec.slug)),
   ),
   ...serviceBatchSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedServiceSlugs.has(spec.slug)),
+    prepare(spec, researchedServiceSlugs.has(spec.slug)),
   ),
   ...referenceBatchSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedReferenceSlugs.has(spec.slug)),
+    prepare(spec, researchedReferenceSlugs.has(spec.slug)),
   ),
   ...classicPerformanceSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedClassicSlugs.has(spec.slug)),
+    prepare(spec, researchedClassicSlugs.has(spec.slug)),
   ),
   ...dieselServiceSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedDieselSlugs.has(spec.slug)),
+    prepare(spec, researchedDieselSlugs.has(spec.slug)),
   ),
   ...generalVehicleSpecs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedGeneralVehicleSlugs.has(spec.slug)),
+    prepare(spec, researchedGeneralVehicleSlugs.has(spec.slug)),
   ),
   ...generalVehicleBatch2Specs.map((spec) =>
-    reduceRepeatedCopy(spec, researchedGeneralBatch2Slugs.has(spec.slug)),
+    prepare(spec, researchedGeneralBatch2Slugs.has(spec.slug)),
   ),
-  ...researchedDiagramSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...researchedSystemSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...exhaustDiagramSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...valveAdjustmentSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...camTimingSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...flywheelSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...frontServiceSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
-  ...valveCoverSpecs.map((spec) => reduceRepeatedCopy(spec, true)),
+  ...researchedDiagramSpecs.map((spec) => prepare(spec, true)),
+  ...researchedSystemSpecs.map((spec) => prepare(spec, true)),
+  ...exhaustDiagramSpecs.map((spec) => prepare(spec, true)),
+  ...valveAdjustmentSpecs.map((spec) => prepare(spec, true)),
+  ...camTimingSpecs.map((spec) => prepare(spec, true)),
+  ...flywheelSpecs.map((spec) => prepare(spec, true)),
+  ...frontServiceSpecs.map((spec) => prepare(spec, true)),
+  ...valveCoverSpecs.map((spec) => prepare(spec, true)),
 ];
 export type { SpecRecord } from "./chevy350-content";
 
-export const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+
+
+// --- Canonical taxonomy -----------------------------------------------------
+// Content files carry free-form `category` and combined `make` strings
+// ("Firing Orders" vs "Firing Order", "Chevrolet / GMC"). These helpers map
+// them onto the real hub routes without editing any content record.
+
+const categorySlugByLabel: Record<string, string> = {
+  "Torque Specs": "torque-specs",
+  "Firing Order": "firing-order",
+  "Firing Orders": "firing-order",
+  "Fluid Capacities": "fluid-capacities",
+  "Ignition Specs": "ignition-specs",
+  "Bolt Torque Sequences": "bolt-sequences",
+  "Timing & Ignition": "timing-ignition",
+  "Valve Specifications": "valve-specs",
+  "Mechanical Diagrams": "diagrams",
+  Diagrams: "diagrams",
+  "Vehicle Specifications": "vehicle-specs",
+  "Engine Specifications": "engine-specs",
+  "Brake Specifications": "brake-specs",
+  "Electrical Specifications": "electrical-specs",
+  "Performance Specs": "performance-specs",
+};
+
+export const categorySlugFor = (category: string) =>
+  categorySlugByLabel[category] ?? slugify(category);
+
+const primaryMakeByLabel: Record<string, string> = {
+  "Chevrolet / GMC": "Chevrolet",
+  GM: "Chevrolet",
+  "Dodge / Ram": "Dodge",
+  "Dodge / Ram / Chrysler": "Dodge",
+  "Honda / Acura": "Honda",
+  "Nissan / Infiniti": "Nissan",
+  "Volkswagen / Audi": "Volkswagen",
+};
+
+/** Collapses combined make labels onto the make that actually has a hub route. */
+export const primaryMake = (make: string) => primaryMakeByLabel[make] ?? make;
+
+export const makeHubPath = (make: string) => `/makes/${slugify(primaryMake(make))}`;
+
+export const specsForMake = (make: string) =>
+  specs.filter((spec) => primaryMake(spec.make) === make);
+
+export const specsForCategory = (slug: string) =>
+  specs.filter((spec) => categorySlugFor(spec.category) === slug);
+
+/** Minimal payload for the client-side search box — no full spec records. */
+export const searchIndex = specs.map((spec) => ({
+  label: spec.title,
+  href: `/specs/${spec.slug}`,
+  text: `${spec.title} ${spec.keyword}`.toLowerCase(),
+}));
+
+export const siteStats = { specCount: specs.length, makeCount: makes.length };

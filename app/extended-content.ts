@@ -157,6 +157,12 @@ export function lugGuide(base: Base): SpecRecord {
   const primary = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
+    guides: [
+      "clean-dry-threads-and-torque-accuracy",
+      "wheel-tightening-pattern-and-staged-passes",
+      "when-to-recheck-wheel-torque",
+      "torque-wrench-selection-and-accuracy",
+    ],
     reviewed,
     diagram: {
       type: "wheel",
@@ -169,41 +175,13 @@ export function lugGuide(base: Base): SpecRecord {
       `The short answer for the most common ${base.identity} application is ${primary}, but wheel torque is a safety specification—not a value to guess from memory. Model year, platform, stud size, factory wheel design, and an aftermarket wheel manufacturer's instructions can change the required value. This guide therefore starts with the verified application table and then explains how to produce an accurate clamping load instead of merely making the wrench click.`,
       `Correct torque keeps the wheel seated evenly against the hub. Too little clamping force can let the wheel move and loosen the fasteners. Too much can stretch studs, damage the nut seat, distort a brake rotor, or make roadside removal impossible. Read the scope note, identify the vehicle and wheel, clean the mating surfaces, and use a calibrated torque wrench for the final passes.`,
     ],
-    steps: [
-      "Park on a firm, level surface, set the parking brake, select Park or first gear, and chock the wheel diagonally opposite the one being serviced.",
-      "Confirm the model year, platform, wheel type, fastener type, and the exact value in the application table or the vehicle's own manual.",
-      "With the vehicle safely supported, clean the hub face, wheel mounting pad, studs, and nut seats. Replace damaged, swollen, cracked, or cross-threaded fasteners.",
-      "Install every nut by hand for several full turns. If a nut will not spin on normally, stop and correct the thread problem rather than driving it on with an impact tool.",
-      "Snug the fasteners in a star or opposite-side pattern while the wheel is just supported, then lower the vehicle enough to prevent rotation without placing its full weight on a visibly unseated wheel.",
-      "Set the torque wrench to the verified specification. Tighten in the illustrated pattern, repeat the pattern once as a confirmation pass, restore tire pressure, and perform the manufacturer's recommended recheck.",
-    ],
+    steps: [],
     sections: [
       {
         heading: `How to read the ${base.model} torque table`,
         paragraphs: [
           `Start with model year and platform rather than wheel diameter. Factory 17-, 18-, and 20-inch wheels can share a value when they use the same stud and seat design, while two trucks sold in the same calendar year can differ because one is an outgoing platform. ${base.distinctions[0]}`,
           `The figures in this guide assume original-equipment-style fasteners and clean, dry threads unless the cited manufacturer says otherwise. If an aftermarket wheel, spacer, conversion stud, locking nut, or repair kit supplies a different instruction, that component-specific document controls. Record the final value on the work order so the next technician does not have to infer it.`,
-        ],
-      },
-      {
-        heading: "Why clean, dry threads matter",
-        paragraphs: [
-          `A torque wrench measures resistance to turning; it does not directly measure stud tension. Rust, dirt, damaged plating, oil, grease, or anti-seize changes the relationship between the wrench reading and the actual clamping force. A lubricated fastener can create substantially more tension at the same displayed torque, which is why the owner-manual instruction to keep the threads and seats clean and dry is part of the specification.`,
-          `Clean loose corrosion from the hub face and wheel pad so the wheel can sit flat. Do not grind away sound material or coat the conical or ball seat with lubricant. A tiny amount of corrosion-prevention material may be permitted only on a hub pilot in some manuals; that is different from coating the studs, nut seats, or wheel mounting face.`,
-        ],
-      },
-      {
-        heading: "Correct tightening pattern and staged passes",
-        paragraphs: [
-          `The star pattern is not cosmetic. Moving to a fastener across the center draws the wheel onto the hub evenly and reduces the chance of trapping the wheel at an angle. For a five-lug wheel, follow 1-3-5-2-4 around the circle, or use the numbered interactive diagram. For six or eight lugs, continue selecting the fastener approximately opposite the one just tightened.`,
-          `Use two or three stages when the wheel has been fully removed: hand snug, an intermediate pass, and the final specification. Do not use an impact wrench for the final value. Impact output varies with air pressure, battery state, socket mass, joint friction, and trigger time. It is suitable for gentle run-down only when the nut remains below final torque.`,
-        ],
-      },
-      {
-        heading: "When and how to recheck torque",
-        paragraphs: [
-          `Rechecking is especially important after a wheel change, tire rotation, brake job, new wheel installation, or any work that disturbed the wheel. Heat cycles and small amounts of paint, corrosion, or debris can settle. Perform the recheck at the distance stated by the exact manual or wheel manufacturer; many late-model procedures specify a short post-service interval.`,
-          `To recheck, let the brakes and wheels cool, place the torque wrench at the specified value, and follow the complete pattern. Do not loosen each nut first unless the service procedure specifically requires it. If a fastener turns significantly before reaching the setting, inspect the wheel seat, stud, nut, and hub rather than assuming repeated tightening will solve the cause.`,
         ],
       },
       {
@@ -220,35 +198,9 @@ export function lugGuide(base: Base): SpecRecord {
           `${base.distinctions[1] ?? "A factory torque value is valid only for the application identified by its manual."} Treat an unfamiliar nut seat, stud, spacer, or wheel as a reason to stop and identify the hardware before tightening.`,
         ],
       },
-      {
-        heading: "Tool selection and accuracy check",
-        paragraphs: [
-          `Use a torque wrench whose working range places ${primary} away from the extreme bottom or top of the scale. A six-point deep socket that fully engages the nut reduces rounding. Extensions used straight do not normally change torque, but crow-foot adapters that change the effective wrench length require calculation. Return a click wrench to its minimum marked setting after use and calibrate it at the interval specified by its maker.`,
-          `If the only available wrench has been dropped, stored under load, or shows inconsistent clicks, use another verified tool. Wheel service is a poor place to test a questionable wrench. A smooth pull at the handle's marked grip point gives a more repeatable result than a jerk, bounce, or second click applied “for luck.”`,
-        ],
-      },
-    ],
+      ],
     faqs: [
-      {
-        q: `What is the ${base.keyword}?`,
-        a: `${base.answer} Use the application table because the broad search phrase can cover more than one platform or model year.`,
-      },
-      {
-        q: "Should lug nuts be torqued wet or dry?",
-        a: "Use clean, dry threads and seats unless the exact vehicle or wheel instruction explicitly specifies a lubricant. Lubrication changes clamping force at a given wrench reading.",
-      },
-      {
-        q: "Can I use an impact wrench for final tightening?",
-        a: "Use it only for controlled run-down below final torque. Finish every fastener with a calibrated hand torque wrench in the correct pattern.",
-      },
-      {
-        q: "Do aluminum wheels use a different value?",
-        a: "Not automatically. The correct value comes from the vehicle/wheel application and fastener design, not from wheel material alone.",
-      },
-      {
-        q: "Why should wheel torque be checked again?",
-        a: "Mating surfaces can settle after removal and installation. A short-distance recheck confirms that every fastener retained the specified clamp load.",
-      },
+      { q: `What is the ${base.keyword}?`, a: `${base.answer} Use the application table because the broad search phrase can cover more than one platform or model year.` },
     ],
   };
 }
@@ -257,6 +209,13 @@ export function oilGuide(base: Base): SpecRecord {
   const primary = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
+    guides: [
+      "engine-oil-change-procedure",
+      "oil-capacity-viscosity-and-approval",
+      "reading-an-oil-dipstick-accurately",
+      "oil-filter-replacement-and-leak-check",
+      "oil-life-monitors-and-service-intervals",
+    ],
     reviewed,
     diagram: {
       type: "oil",
@@ -269,49 +228,14 @@ export function oilGuide(base: Base): SpecRecord {
       `${base.answer} That number is a refill starting point for the identified engine, not permission to pour the entire amount without checking. Oil can remain in galleries, coolers, a tilted pan, or an old filter, and aftermarket pans can change total volume. The safest method is to verify the engine code and model year, use the correct viscosity and approval, refill slightly below capacity, circulate the oil, wait, and finish by the dipstick.`,
       `This guide separates similarly named engines and model generations because capacity errors commonly come from a search result that omits the year or engine code. The table also distinguishes “with filter” from “without filter.” During a normal oil change, replace the filter and use the with-filter figure, then confirm the final level on level ground under the conditions specified by the owner manual.`,
     ],
-    steps: [
-      "Confirm the VIN, model year, engine displacement/code, drivetrain if relevant, and whether the engine or oil pan is original.",
-      "Warm the engine enough to suspend contaminants, park level, shut it off, secure the vehicle, and allow hot components to become safe to work around.",
-      "Remove the drain plug and old filter, allow a complete drain, inspect the sealing surfaces, and install the correct filter and plug using their component-specific instructions.",
-      "Add approximately half a quart less than the listed with-filter capacity through a clean funnel, reinstall the cap, and check for tools or rags before starting.",
-      "Run the engine briefly while watching the oil-pressure indicator, shut it off, inspect the plug and filter for leakage, and wait the manual's specified drain-back time.",
-      "Check the dipstick on level ground, add small measured amounts to reach the full mark without exceeding it, reset the oil-life monitor, and document the product and quantity used.",
-    ],
+    steps: [],
     sections: [
       {
         heading: `Oil-capacity chart for ${base.model}`,
         paragraphs: [
           `Use the chart as an application lookup. ${base.distinctions[0]} A capacity printed beside the wrong engine code is not “close enough”; even engines sharing the same displacement can have different pans, filters, coolers, or drain-back behavior. If the vehicle has been swapped, rebuilt, or fitted with an aftermarket pan, use the installed hardware manufacturer's capacity and calibration marks.`,
           `The most common current application begins near ${primary}. Begin below that amount and finish by measurement. The difference between the add and full marks is often about one quart, but do not assume that relationship when the dipstick is aftermarket, damaged, or paired with a non-original tube. Investigate a reading that remains absent or implausibly high.`,
-        ],
-      },
-      {
-        heading:
-          "Capacity, viscosity, and oil approval are different specifications",
-        paragraphs: [
-          `Capacity tells you approximately how much the crankcase accepts after a defined service. Viscosity—such as 0W-20 or 5W-20—describes flow behavior across temperature ranges. The manufacturer approval or material standard addresses performance tests beyond viscosity. Match all three items to the year and engine; a bottle with the right viscosity is not automatically approved for every application.`,
-          `${base.distinctions[1]} Climate provisions can allow an alternate viscosity in severe cold or special duty, but those exceptions belong to a specific manual. Avoid universal additive claims that conflict with the manufacturer-approved oil chemistry, and never mix a guess about viscosity with a guess about capacity.`,
-        ],
-      },
-      {
-        heading: "How to get an accurate dipstick reading",
-        paragraphs: [
-          `Park on level ground. Follow the manual's hot or cold checking method because drain-back time affects the reading. Pull the dipstick, wipe it clean, fully reinsert it, and withdraw it again without dragging the marked area along the tube more than necessary. Read both sides; the lower consistent boundary is more reliable when oil smears up one side.`,
-          `Add oil in small measured increments and allow time to reach the pan. Overfilling can aerate the oil as the crankshaft contacts it, increase crankcase pressure, contaminate the intake through the ventilation system, or damage emissions components. Underfilling reduces the reserve available during braking, cornering, towing, or operation on grades.`,
-        ],
-      },
-      {
-        heading: "Filter replacement and leak inspection",
-        paragraphs: [
-          `Confirm the old filter gasket came off with the filter. A double gasket can dump oil rapidly after startup. Lightly oil the new gasket only when the filter maker directs it, tighten by the stated turn or torque method, and keep the mounting pad clean. Replace a drain-plug gasket or seal when required and use the exact plug torque rather than guessing from wrench feel.`,
-          `After starting, verify that the oil-pressure warning clears promptly. Shut down immediately if it does not. Inspect the filter perimeter, drain plug, and nearby splash shield with a light. A clean final inspection is easier when residual oil from removal has been wiped away. Recheck the parking spot and oil level after the first drive.`,
-        ],
-      },
-      {
-        heading: "Oil-life monitor and service interval",
-        paragraphs: [
-          `An oil-life monitor estimates service need from operating conditions; it does not measure the amount of oil in the pan. Reset it only after completing the oil and filter service. Continue checking the level between changes, especially before long trips, towing, high-speed driving, or off-road use. A vehicle can consume or leak oil while the monitor still shows substantial life remaining.`,
-          `Follow the time, mileage, engine-hour, and severe-service limits in the exact owner manual. Repeated short trips, dusty roads, extended idling, heavy loads, and extreme temperatures can justify closer inspection or a shorter interval. Keep receipts and record the oil approval, viscosity, filter number, mileage, and measured refill quantity.`,
+          `${base.distinctions[1]}`,
         ],
       },
       {
@@ -330,26 +254,7 @@ export function oilGuide(base: Base): SpecRecord {
       },
     ],
     faqs: [
-      {
-        q: `How much oil does the ${base.model} take?`,
-        a: `${base.answer} Confirm the year/engine row and finish by the dipstick rather than treating the capacity as an exact pour-in amount.`,
-      },
-      {
-        q: "Does the published capacity include the filter?",
-        a: "Use the table note. The main figures in this guide identify with-filter capacity because a normal service includes a new filter.",
-      },
-      {
-        q: "Should I add the full capacity at once?",
-        a: "No. Add slightly less, run the engine, wait for drain-back on level ground, and bring the level to full in small measured amounts.",
-      },
-      {
-        q: "Can the same-displacement engine use a different amount in another year?",
-        a: "Yes. Oil-pan, filter, cooler, and engine-generation changes can alter capacity even when the badge still shows the same displacement.",
-      },
-      {
-        q: "What if my dipstick disagrees with the chart?",
-        a: "Recheck the identification and checking procedure. If the mismatch remains, investigate non-original hardware, an incorrect dipstick, incomplete draining, or leakage before operating the vehicle.",
-      },
+      { q: `How much oil does the ${base.model} take?`, a: `${base.answer} Confirm the year/engine row and finish by the dipstick rather than treating the capacity as an exact pour-in amount.` },
     ],
   };
 }
@@ -358,6 +263,13 @@ export function firingGuide(base: Base): SpecRecord {
   const order = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
+    guides: [
+      "cylinder-numbering-versus-firing-order",
+      "finding-compression-tdc-on-cylinder-1",
+      "distributor-direction-and-coil-on-plug-routing",
+      "symptoms-of-an-incorrect-firing-order",
+      "firing-order-verification-method",
+    ],
     reviewed,
     diagram: {
       type: "firing",
@@ -370,14 +282,7 @@ export function firingGuide(base: Base): SpecRecord {
       `${base.answer} A firing order is the sequence in which the cylinders begin their power strokes. It is not the same thing as cylinder numbering, distributor-cap clock position, or ignition-coil connector order. Confusing those references can create a no-start, violent backfire, dead cylinders, or a diagnostic trail that looks like a fuel or mechanical problem.`,
       `Use the verified order only after identifying the engine family and camshaft. Classic engines can accept camshaft swaps that change the required sequence, while modern coil-on-plug engines have no distributor cap to route. The table, bank diagram, and procedure below keep those concepts separate and show how to confirm No. 1 on compression before moving any wires.`,
     ],
-    steps: [
-      "Identify the engine by year, casting, VIN code, induction system, and—on a rebuilt classic engine—the installed camshaft or engine-builder documentation.",
-      "Disconnect power as appropriate, label every wire or coil connector, and photograph the original routing before removing parts.",
-      "Locate cylinder 1 using the bank-numbering diagram; do not assume the left/right convention matches another manufacturer's V8.",
-      "For a distributor engine, rotate to cylinder 1 compression TDC and identify the cap terminal directly above the rotor. That terminal is No. 1 for the installed distributor position.",
-      `Route or verify the remaining cylinders in ${order} order, following the correct rotor direction or the harness/coil identification for the system.`,
-      "Keep leads separated from exhaust heat and sharp edges, reinstall retainers, then verify starting, idle quality, diagnostic codes, and ignition timing where adjustable.",
-    ],
+    steps: [],
     sections: [
       {
         heading: `Which ${base.model} firing order applies?`,
@@ -387,67 +292,15 @@ export function firingGuide(base: Base): SpecRecord {
         ],
       },
       {
-        heading: "Cylinder numbering versus firing sequence",
+        heading: `Bank numbering and verification on the ${base.model}`,
         paragraphs: [
-          `Cylinder numbering tells you each bore's permanent identity. Firing order tells you the repeating sequence of combustion events. The crankshaft makes two full revolutions during a four-stroke cycle, so checking only that the timing mark is at top dead center is insufficient: cylinder 1 can be at compression TDC or exhaust TDC. Both valves should be closed at compression TDC.`,
-          `${base.distinctions[1]} Mark the banks temporarily when working in a crowded engine bay. Route one connection from its source to its cylinder and verify both ends before starting the next; tracing a completed bundle afterward invites transposed pairs.`,
-        ],
-      },
-      {
-        heading: "How to find compression TDC on cylinder 1",
-        paragraphs: [
-          `Remove the cylinder 1 spark plug with the engine cool. Rotate the crankshaft in its normal direction while feeling for compression with an appropriate method, then bring the timing mark to zero or the specified installation position. Never use the starter with hands, tools, or loose clothing near rotating parts. A piston-stop tool requires a dedicated procedure and should not be improvised.`,
-          `On a distributor engine, remove the cap and observe the rotor. The cap post over the rotor becomes the practical No. 1 location for that installation. If the vacuum advance, wiring, or housing cannot be positioned correctly, the distributor may need to be re-indexed, but re-indexing is separate from changing the firing order.`,
-        ],
-      },
-      {
-        heading:
-          "Distributor direction, coil-on-plug systems, and wire routing",
-        paragraphs: [
-          `A distributor's rotation direction determines which adjacent cap terminal is next. Verify the direction for the engine family rather than assuming clockwise. Coil-on-plug engines electronically schedule the same mechanical firing sequence, but the service task becomes identifying the correct coil, connector, harness branch, or control circuit instead of arranging terminals around a cap.`,
-          `Keep secondary leads away from exhaust components and moving linkages. Avoid long parallel runs between consecutively firing cylinders when the manufacturer provides separators or a routing plan, because inductive coupling can trigger crossfire in vulnerable systems. Use boots and terminals designed for the cap and plugs; a wire that feels attached may not have fully engaged.`,
-        ],
-      },
-      {
-        heading: "Symptoms of an incorrect firing order",
-        bullets: [
-          "Cranks normally but will not start after plug-wire or engine work.",
-          "Popping through the intake, carburetor, or exhaust during cranking.",
-          "Severe shaking, dead cylinders, low manifold vacuum, or raw-fuel odor.",
-          "Multiple misfire codes that appeared immediately after connectors were disturbed.",
-          "Timing-light marks that are unstable or cannot be brought into the expected range.",
-          "Exhaust manifolds that warm unevenly because one or more cylinders are not contributing.",
-        ],
-        paragraphs: [
-          `Do not continue extended cranking or driving with a known misfire. Unburned fuel can damage a catalytic converter, wash oil from cylinder walls, or ignite in the exhaust. Recheck identification, No. 1 compression TDC, bank numbering, and every connection.`,
-        ],
-      },
-      {
-        heading: "A disciplined verification method",
-        paragraphs: [
-          `Print or download the branded diagram, write the actual cap or coil identifiers beside each cylinder, and check off connections in sequence. Use an ohmmeter only where the wire manufacturer's resistance specification is available; continuity alone does not prove that a lead will contain ignition voltage under load. Inspect boots for carbon tracking and terminals for corrosion or pull-out.`,
-          `${base.detail} After the engine starts, verify any adjustable base timing using the exact procedure for disabling computer advance or disconnecting a timing connector. Modern engine timing is PCM controlled and should not be “set” by moving sensors or guessing at reference positions.`,
+          `${base.distinctions[1]}`,
+          `${base.detail}`,
         ],
       },
     ],
     faqs: [
       { q: `What is the ${base.keyword}?`, a: base.answer },
-      {
-        q: "Is cylinder numbering the same as firing order?",
-        a: "No. Numbering identifies physical cylinders; firing order is the sequence in which those cylinders begin power strokes.",
-      },
-      {
-        q: "Does the No. 1 distributor terminal have one fixed clock position?",
-        a: "Not necessarily. The terminal over the rotor at cylinder 1 compression TDC is No. 1 for the installed distributor position.",
-      },
-      {
-        q: "Can a camshaft change the firing order?",
-        a: "On engine families offered with alternate orders, yes. A camshaft and its matching ignition routing must use the same order.",
-      },
-      {
-        q: "Why does the engine backfire after replacing wires?",
-        a: "The usual causes are crossed wires, No. 1 indexed on exhaust rather than compression TDC, wrong bank numbering, or the wrong order for the installed engine/camshaft.",
-      },
     ],
   };
 }
@@ -456,6 +309,7 @@ export function sparkGuide(base: Base): SpecRecord {
   const primary = base.values[0]?.value ?? "See the application table";
   return {
     ...base,
+    guides: ["spark-plug-replacement-procedure"],
     reviewed,
     diagram: {
       type: "spark",
@@ -468,14 +322,7 @@ export function sparkGuide(base: Base): SpecRecord {
       `${base.answer} Spark-plug gap is application-specific, and the number alone does not identify the correct plug. Reach, seat type, heat range, resistor design, terminal, electrode construction, and manufacturer part number all matter. A plug can measure the expected gap and still be completely wrong for the engine. Begin with the model year, engine code, and original-equipment plug reference in the table.`,
       `Turbocharged, direct-injected, and modern coil-on-plug engines are especially sensitive to correct parts and installation. Excessive gap can demand more voltage and cause misfire under boost or load. Too little gap can reduce flame-kernel exposure. Fine-wire iridium or platinum electrodes are easily damaged by old-style levering tools, so follow the plug and vehicle manufacturer's adjustment policy.`,
     ],
-    steps: [
-      "Identify the exact model year, engine, calibration or performance variant, and the approved spark-plug part number before removing anything.",
-      "Work on a cool engine, clear dirt from the plug wells, disconnect coils carefully, and keep every coil, boot, fastener, and connector organized by cylinder.",
-      "Inspect each new plug for shipping damage, correct reach and seat, intact insulator, and the application-specific gap using a clean wire-style gauge.",
-      "Do not pry against a fine-wire center electrode. If the vehicle or plug maker says the plug is non-adjustable, replace an out-of-range plug.",
-      "Thread each plug fully by hand to prevent cross-threading, then tighten with the exact service torque or the plug maker's angle method for the seat and head material.",
-      "Reinstall boots and coils, verify connector locks and harness routing, start the engine, and check for smooth operation or stored/pending misfire codes.",
-    ],
+    steps: [],
     sections: [
       {
         heading: `Spark-plug gap chart for ${base.model}`,
@@ -525,26 +372,7 @@ export function sparkGuide(base: Base): SpecRecord {
       },
     ],
     faqs: [
-      {
-        q: `What is the ${base.keyword}?`,
-        a: `${base.answer} Match the exact year, engine, and plug part number in the application table.`,
-      },
-      {
-        q: "Should new spark plugs be checked?",
-        a: "Inspect them for damage and verify the application-specific gap gently. Do not force or regap a plug the manufacturer identifies as non-adjustable.",
-      },
-      {
-        q: "Can I use a coin-style ramp gauge?",
-        a: "A wire-style gauge is safer and more accurate for fine-wire plugs. Ramp tools can load or damage delicate electrodes.",
-      },
-      {
-        q: "Should spark-plug threads get anti-seize?",
-        a: "Not unless the vehicle or plug manufacturer explicitly instructs it. Plated modern shells are commonly installed dry, and lubricant changes torque.",
-      },
-      {
-        q: "Will a smaller gap fix a boosted-engine misfire?",
-        a: "Use the factory range for the exact calibration. A smaller unapproved gap can hide a weak coil, fueling issue, excessive boost, or mechanical fault rather than fix it.",
-      },
+      { q: `What is the ${base.keyword}?`, a: `${base.answer} Match the exact year, engine, and plug part number in the application table.` },
     ],
   };
 }

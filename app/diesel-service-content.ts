@@ -1,4 +1,5 @@
 import type { Source, SpecRecord, SpecValue } from "./chevy350-content";
+import { dieselServiceFaqs } from "./diesel-service-faqs";
 import { firingGuide, oilGuide } from "./extended-content";
 
 const reviewed="2026-08-14";
@@ -81,7 +82,7 @@ function headPage(j:HeadJob):SpecRecord{return {slug:j.slug,keyword:j.keyword,ma
   metaDescription:`${j.title} with application boundaries, fastener distinctions, staged sequence guidance and official service lookup.`,answer:j.answer,scope:j.scope,detail:j.detail,values:j.values,sources:[j.source],reviewed,featureImage:engineImage,featureOverlay:true,
   diagram:{type:"head",title:`Interactive ${j.model} head sequence aid`,caption:"Orientation aid only. Use the exact manufacturer bolt map and stages for assembly.",points:["1","5","9","7","3","4","8","10","6","2"]},intro:[j.answer,j.scope],
   steps:["Identify the engine serial/RPO, model year, cylinder head, gasket and fastener kit.","Verify flatness, surface finish, threads and empty bolt holes.","Complete each torque, loosen and angle stage in the exact numbered order."],sections:[{heading:`Application boundaries for ${j.model}`,paragraphs:[j.scope,j.detail]}],
-  faqs:[{q:`What are the ${j.keyword}?`,a:j.answer},{q:"Can factory head bolts be reused?",a:"Only when the exact service procedure permits it and the bolts pass every inspection limit."},{q:"Can a stud kit use the factory procedure?",a:"No. Use the fastener maker's torque, lubricant and sequence for the exact kit."}]};}
+  faqs:dieselServiceFaqs[j.slug]??[{q:`What are the ${j.keyword}?`,a:j.answer},{q:"Can factory head bolts be reused?",a:"Only when the exact service procedure permits it and the bolts pass every inspection limit."},{q:"Can a stud kit use the factory procedure?",a:"No. Use the fastener maker's torque, lubricant and sequence for the exact kit."}]};}
 
 type TorqueJob={slug:string;keyword:string;make:string;model:string;title:string;answer:string;scope:string;detail:string;values:SpecValue[];source:Source;sources?:Source[];diagram?:"intake"|"timing"|"main"};
 const torqueJobs:TorqueJob[]=[
@@ -104,7 +105,7 @@ const torqueJobs:TorqueJob[]=[
 ];
 function torquePage(j:TorqueJob):SpecRecord{return {slug:j.slug,keyword:j.keyword,make:j.make,model:j.model,category:"Torque Specs",title:j.title,
   metaDescription:`${j.title} with fastener-group distinctions, installation cautions, application limits and official source lookup.`,answer:j.answer,scope:j.scope,detail:j.detail,values:j.values,sources:j.sources??[j.source],reviewed,featureImage:engineImage,featureOverlay:true,
-  diagram:{type:j.diagram??"intake",title:`Interactive ${j.model} fastener map`,caption:"Orientation aid only. Match every position and stage to the exact service diagram.",points:["1","5","3","7","8","4","6","2"]},intro:[j.answer,j.scope],steps:["Identify the exact engine, component, fastener size and hardware instructions.","Clean and inspect threads and mating faces; apply only the specified lubricant or sealant.","Tighten in gradual balanced passes and verify any angle, cure-time or recheck instruction."],sections:[{heading:`Application boundaries for ${j.model}`,paragraphs:[j.scope,j.detail]}],faqs:[{q:`What is the ${j.keyword}?`,a:j.answer},{q:"Does aftermarket hardware use the stock torque?",a:"Not automatically. Use the component or fastener maker's instructions for its exact hardware and lubricant."},{q:"Can extra torque stop a leak?",a:"No. Diagnose flatness, cracks, gasket alignment, fastener condition and thread damage instead of overtightening."}]};}
+  diagram:{type:j.diagram??"intake",title:`Interactive ${j.model} fastener map`,caption:"Orientation aid only. Match every position and stage to the exact service diagram.",points:["1","5","3","7","8","4","6","2"]},intro:[j.answer,j.scope],steps:["Identify the exact engine, component, fastener size and hardware instructions.","Clean and inspect threads and mating faces; apply only the specified lubricant or sealant.","Tighten in gradual balanced passes and verify any angle, cure-time or recheck instruction."],sections:[{heading:`Application boundaries for ${j.model}`,paragraphs:[j.scope,j.detail]}],faqs:dieselServiceFaqs[j.slug]??[{q:`What is the ${j.keyword}?`,a:j.answer},{q:"Does aftermarket hardware use the stock torque?",a:"Not automatically. Use the component or fastener maker's instructions for its exact hardware and lubricant."},{q:"Can extra torque stop a leak?",a:"No. Diagnose flatness, cracks, gasket alignment, fastener condition and thread damage instead of overtightening."}]};}
 
 type OilJob={slug:string;keyword:string;make:string;model:string;title:string;answer:string;scope:string;detail:string;capacity:string;liters:string;source:Source};
 const oilJobs:OilJob[]=[

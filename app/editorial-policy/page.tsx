@@ -11,7 +11,13 @@ export const metadata = pageMetadata({
 
 export default function Page() {
   return (
-    <StaticPage eyebrow="Trust & methodology" title="Editorial and technical review policy">
+    <StaticPage
+      eyebrow="Trust & methodology"
+      title="Editorial and technical review policy"
+      path="/editorial-policy"
+      pageType="AboutPage"
+      description="How TorqueSheet researches vehicle specifications, uses automation, labels source coverage, verifies references, and corrects errors."
+    >
       <p>
         TorqueSheet is a focused mechanical-reference project. Its purpose is to
         help readers identify the correct application, find a useful starting
@@ -43,9 +49,27 @@ export default function Page() {
       <p>
         A manual-library homepage or service-information portal helps readers find
         documentation, but it is not a precise citation. Every published page remains
-        crawlable and appears in the public XML sitemap. Pages without a direct
-        application-specific document are visibly labeled as reference pages so a
-        reader can distinguish them from pages with a stronger source trail.
+        crawlable and appears in the public XML sitemap. Each page carries one of
+        three labels, applied automatically from the sources actually attached to it
+        rather than by hand:
+      </p>
+      <ul className="check-list">
+        <li><strong>Direct source linked</strong> — at least one application-specific manufacturer or component document.</li>
+        <li><strong>Reference page</strong> — a real technical source, but broader than the exact application.</li>
+        <li><strong>Awaiting specific citation</strong> — only the manufacturer&apos;s general manual portal is linked, so the reader must look the value up for their own VIN and model year.</li>
+      </ul>
+
+      <h2>Sources we will not cite</h2>
+      <p>
+        TorqueSheet does not link unauthorised mirrors of copyrighted factory service
+        manuals, or user-upload document dumps, even when the values they carry appear
+        correct. Citing them would pass authority to material the rights holder has not
+        released, and a reader cannot tell whether a mirrored page has been altered or
+        superseded. Where removing such a link leaves a page without any citation, the
+        manufacturer&apos;s official manual portal is linked instead and the page is
+        labeled <em>awaiting specific citation</em> until a precise document replaces it.
+        That exclusion is enforced in the site&apos;s build rather than left to
+        individual judgement.
       </p>
 
       <h2>How specifications are checked</h2>
@@ -74,6 +98,15 @@ export default function Page() {
         Use the <Link href="/contact">contact page</Link>. A corrected page receives
         a new source-check date only when its technical content or source trail has
         materially changed.
+      </p>
+
+      <h2>What the date on a page means</h2>
+      <p>
+        The date shown on a specification page is the date its sources were
+        researched — for most pages, when the page was first published. It is not a
+        claim that the page has been re-reviewed since. Pages are not given rolling
+        dates to look recently updated; a date changes only when the underlying work
+        changed, so a page that has not needed revision keeps its original date.
       </p>
     </StaticPage>
   );
