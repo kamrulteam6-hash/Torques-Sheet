@@ -42,6 +42,9 @@ const fordObd2017 = {
 import { troubleCodeBatch2a } from "./trouble-code-batch-2a";
 import { troubleCodeBatch2b } from "./trouble-code-batch-2b";
 import { troubleCodeEscape } from "./trouble-code-escape";
+import { troubleCodeEscapeBoost } from "./trouble-code-escape-boost";
+import { troubleCodeEscapeMisfire } from "./trouble-code-escape-misfire";
+import { troubleCodeEscapeEmissions } from "./trouble-code-escape-emissions";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -215,7 +218,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;

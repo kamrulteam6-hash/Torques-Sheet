@@ -1,7 +1,7 @@
 import type { TroubleCodeGuide } from "./trouble-code-data";
 import { fordManuals, fordObd2017, fordObd2024, nhtsaTsb } from "./trouble-code-sources";
 
-const escapeVehicle = {
+export const escapeVehicle = {
   name: "Ford Escape",
   kicker: "FORD ESCAPE · 1.5L & 2.0L ECOBOOST · 1.6L · 2.5L · HYBRID",
   breadcrumb: "Ford Escape",
@@ -10,25 +10,25 @@ const escapeVehicle = {
     "The Escape has carried at least five different engines since 2013, and P0171 behaves differently on each of them. Turbocharged EcoBoost engines have far more pressurised joints to leak from; the naturally aspirated 2.5L has fewer places to look but hides its most common failure underneath the intake manifold. Identify your engine first — the rest of this page is organised around it.",
 };
 
-const goPartsEscapeMaf = {
+export const goPartsEscapeMaf = {
   label: "P0101 on 2013–2019 Ford Escape: MAF sensor causes and fixes",
   url: "https://www.go-parts.com/garage/obd-p0101-ford-escape-2013-2019",
   note: "Documents how EcoBoost PCV oil vapour contaminates the MAF sensor on this platform",
 };
 
-const goPartsEscapeHybrid = {
+export const goPartsEscapeHybrid = {
   label: "P0171 on 2005–2008 Ford Escape Hybrid: lean code causes and fixes",
   url: "https://www.go-parts.com/garage/obd-p0171-ford-escape-hybrid-2005-2008-2-3l-atkinson",
   note: "Identifies the hidden PCV hose crack beneath the intake manifold on the Atkinson engine",
 };
 
-const repairPalEscapeIntake = {
+export const repairPalEscapeIntake = {
   label: "Ford Escape intake manifold gasket replacement cost estimate",
   url: "https://repairpal.com/estimator/ford/escape/intake-manifold-gasket-replacement-cost",
   note: "Published U.S. parts-and-labour range used as a planning figure",
 };
 
-const goPartsIntercooler = {
+export const goPartsIntercooler = {
   label: "Ford Escape and Maverick intercooler guide",
   url: "https://www.go-parts.com/garage/intercooler-ford-escape-ford-maverick-lincoln-corsair-2013-2025",
   note: "Charge-air-cooler condensation and damage on EcoBoost applications",
