@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { specs, slugify } from "../../data";
+import { makeHubPath, primaryMake, specs } from "../../data";
 import { SpecVisual } from "../../spec-visual";
 import { Footer, Header } from "../../ui";
 import { editorialStatus } from "../../content-quality";
+import { hasBespokeFaqs } from "../../faq-quality";
+import { buildDiagramSvg } from "../../diagram-svg";
+import { guidePath, guidesFor } from "../../guides-data";
 
 const findSpec = (parts: string[]) =>
   specs.find((s) => s.slug === parts.join("/"));
@@ -81,15 +84,54 @@ export default async function SpecPage({
     .slice(0, 5);
   const url = `https://torquesheet.com/specs/${s.slug}`;
   const status = editorialStatus(s);
+  // Static, server-rendered diagram. Null whenever the record does not carry
+  // data that supports an honest drawing (see app/diagram-svg.ts).
+  const staticDiagram = buildDiagramSvg(s);
+  // Shared procedures this page links instead of inlining.
+  const relatedGuides = guidesFor(s.guides);
+  // FAQPage asserts the Q&A is distinct content. Pages still served by the
+  // generated FAQ block repeat across the corpus, so they render the accordion
+  // as plain UI and emit no FAQ markup.
+  const diagramSchema = staticDiagram
+    ? [
+        {
+          "@type": "ImageObject",
+          "@id": `${url}#diagram`,
+          contentUrl: `https://torquesheet.com/diagram/${s.slug}.svg`,
+          url: `https://torquesheet.com/diagram/${s.slug}.svg`,
+          encodingFormat: "image/svg+xml",
+          width: 640,
+          height: 360,
+          caption: staticDiagram.alt,
+          representativeOfPage: false,
+        },
+      ]
+    : [];
+  const faqSchema = hasBespokeFaqs(s)
+    ? [
+        {
+          "@type": "FAQPage",
+          "@id": `${url}#faq`,
+          mainEntity: s.faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        },
+      ]
+    : [];
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
+      ...faqSchema,
+      ...diagramSchema,
       {
         "@type": "TechArticle",
         "@id": `${url}#article`,
         headline: s.title,
         description: s.metaDescription,
-        dateModified: s.reviewed,
+        // Records carry a single research date. Emitting it as datePublished
+        // only avoids asserting a revision that never happened.
         datePublished: s.reviewed,
         mainEntityOfPage: url,
         author: {
@@ -101,18 +143,12 @@ export default async function SpecPage({
           "@type": "Organization",
           name: "TorqueSheet",
           url: "https://torquesheet.com",
+          publishingPrinciples: "https://torquesheet.com/editorial-policy",
         },
+        publishingPrinciples: "https://torquesheet.com/editorial-policy",
         about: [`${s.make} ${s.model}`, s.category],
+        ...(staticDiagram ? { image: { "@id": `${url}#diagram` } } : {}),
         citation: s.sources.map((x) => x.url),
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        mainEntity: s.faqs.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
       },
       {
         "@type": "BreadcrumbList",
@@ -126,8 +162,8 @@ export default async function SpecPage({
           {
             "@type": "ListItem",
             position: 2,
-            name: s.make,
-            item: `https://torquesheet.com/makes/${slugify(s.make)}`,
+            name: primaryMake(s.make),
+            item: `https://torquesheet.com${makeHubPath(s.make)}`,
           },
           {
             "@type": "ListItem",
@@ -148,7 +184,7 @@ export default async function SpecPage({
             <div className="shell">
               <div className="breadcrumbs">
                 <Link href="/">Home</Link> /{" "}
-                <Link href={`/makes/${slugify(s.make)}`}>{s.make}</Link> /{" "}
+                <Link href={makeHubPath(s.make)}>{primaryMake(s.make)}</Link> /{" "}
                 <span>{s.model}</span> / {s.category}
               </div>
               <div className="spec-label">
@@ -159,7 +195,7 @@ export default async function SpecPage({
               <p>{s.metaDescription}</p>
               <div className="review-line">
                 <span>
-                  Source checked{" "}
+                  Sources researched{" "}
                   {new Date(s.reviewed + "T00:00:00").toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "long", day: "numeric" },
@@ -185,13 +221,14 @@ export default async function SpecPage({
               <strong>ON THIS PAGE</strong>
               <a href="#answer">Quick answer</a>
               <a href="#diagram">Interactive diagram</a>
-              <a href="#procedure">Procedure</a>
+              {s.steps.length > 0 && <a href="#procedure">Procedure</a>}
               {s.sections.map((section, i) => (
                 <a key={section.heading} href={`#section-${i}`}>
                   {section.heading}
                 </a>
               ))}
-              <a href="#faq">FAQs</a>
+              {relatedGuides.length > 0 && <a href="#procedures">Procedures</a>}
+              {s.faqs.length > 0 && <a href="#faq">FAQs</a>}
               <a href="#sources">Sources</a>
             </aside>
             <div className="article-main">
@@ -215,6 +252,7 @@ export default async function SpecPage({
                     width={1536}
                     height={1024}
                     sizes="(max-width: 900px) 100vw, 800px"
+                    priority
                   />
                   {s.featureOverlay && (
                     <div className="spec-feature-overlay" aria-hidden="true">
@@ -226,6 +264,17 @@ export default async function SpecPage({
                   <figcaption>
                     TorqueSheet technical reference artwork · torquesheet.com
                   </figcaption>
+                </figure>
+              )}
+              {staticDiagram && (
+                <figure className="static-diagram">
+                  <div
+                    className="static-diagram-frame"
+                    role="img"
+                    aria-label={staticDiagram.alt}
+                    dangerouslySetInnerHTML={{ __html: staticDiagram.svg }}
+                  />
+                  <figcaption>{s.diagram.caption}</figcaption>
                 </figure>
               )}
               <section id="diagram">
@@ -262,6 +311,7 @@ export default async function SpecPage({
                 </div>
                 <p className="table-note">{s.detail}</p>
               </section>
+              {s.steps.length > 0 && (
               <section id="procedure" className="article-section">
                 <span className="kicker">STEP BY STEP</span>
                 <h2>How to use this specification correctly</h2>
@@ -274,6 +324,7 @@ export default async function SpecPage({
                   ))}
                 </ol>
               </section>
+              )}
               {s.sections.map((section, i) => (
                 <section
                   id={`section-${i}`}
@@ -306,6 +357,27 @@ export default async function SpecPage({
                   </p>
                 </div>
               </section>
+              {relatedGuides.length > 0 && (
+                <section id="procedures" className="article-section">
+                  <span className="kicker">SHARED PROCEDURES</span>
+                  <h2>Procedures used with this specification</h2>
+                  <p>
+                    These steps are the same for every vehicle in this family, so they
+                    are documented once rather than repeated on each page. The values
+                    above remain specific to this {s.make} {s.model}.
+                  </p>
+                  <div className="related-grid">
+                    {relatedGuides.map((guide) => (
+                      <Link key={guide.slug} href={guidePath(guide.slug)}>
+                        <small>Procedure guide</small>
+                        <strong>{guide.short}</strong>
+                        <span>Read the procedure →</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+              {s.faqs.length > 0 && (
               <section id="faq" className="article-section faq-section">
                 <span className="kicker">COMMON QUESTIONS</span>
                 <h2>{s.title} FAQs</h2>
@@ -319,6 +391,7 @@ export default async function SpecPage({
                   </details>
                 ))}
               </section>
+              )}
               <section id="sources" className="article-section source-section">
                 <span className="kicker">SOURCE TRAIL</span>
                 <h2>Technical sources</h2>
@@ -342,7 +415,7 @@ export default async function SpecPage({
                   </a>
                 ))}
                 <div className="reviewed">
-                  LAST SOURCE CHECK · {s.reviewed}
+                  SOURCES RESEARCHED · {s.reviewed}
                 </div>
               </section>
               <section className="related-section">

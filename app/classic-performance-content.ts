@@ -1,4 +1,5 @@
 import type { Source, SpecRecord, SpecValue } from "./chevy350-content";
+import { classicPerformanceFaqs } from "./classic-performance-faqs";
 import { firingGuide, sparkGuide } from "./extended-content";
 
 const reviewed="2026-08-14";
@@ -119,8 +120,8 @@ const headJobs:HeadJob[]=[
 function headPage(j:HeadJob):SpecRecord{return {slug:j.slug,keyword:j.keyword,make:j.make,model:j.model,category:"Torque Specs",title:j.title,
   metaDescription:`${j.title} with application boundaries, staged tightening guidance, reuse cautions and official service-information lookup.`,answer:j.answer,scope:j.scope,detail:j.detail,values:j.values,sources:[j.source],reviewed,featureImage:engineImage,featureOverlay:true,
   diagram:{type:"head",title:`Interactive ${j.model} center-out sequence aid`,caption:"This balanced pattern is an orientation aid; use the exact numbered manufacturer diagram for assembly.",points:["1","5","9","7","3","4","8","10","6","2"]},
-  intro:[j.answer,j.scope],steps:["Identify the complete engine code, head, gasket and fastener kit.","Verify flatness, surface finish, clean threads and empty bolt holes.","Apply the exact lubricant, torque, loosen and angle stages in the numbered sequence."],
-  sections:[{heading:`Application boundaries for ${j.model}`,paragraphs:[j.scope,j.detail]}],faqs:[{q:`What are the ${j.keyword}?`,a:j.answer},{q:"Can the original head bolts be reused?",a:"Only when the exact service procedure permits reuse and the bolts pass its inspection limits."},{q:"Do aftermarket studs use the stock torque?",a:"No assumption is safe. Use the stud maker's value, lubricant and sequence for the exact kit."}]};}
+  intro:[j.answer,j.scope],steps:[],guides:["cylinder-head-bolt-procedure","clean-dry-threads-and-torque-accuracy"],
+  sections:[{heading:`Application boundaries for ${j.model}`,paragraphs:[j.scope,j.detail]}],faqs:classicPerformanceFaqs[j.slug]??[{q:`What are the ${j.keyword}?`,a:j.answer},{q:"Can the original head bolts be reused?",a:"Only when the exact service procedure permits reuse and the bolts pass its inspection limits."},{q:"Do aftermarket studs use the stock torque?",a:"No assumption is safe. Use the stud maker's value, lubricant and sequence for the exact kit."}]};}
 
 type SparkJob={slug:string;keyword:string;make:string;model:string;title:string;answer:string;scope:string;detail:string;values:SpecValue[];source:Source};
 const sparkJobs:SparkJob[]=[

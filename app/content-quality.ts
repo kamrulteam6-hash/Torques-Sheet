@@ -1,4 +1,5 @@
 import type { SpecRecord } from "./chevy350-content";
+import { citationTier } from "./source-quality";
 
 const directSourcePatterns = [
   /\.pdf(?:$|\?)/i,
@@ -28,9 +29,19 @@ export function hasDirectCitation(spec: SpecRecord) {
 
 export function editorialStatus(spec: SpecRecord) {
   const cited = hasDirectCitation(spec);
+  const tier = citationTier(spec);
+
+  // All published specification routes are crawlable and included in the sitemap.
+  // Source status remains visible to readers without restricting crawlers.
+  if (tier === "portal-only") {
+    return {
+      indexReady: true,
+      label: "Awaiting specific citation",
+      note: "This page links the manufacturer's official manual portal rather than a document for this exact application. Look the specification up for your VIN and model year before service work.",
+    };
+  }
+
   return {
-    // All published specification routes are crawlable and included in the sitemap.
-    // Source status remains visible to readers without restricting crawlers.
     indexReady: true,
     label: cited ? "Direct source linked" : "Reference page",
     note: cited
@@ -93,16 +104,12 @@ export function reduceRepeatedCopy(spec: SpecRecord, preserveLongForm = false): 
       heading: `Application boundaries for ${spec.model}`,
       paragraphs: [spec.scope, spec.detail],
     }],
-    faqs: [
-      spec.faqs[0] ?? { q: `What is the ${spec.keyword}?`, a: spec.answer },
-      {
-        q: `Which ${spec.model} applications does this page cover?`,
-        a: spec.scope,
-      },
-      {
-        q: "What should be verified before using this specification?",
-        a: `${spec.detail} Confirm the exact application in the linked technical source before safety-critical work.`,
-      },
-    ],
+    // Only the record's own first question survives. The two questions this
+    // template used to append were identical across hundreds of pages and
+    // answered by repeating `scope` and `detail`, which are already rendered
+    // in the body — filler that made these pages duplicates of one another.
+    faqs: spec.faqs[0]
+      ? [spec.faqs[0]]
+      : [],
   };
 }
