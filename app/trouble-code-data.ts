@@ -23,6 +23,8 @@ export type TroubleCodeGuide = {
   tsbs?: { number: string; applies: string; summary: string }[];
   /** Extra explanatory sections, rendered after the cause matrix. */
   deepDive?: { heading: string; paragraphs?: string[]; bullets?: string[] }[];
+  /** Vehicle this guide covers. Defaults to the F-150 5.0L when absent. */
+  vehicle?: { name: string; kicker: string; breadcrumb: string; about: string; yearsIntro: string };
 };
 
 const fordObd2024 = {
@@ -39,6 +41,7 @@ const fordObd2017 = {
 
 import { troubleCodeBatch2a } from "./trouble-code-batch-2a";
 import { troubleCodeBatch2b } from "./trouble-code-batch-2b";
+import { troubleCodeEscape } from "./trouble-code-escape";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -212,7 +215,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;

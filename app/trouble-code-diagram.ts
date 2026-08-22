@@ -72,6 +72,7 @@ const label = (
 export type TroubleCodeDiagram = { svg: string; alt: string };
 
 export function buildTroubleCodeSvg(guide: TroubleCodeGuide): TroubleCodeDiagram | null {
+  const vehicleName = guide.vehicle?.about ?? "Ford F-150 5.0L";
   const causes = guide.causes.slice(0, 5);
   if (causes.length < 2) return null;
 
@@ -106,7 +107,7 @@ ${testText}
     })
     .join("");
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${height}" width="${W}" height="${height}" role="img" aria-labelledby="tcTitle tcDesc" preserveAspectRatio="xMidYMid meet"><title id="tcTitle">${esc(`${guide.code} diagnostic path`)}</title><desc id="tcDesc">${esc(`${guide.code} on the Ford F-150 5.0L: ${causes.length} candidate causes, each paired with the first test that separates it.`)}</desc><defs><pattern id="g" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="${C.grid}" stroke-width="1"/></pattern><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L7 4L0 7z" fill="#3a4c56"/></marker></defs>
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${height}" width="${W}" height="${height}" role="img" aria-labelledby="tcTitle tcDesc" preserveAspectRatio="xMidYMid meet"><title id="tcTitle">${esc(`${guide.code} diagnostic path`)}</title><desc id="tcDesc">${esc(`${guide.code} on the ${vehicleName}: ${causes.length} candidate causes, each paired with the first test that separates it.`)}</desc><defs><pattern id="g" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="${C.grid}" stroke-width="1"/></pattern><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L7 4L0 7z" fill="#3a4c56"/></marker></defs>
 <rect width="${W}" height="${height}" fill="${C.bg}"/><rect width="${W}" height="${height}" fill="url(#g)"/>
 ${label(W / 2, 32, `${guide.code} — WHERE TO START`, 11, C.orange)}
 ${label(W / 2, 50, "EACH CANDIDATE CAUSE WITH THE TEST THAT RULES IT IN OR OUT", 8, C.muted)}
@@ -121,7 +122,7 @@ ${label(W / 2, height - 16, "Order is evidence-driven, not a probability ranking
 
   return {
     svg,
-    alt: `${guide.code} diagnostic path for the Ford F-150 5.0L: ${causes
+    alt: `${guide.code} diagnostic path for the ${vehicleName}: ${causes
       .map((c) => c.cause)
       .join("; ")} — each paired with its first useful test.`,
   };
