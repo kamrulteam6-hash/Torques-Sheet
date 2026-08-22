@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { categories, makes, specs, slugify } from "./data";
 import { buildDiagramSvg } from "./diagram-svg";
 import { guidePath, guides } from "./guides-data";
+import { buildTroubleCodeSvg } from "./trouble-code-diagram";
 import { comparisons, comparisonPath } from "./compare-data";
 import { troubleCodeGuides, troubleCodePath } from "./trouble-code-data";
 
@@ -61,6 +62,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: updated,
       changeFrequency: "monthly" as const,
       priority: 0.9,
+      ...(buildTroubleCodeSvg(guide)
+        ? { images: [`${origin}/diagram/trouble-codes/${guide.slug}.svg`] }
+        : {}),
     })),
     ...specs.map((spec) => ({
       url: `${origin}/specs/${spec.slug}`,
