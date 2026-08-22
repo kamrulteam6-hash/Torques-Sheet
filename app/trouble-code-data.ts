@@ -15,6 +15,8 @@ export type TroubleCodeGuide = {
   yearNotes: string[];
   faqs: { question: string; answer: string }[];
   sources: { label: string; url: string; note: string }[];
+  /** Closing verification section. Data-driven so new codes need no page edits. */
+  closing?: { title: string; paragraphs: string[] };
 };
 
 const fordObd2024 = {
@@ -29,7 +31,9 @@ const fordObd2017 = {
   note: "Ford catalyst, fuel, misfire and VCT monitor descriptions",
 };
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [
+import { troubleCodeBatch2 } from "./trouble-code-batch-2";
+
+const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
     slug: "ford/f-150/5-0/p0300",
     code: "P0300",
@@ -200,6 +204,8 @@ export const troubleCodeGuides: TroubleCodeGuide[] = [
     sources: [fordObd2024, fordObd2017, { label: "Ford F-150 camshaft repair cost estimate", url: "https://repairpal.com/estimator/ford/f-150/camshaft-replacement-cost", note: "Current cost context for internal camshaft work—not a P0016 diagnosis" }],
   },
 ];
+
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;
