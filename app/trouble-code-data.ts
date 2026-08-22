@@ -17,6 +17,12 @@ export type TroubleCodeGuide = {
   sources: { label: string; url: string; note: string }[];
   /** Closing verification section. Data-driven so new codes need no page edits. */
   closing?: { title: string; paragraphs: string[] };
+  /** Repair-cost comparison. Ranges are planning figures, not quotations. */
+  costs?: { job: string; parts: string; shop: string; diy: string; note: string }[];
+  /** Ford technical service bulletins that name this code. */
+  tsbs?: { number: string; applies: string; summary: string }[];
+  /** Extra explanatory sections, rendered after the cause matrix. */
+  deepDive?: { heading: string; paragraphs?: string[]; bullets?: string[] }[];
 };
 
 const fordObd2024 = {
@@ -31,7 +37,8 @@ const fordObd2017 = {
   note: "Ford catalyst, fuel, misfire and VCT monitor descriptions",
 };
 
-import { troubleCodeBatch2 } from "./trouble-code-batch-2";
+import { troubleCodeBatch2a } from "./trouble-code-batch-2a";
+import { troubleCodeBatch2b } from "./trouble-code-batch-2b";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -205,7 +212,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;
