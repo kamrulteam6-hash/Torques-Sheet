@@ -48,6 +48,9 @@ import { troubleCodeEscapeEmissions } from "./trouble-code-escape-emissions";
 import { troubleCodeExplorer } from "./trouble-code-explorer";
 import { troubleCodeExplorerBoost } from "./trouble-code-explorer-boost";
 import { troubleCodeExplorerEmissions } from "./trouble-code-explorer-emissions";
+import { troubleCodeFusion } from "./trouble-code-fusion";
+import { troubleCodeFusionBoost } from "./trouble-code-fusion-boost";
+import { troubleCodeFusionEmissions } from "./trouble-code-fusion-emissions";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -221,7 +224,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;
