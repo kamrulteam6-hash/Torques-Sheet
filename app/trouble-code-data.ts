@@ -4,7 +4,7 @@ export type TroubleCodeGuide = {
   title: string;
   description: string;
   definition: string;
-  severity: "Stop soon" | "Diagnose promptly" | "Service soon";
+  severity: "Stop soon" | "Diagnose promptly" | "Service soon" | "Informational";
   driveAdvice: string;
   quickAnswer: string;
   symptoms: { key: string; label: string; response: string }[];
@@ -51,6 +51,9 @@ import { troubleCodeExplorerEmissions } from "./trouble-code-explorer-emissions"
 import { troubleCodeFusion } from "./trouble-code-fusion";
 import { troubleCodeFusionBoost } from "./trouble-code-fusion-boost";
 import { troubleCodeFusionEmissions } from "./trouble-code-fusion-emissions";
+import { troubleCodeMustang } from "./trouble-code-mustang";
+import { troubleCodeMustangB } from "./trouble-code-mustang-b";
+import { troubleCodeMustangC } from "./trouble-code-mustang-c";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -224,7 +227,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions, ...troubleCodeMustang, ...troubleCodeMustangB, ...troubleCodeMustangC];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;
