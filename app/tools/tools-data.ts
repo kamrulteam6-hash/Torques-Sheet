@@ -18,7 +18,7 @@ export type ToolEntry = {
   blurb: string;
   icon: IconName;
   /** Grouping on the hub page. */
-  family: "tire" | "drivetrain" | "fitment";
+  family: "tire" | "drivetrain" | "fitment" | "engine" | "running-cost";
   /** Slugs of tools worth offering next. */
   related: string[];
 };
@@ -98,6 +98,54 @@ export const tools: ToolEntry[] = [
     family: "fitment",
     related: ["wheel-offset-calculator", "tire-size-comparison", "tire-size-calculator"],
   },
+  {
+    slug: "engine-displacement-calculator",
+    name: "Engine Displacement Calculator",
+    title: "Engine Displacement Calculator",
+    metaTitle: "Engine Displacement Calculator — Bore, Stroke, CI, cc & Litres",
+    description:
+      "Calculate engine displacement from bore, stroke and cylinder count in cubic inches, cc and litres, with overbore steps and the bore/stroke ratio.",
+    blurb: "Cubic inches, cc and litres from bore and stroke, plus overbore steps.",
+    icon: "diagram",
+    family: "engine",
+    related: ["compression-ratio-calculator", "horsepower-torque-rpm-calculator", "gear-ratio-calculator"],
+  },
+  {
+    slug: "compression-ratio-calculator",
+    name: "Compression Ratio Calculator",
+    title: "Compression Ratio Calculator",
+    metaTitle: "Compression Ratio Calculator — Chamber, Gasket, Deck & Piston",
+    description:
+      "Work out static compression ratio from bore, stroke, chamber volume, gasket, deck clearance and piston dome or dish — and see what each one contributes.",
+    blurb: "Static compression from every volume above the piston, itemised.",
+    icon: "valve",
+    family: "engine",
+    related: ["engine-displacement-calculator", "horsepower-torque-rpm-calculator", "gear-ratio-calculator"],
+  },
+  {
+    slug: "horsepower-torque-rpm-calculator",
+    name: "HP, Torque & RPM Calculator",
+    title: "Horsepower, Torque and RPM Calculator",
+    metaTitle: "Horsepower & Torque Calculator — Solve HP, Torque or RPM",
+    description:
+      "Solve for horsepower, torque or RPM from the other two. Includes kW, Nm and PS conversions, and why every curve crosses at 5,252 RPM.",
+    blurb: "Solve any one of horsepower, torque or RPM from the other two.",
+    icon: "firing",
+    family: "engine",
+    related: ["engine-displacement-calculator", "compression-ratio-calculator", "gear-ratio-calculator"],
+  },
+  {
+    slug: "fuel-cost-calculator",
+    name: "MPG & Fuel Cost Calculator",
+    title: "MPG and Fuel Cost Calculator",
+    metaTitle: "Fuel Cost & MPG Calculator — Cost Per Mile, Trip & Range",
+    description:
+      "Calculate real MPG from your own fill-up, then cost per mile, trip cost, annual fuel spend and how far a tank will take you. Includes L/100km.",
+    blurb: "Real MPG from a fill-up, then cost per mile, trip cost and tank range.",
+    icon: "fluid",
+    family: "running-cost",
+    related: ["tire-size-calculator", "gear-ratio-calculator", "engine-displacement-calculator"],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((tool) => tool.slug === slug);
@@ -117,5 +165,15 @@ export const FAMILIES: { key: ToolEntry["family"]; title: string; note: string }
     key: "fitment",
     title: "Wheel fitment",
     note: "Offset, backspacing, poke and inboard clearance",
+  },
+  {
+    key: "engine",
+    title: "Engine building",
+    note: "Displacement, compression and the relationship between power and torque",
+  },
+  {
+    key: "running-cost",
+    title: "Running costs",
+    note: "What the vehicle actually costs to fuel, per mile and per year",
   },
 ];

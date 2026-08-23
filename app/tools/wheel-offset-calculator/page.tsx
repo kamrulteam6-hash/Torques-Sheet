@@ -80,8 +80,8 @@ export default function Page() {
           paragraphs: [
             "This is the single most common mistake in wheel fitment, and it produces more returned wheels than any other.",
             "Changing offset moves the whole wheel bodily — both edges shift the same distance in the same direction. Changing width moves the edges apart symmetrically about the mounting position, adding half the extra width to each side.",
-            "Put those together and you get outcomes that surprise people. Going from an 8-inch wheel at +45 to a 9-inch wheel at +20 moves the outer edge out by 1.48 inches while moving the inner edge inward by only 0.02 inches. Almost all the change lands outboard.",
-            "Going the other way — a 9-inch wheel at +45 replacing an 8-inch at +45 — splits the change evenly, adding half an inch on each side. Same width increase, completely different clearance consequences, purely because of what the offset did.",
+            "Put those together and you get outcomes that surprise people. Going from an 8-inch wheel at +45 to a 9-inch wheel at +20 moves the outer edge out by 1.48 inches — while the inner edge actually moves 0.48 inches away from the suspension. The wheel got an inch wider and still gained inboard clearance, because the offset drop pulled it outward faster than the extra width pushed it in.",
+            "Keep the offset instead — a 9-inch wheel at +45 replacing an 8-inch at +45 — and the change splits evenly, adding half an inch on each side. Identical width increase, opposite consequence at the strut, purely because of what the offset did.",
           ],
         },
         {
