@@ -54,6 +54,12 @@ import { troubleCodeFusionEmissions } from "./trouble-code-fusion-emissions";
 import { troubleCodeMustang } from "./trouble-code-mustang";
 import { troubleCodeMustangB } from "./trouble-code-mustang-b";
 import { troubleCodeMustangC } from "./trouble-code-mustang-c";
+import { troubleCodeFocus } from "./trouble-code-focus";
+import { troubleCodeSilverado } from "./trouble-code-silverado";
+import { troubleCodeEquinox } from "./trouble-code-equinox";
+import { troubleCodeMalibu } from "./trouble-code-malibu";
+import { troubleCodeTraverse } from "./trouble-code-traverse";
+import { troubleCodeSierra } from "./trouble-code-sierra";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -227,7 +233,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions, ...troubleCodeMustang, ...troubleCodeMustangB, ...troubleCodeMustangC];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions, ...troubleCodeMustang, ...troubleCodeMustangB, ...troubleCodeMustangC, ...troubleCodeFocus, ...troubleCodeSilverado, ...troubleCodeEquinox, ...troubleCodeMalibu, ...troubleCodeTraverse, ...troubleCodeSierra];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;
