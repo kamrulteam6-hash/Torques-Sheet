@@ -13,7 +13,7 @@ export function SearchIcon({ size = 20 }: { size?: number }) {
 
 export function HeaderNav() {
   const [open, setOpen] = useState(false);
-  return <><button className="menu-button" aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen(!open)}><span/><span/><span/></button><nav className={open ? "nav open" : "nav"}><Link href="/category/torque-specs">Specifications</Link><Link href="/compare">Compare</Link><Link href="/guides">Guides</Link><Link href="/trouble-codes">Trouble Codes</Link><Link href="/makes/chevrolet">Makes</Link></nav></>;
+  return <><button className="menu-button" aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen(!open)}><span/><span/><span/></button><nav className={open ? "nav open" : "nav"}><Link href="/category/torque-specs">Specifications</Link><Link href="/tools">Tools</Link><Link href="/compare">Compare</Link><Link href="/guides">Guides</Link><Link href="/trouble-codes">Trouble Codes</Link><Link href="/makes/chevrolet">Makes</Link></nav></>;
 }
 
 export function VehicleSelector({ makes, vehicleData, index }: { makes: string[]; vehicleData: Record<string, Record<string, string[]>>; index: SearchEntry[] }) {

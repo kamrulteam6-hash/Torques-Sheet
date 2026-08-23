@@ -5,6 +5,8 @@ import { guidePath, guides } from "./guides-data";
 import { buildTroubleCodeSvg } from "./trouble-code-diagram";
 import { comparisons, comparisonPath } from "./compare-data";
 import { troubleCodeGuides, troubleCodePath } from "./trouble-code-data";
+import { toolPath, tools } from "./tools/tools-data";
+import { COMPARISON_PAIRS, comparisonPairPath } from "./tools/tire-size-comparison/pairs";
 
 const origin = "https://torquesheet.com";
 
@@ -18,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     // /search is noindex and excluded on purpose.
-    ...["about", "compare", "contact", "diagrams", "editorial-policy", "guides", "privacy", "terms", "trouble-codes"].map(
+    ...["about", "compare", "contact", "diagrams", "editorial-policy", "guides", "privacy", "terms", "tools", "trouble-codes"].map(
       (path) => ({
         url: `${origin}/${path}`,
         lastModified: updated,
@@ -65,6 +67,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ...(buildTroubleCodeSvg(guide)
         ? { images: [`${origin}/diagram/trouble-codes/${guide.slug}.svg`] }
         : {}),
+    })),
+    ...tools.map((tool) => ({
+      url: `${origin}${toolPath(tool.slug)}`,
+      lastModified: updated,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+    ...COMPARISON_PAIRS.map((pair) => ({
+      url: `${origin}${comparisonPairPath(pair)}`,
+      lastModified: updated,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
     ...specs.map((spec) => ({
       url: `${origin}/specs/${spec.slug}`,
