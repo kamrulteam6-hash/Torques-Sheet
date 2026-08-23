@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { chevyHardcoreCompression, fordDynoTips, saeCorrection } from "../tool-sources";
 import { EngineDisplacementCalculator } from "./ui";
 
 const tool = toolBySlug("engine-displacement-calculator")!;
@@ -147,6 +148,7 @@ export default function Page() {
             "It sets the ceiling rather than the result. Displacement decides how much air the engine can move per cycle; the heads, camshaft, induction and how hard it can be revved decide how much of that potential becomes power.",
         },
       ]}
+      sources={[fordDynoTips, saeCorrection, chevyHardcoreCompression]}
     >
       <EngineDisplacementCalculator />
     </ToolPage>

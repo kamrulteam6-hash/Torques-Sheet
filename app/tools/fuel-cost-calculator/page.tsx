@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { cfrLabeling, epaTesting, uneceR39 } from "../tool-sources";
 import { FuelCostCalculator } from "./ui";
 
 const tool = toolBySlug("fuel-cost-calculator")!;
@@ -76,6 +77,15 @@ export default function Page() {
           ],
         },
         {
+          heading: "Why the window sticker disagrees with you too",
+          paragraphs: [
+            "The EPA figure on a new vehicle's label is not a single measurement, and it is not taken on a road. Understanding how it is produced explains most of the gap between it and what you actually see.",
+            "Since 2008 the label has come from five separate laboratory test cycles. The two originals cover city and highway driving; three supplemental tests were added to capture what those missed — US06 for higher speeds and harder acceleration, SC03 for air conditioning load, and a cold-temperature FTP for what happens when the engine has not warmed up.",
+            "Results from those five are weighted and adjusted for wind, tire pressure, fuel and road surface, and the combined figure published on the sticker is a weighted average of 55 percent city driving and 45 percent highway. The calculation itself is defined in regulation, at 40 CFR 600.210-12, rather than left to the manufacturer.",
+            "So the sticker describes a specific weighted blend of laboratory conditions. Your commute is not that blend, your climate is not that laboratory, and your right foot is not the test schedule. Neither figure is wrong — they are answers to different questions, and the one you measure at the pump is the one that describes your vehicle.",
+          ],
+        },
+        {
           heading: "Cost per mile is the figure to carry",
           paragraphs: [
             "MPG is the number everyone quotes, and it is the harder one to use. Cost per mile is the one that answers questions.",
@@ -138,6 +148,16 @@ export default function Page() {
             "From 15 to 20, by a wide margin. Over 12,000 miles that saves 200 gallons, while 30 to 35 saves only 57. MPG is an inverse measure, which makes equal-looking gains very unequal.",
         },
         {
+          question: "Why is my MPG lower than the EPA rating?",
+          answer:
+            "The label figure comes from five laboratory test cycles, weighted 55 percent city and 45 percent highway under 40 CFR 600.210-12. It describes a specific blend of controlled conditions rather than your commute, your climate or your driving.",
+        },
+        {
+          question: "How does the EPA measure fuel economy?",
+          answer:
+            "With five test cycles run in a laboratory: the original city and highway procedures plus US06 for higher speeds, SC03 for air conditioning load, and a cold-temperature test. The results are weighted and adjusted into the sticker figures.",
+        },
+        {
           question: "Do bigger tires affect my MPG calculation?",
           answer:
             "Yes, through the odometer. Taller tires make the recorded distance shorter than the real one, so the calculated MPG comes out lower than reality by the same percentage as the diameter change.",
@@ -148,6 +168,7 @@ export default function Page() {
             "It depends entirely on the vehicle and the fuel price. A 30 MPG car at $3.45 costs about 11.5 cents a mile; a 15 MPG truck at the same price costs 23 cents. Calculate your own rather than using an average.",
         },
       ]}
+      sources={[epaTesting, cfrLabeling, uneceR39]}
     >
       <FuelCostCalculator />
     </ToolPage>

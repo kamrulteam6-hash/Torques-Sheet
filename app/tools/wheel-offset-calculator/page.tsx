@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { iso5775, rimWidthRange, tireRimAssociation } from "../tool-sources";
 import { WheelOffsetCalculator } from "./ui";
 
 const tool = toolBySlug("wheel-offset-calculator")!;
@@ -147,6 +148,7 @@ export default function Page() {
             "Geometrically yes — a 20 mm spacer produces the same wheel position as 20 mm less offset. The difference is mechanical: a spacer adds a joint and needs correctly rated hardware and enough remaining stud engagement.",
         },
       ]}
+      sources={[tireRimAssociation, rimWidthRange, iso5775]}
     >
       <WheelOffsetCalculator />
     </ToolPage>

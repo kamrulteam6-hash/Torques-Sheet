@@ -2,6 +2,7 @@ import Link from "next/link";
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { rimWidthRange, tireRimAssociation, uneceR39, yokohamaSidewall } from "../tool-sources";
 import { COMPARISON_PAIRS, comparisonPairPath } from "./pairs";
 import { TireSizeComparison } from "./ui";
 
@@ -148,6 +149,7 @@ export default function Page() {
             "In direct proportion to the diameter change. A 4% taller tire means every indicated 1,000 miles is actually about 1,040, so the vehicle accumulates real distance faster than the clock records it.",
         },
       ]}
+      sources={[tireRimAssociation, rimWidthRange, uneceR39, yokohamaSidewall]}
     >
       <TireSizeComparison />
 

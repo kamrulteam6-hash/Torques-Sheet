@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { iso5775, rimWidthRange, tireRimAssociation, yokohamaSidewall } from "../tool-sources";
 import { TireSizeCalculator } from "./ui";
 
 const tool = toolBySlug("tire-size-calculator")!;
@@ -83,6 +84,15 @@ export default function Page() {
           ],
         },
         {
+          heading: "Who decides what a tire size means",
+          paragraphs: [
+            "The size on a sidewall is not a manufacturer's description. It is a standardised designation, and there are bodies whose job is to keep it consistent.",
+            "In the United States that body is the Tire and Rim Association, which has been the standardising authority for tire and rim interchangeability since 1903. Europe has ETRTO, and ISO 5775 covers the international designation system. Between them they define what each figure in a size means and, importantly, which rim widths a given section width may legitimately be mounted on.",
+            "That last part matters more than most people realise. Every section width has an approved rim-width range rather than a single correct wheel. As a rough guide, the ideal rim inner width is around 80 to 90 percent of the section width converted to inches, with an approved band of roughly an inch either side of that ideal.",
+            "So a 245-section tire — 9.65 inches wide — sits happiest on something near 8 inches, and the approved range typically spans about 7 to 9. Mount it outside that band and the sidewall is pulled into a shape it was not designed to hold, which changes the contact patch, the handling and the wear pattern regardless of what the size calculation says.",
+          ],
+        },
+        {
           heading: "What overall diameter actually controls",
           bullets: [
             "Ride height — half the diameter change appears at the axle, so a 1-inch taller tire lifts the vehicle half an inch",
@@ -141,9 +151,15 @@ export default function Page() {
         {
           question: "Can I put a wider tire on the same wheel?",
           answer:
-            "Often, within a range — each rim width suits a band of section widths. But widening without reducing the aspect ratio also makes the tire taller, which is the part people forget. Check both dimensions, not just the width.",
+            "Often, within a range. TRA and ETRTO publish an approved rim-width band for each section width — roughly an inch either side of an ideal that sits near 80 to 90 percent of the section width in inches. Widening without reducing the aspect ratio also makes the tire taller, which is the part people forget.",
+        },
+        {
+          question: "Who sets tire size standards?",
+          answer:
+            "The Tire and Rim Association in the United States, which has been the standardising body for tire and rim interchangeability since 1903, ETRTO in Europe, and ISO 5775 internationally. They define both the designation and the rim widths each size may be mounted on.",
         },
       ]}
+      sources={[tireRimAssociation, yokohamaSidewall, rimWidthRange, iso5775]}
     >
       <TireSizeCalculator />
     </ToolPage>

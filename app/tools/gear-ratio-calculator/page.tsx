@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { fordDynoTips, tireRimAssociation, uneceR39 } from "../tool-sources";
 import { GearRatioCalculator } from "./ui";
 
 const tool = toolBySlug("gear-ratio-calculator")!;
@@ -147,6 +148,7 @@ export default function Page() {
             "Sometimes, if oversized tires have pushed the engine out of its efficient range or made the transmission hunt between gears. Regearing to compensate for tires you have already fitted often recovers economy that the tire change cost you.",
         },
       ]}
+      sources={[tireRimAssociation, fordDynoTips, uneceR39]}
     >
       <GearRatioCalculator />
     </ToolPage>

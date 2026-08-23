@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { fordDynoTips, saeCorrection } from "../tool-sources";
 import { PowerCalculator } from "./ui";
 
 const tool = toolBySlug("horsepower-torque-rpm-calculator")!;
@@ -96,6 +97,15 @@ export default function Page() {
           ],
         },
         {
+          heading: "How an advertised horsepower figure is produced",
+          paragraphs: [
+            "A horsepower number means nothing without knowing the conditions it was measured under, because air density alone moves the result by several percent between a cold morning and a hot afternoon.",
+            "In North America the reference is SAE J1349, which defines net power measured as installed, corrected to a standard reference day: 77°F, zero percent humidity and 29.234 in-Hg of barometric pressure. Every dyno run is corrected back to those conditions so that two engines tested a thousand miles apart can be compared honestly. J1349 also assumes a default mechanical efficiency of 85 percent when correcting for friction torque.",
+            "There is a certification layer above that. SAE J2723 is the process a manufacturer follows to certify an advertised figure against J1349, which is why some specifications read Certified to SAE J1349 rather than simply quoting a number. That phrasing means there is a documented trail behind it rather than a marketing department.",
+            "It also explains why aftermarket dyno figures so often exceed factory ones. A run corrected with the older STD factor rather than J1349 reads higher for the same engine — against the older J607 standard the difference runs to about 4 percent. If two numbers for the same engine disagree, the correction factor is usually the first place to look, before anything mechanical.",
+          ],
+        },
+        {
           heading: "Reading a claim critically",
           paragraphs: [
             "Because the three figures are locked together, any two of them imply the third. That makes this arithmetic a useful check on numbers that sound impressive.",
@@ -137,6 +147,16 @@ export default function Page() {
             "No. Metric horsepower, or PS, is 735.5 watts against 745.7 for mechanical horsepower, so a PS figure is about 1.4% higher for the same engine.",
         },
         {
+          question: "What does SAE J1349 mean on a horsepower figure?",
+          answer:
+            "That the figure is net power corrected to a standard reference day of 77°F, zero percent humidity and 29.234 in-Hg. SAE J2723 is the certification process behind an advertised Certified to SAE J1349 claim.",
+        },
+        {
+          question: "Why does my dyno number differ from the factory rating?",
+          answer:
+            "Often the correction factor rather than the engine. A run corrected with the older STD factor reads higher than one corrected to SAE J1349 — against the older J607 standard the gap is around 4 percent — and wheel figures are lower than crank figures regardless.",
+        },
+        {
           question: "What is the difference between crank and wheel horsepower?",
           answer:
             "Crank horsepower is measured at the flywheel before drivetrain losses. Wheel horsepower is measured at the tires and is typically around 15% lower on rear-wheel drive, more on all-wheel drive.",
@@ -147,6 +167,7 @@ export default function Page() {
             "Not from torque alone. Torque without engine speed describes effort with no rate attached, and horsepower is fundamentally a rate of doing work.",
         },
       ]}
+      sources={[saeCorrection, fordDynoTips]}
     >
       <PowerCalculator />
     </ToolPage>

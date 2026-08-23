@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { iso5775, rimWidthRange, tireRimAssociation } from "../tool-sources";
 import { WheelBackspacingCalculator } from "./ui";
 
 const tool = toolBySlug("wheel-backspacing-calculator")!;
@@ -147,6 +148,7 @@ export default function Page() {
             "No. Backspacing is a property of the wheel alone. A wider tire changes where the rubber sits, which is what actually contacts things, but it does not move the wheel.",
         },
       ]}
+      sources={[tireRimAssociation, rimWidthRange, iso5775]}
     >
       <WheelBackspacingCalculator />
     </ToolPage>

@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { chevyHardcoreCompression, fordDynoTips, grassrootsOctane } from "../tool-sources";
 import { CompressionRatioCalculator } from "./ui";
 
 const tool = toolBySlug("compression-ratio-calculator")!;
@@ -81,6 +82,7 @@ export default function Page() {
             "Everything calculated here is the static compression ratio, measured from bottom dead centre. It is the standard figure, it is what parts are specified against, and it is not what the engine actually experiences.",
             "The reason is the camshaft. The intake valve does not close at bottom dead centre — it stays open well past it, and on a performance camshaft, considerably past it. Until that valve shuts, the piston is pushing mixture back out of the cylinder rather than compressing it. Effective compression only begins once it closes.",
             "That gives dynamic compression ratio, which is always lower than the static figure and depends on the camshaft as much as on the geometry. It is why a build can carry a static ratio that looks alarming on pump fuel and still be perfectly happy: a late-closing intake valve bleeds off enough cylinder pressure at low RPM to keep detonation away.",
+            "The street rule of thumb among engine builders is a maximum dynamic ratio of about 8.5:1 with aluminium heads and 8.0:1 with iron. Reaching either figure assumes everything else is right — quench, operating temperature, mixture and the shape of the timing curve — which is the real point. Quench in particular does a great deal of work: a tight quench area squeezes mixture across the chamber and creates turbulence that speeds the flame front, while a chamber with little or no quench, such as a hemispherical one with a domed piston, gives the mixture nothing to work with and tolerates detonation poorly.",
             "The practical rule that follows: static compression and camshaft timing must be chosen together. A high static ratio with a mild camshaft is asking for detonation. A modest static ratio with a long-duration camshaft gives away low-end response for nothing. Neither problem is visible from the static number on its own.",
           ],
         },
@@ -99,7 +101,8 @@ export default function Page() {
           heading: "Choosing a ratio you can actually run",
           paragraphs: [
             "The ratio a build can tolerate depends on far more than the number itself, but a few boundaries are reliable enough to plan around.",
-            "For a naturally aspirated engine on regular pump fuel, somewhere between 8.5:1 and 10.5:1 is comfortable. Aluminium heads shed heat faster than iron and will generally tolerate roughly a point more than iron heads at the same fuel quality — a real and widely used allowance.",
+            "The head material sets much of it, and the allowance is larger and better documented than most people expect. Aluminium conducts heat roughly six times better than cast iron, so an aluminium head pulls heat out of the charge faster and leaves less of it available to trigger detonation. Piston manufacturers generally put the limit for cast iron heads on 93 octane at about 9.5:1, and for aluminium heads on the same fuel at about 10.5:1. Drop to 87 octane and both fall by roughly three quarters of a point, to around 8.7:1 on iron and 9.7:1 on aluminium.",
+            "Those are not hard walls, but they are a realistic starting point — and they explain a common experience: an iron-headed 10:1 engine that rattles on 92 octane will frequently stop rattling when aluminium heads of the same chamber volume are fitted, with nothing else changed.",
             "Above 10.5:1 you are committed to premium fuel and to getting the rest of it right: ignition timing, chamber shape, and a camshaft that bleeds off some low-speed cylinder pressure. Hot weather and a heavy load are what find the margin, not a cold morning.",
             "For a boosted engine the logic inverts. Compression is deliberately kept low — often 8.0:1 to 9.0:1 — because the turbocharger or supercharger is adding cylinder pressure on top of whatever the geometry already produces. A high static ratio plus meaningful boost is how pistons get holed.",
             "In every case the static figure is a starting point for the conversation rather than the end of it. Fuel quality, chamber design, cooling, timing and camshaft all move the boundary.",
@@ -120,7 +123,17 @@ export default function Page() {
         {
           question: "What compression ratio is safe on pump gas?",
           answer:
-            "Roughly 8.5:1 to 10.5:1 on a naturally aspirated engine with iron heads. Aluminium heads shed heat faster and generally tolerate about a point more at the same fuel quality.",
+            "On 93 octane, piston manufacturers generally put the limit around 9.5:1 with cast iron heads and 10.5:1 with aluminium. On 87 octane those drop to roughly 8.7:1 and 9.7:1. Chamber design, quench and cam timing all move the boundary.",
+        },
+        {
+          question: "How much more compression can aluminium heads take?",
+          answer:
+            "About a full ratio point at the same fuel quality. Aluminium conducts heat roughly six times better than cast iron, so it pulls heat out of the charge faster and leaves less available to trigger detonation.",
+        },
+        {
+          question: "What is a safe dynamic compression ratio for the street?",
+          answer:
+            "The commonly used figures are about 8.5:1 with aluminium heads and 8.0:1 with iron. Reaching either assumes quench, operating temperature, mixture and timing curve are all correct.",
         },
         {
           question: "Is a dome piston positive or negative volume?",
@@ -148,6 +161,7 @@ export default function Page() {
             "On a typical small-block V8, about 0.12 of a ratio point. Which is why a 5 cc difference in chamber volume between two sets of heads is worth roughly half a ratio point, and why measuring beats assuming.",
         },
       ]}
+      sources={[chevyHardcoreCompression, grassrootsOctane, fordDynoTips]}
     >
       <CompressionRatioCalculator />
     </ToolPage>

@@ -1,6 +1,7 @@
 import { pageMetadata } from "../../seo";
 import { ToolPage } from "../tool-page";
 import { toolBySlug, toolPath } from "../tools-data";
+import { tireRimAssociation, uneceR39, uneceR39Eu } from "../tool-sources";
 import { SpeedometerErrorCalculator } from "./ui";
 
 const tool = toolBySlug("speedometer-error-calculator")!;
@@ -84,6 +85,15 @@ export default function Page() {
           ],
         },
         {
+          heading: "Regulation is why your speedometer already reads high",
+          paragraphs: [
+            "Before blaming a tire change for an inaccurate speedometer, it is worth knowing that the instrument was never designed to be accurate in the first place — it was designed to be safe.",
+            "UN Regulation No. 39, which governs speedometer equipment across Europe and much of the world, states the requirement plainly: the indicated speed must never be lower than the true speed. There is no allowance for reading low, at all. The permitted error runs one way only.",
+            "The regulation caps that positive error too. Indicated speed must not exceed the true speed by more than 10 percent plus 4 km/h. So at a true 100 km/h a compliant speedometer may legitimately display anything from 100 up to about 114 km/h, and manufacturers typically build in a couple of percent of deliberate over-reading to stay clear of the boundary.",
+            "That has a consequence people rarely anticipate. Because the factory reading is already optimistic, fitting slightly taller tires — which pushes the reading downward — can move an indicated speed closer to the truth rather than further from it. Up to a point, a small increase corrects an error that was built in on purpose. Past that point it starts eating into a margin that exists for a reason, and the regulation's floor is where it stops being harmless.",
+          ],
+        },
+        {
           heading: "What else derives from the same wheel-speed signal",
           bullets: [
             "The odometer, which drifts by the same percentage over distance rather than time",
@@ -130,6 +140,16 @@ export default function Page() {
             "It is the conventional threshold, largely because factory speedometers already read a little high as a safety margin. Beyond about 3% the error becomes noticeable at highway speed and worth correcting.",
         },
         {
+          question: "Are speedometers allowed to be inaccurate?",
+          answer:
+            "In one direction only. UN Regulation No. 39 requires that an indicated speed never falls below the true speed, and caps the permitted over-reading at 10 percent plus 4 km/h. Reading high is legal; reading low is not.",
+        },
+        {
+          question: "Why does my speedometer read high from the factory?",
+          answer:
+            "Because regulation forbids it reading low, so manufacturers build in a small deliberate over-reading as margin. That is also why modestly taller tires can move an indicated speed closer to your true speed rather than further from it.",
+        },
+        {
           question: "Can I get a ticket because of speedometer error?",
           answer:
             "Enforcement measures your actual speed, not what your dial shows, so a speedometer reading low will not protect you. That is the direction worth taking seriously if you have fitted taller tires.",
@@ -145,6 +165,7 @@ export default function Page() {
             "Marginally. Lower pressure reduces the rolling radius a little, which has the same effect as a slightly smaller tire. It is not enough to matter for accuracy, though it matters plenty for safety and wear.",
         },
       ]}
+      sources={[uneceR39, uneceR39Eu, tireRimAssociation]}
     >
       <SpeedometerErrorCalculator />
     </ToolPage>
