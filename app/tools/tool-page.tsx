@@ -52,6 +52,22 @@ const CAVEATS: Record<ToolEntry["family"], { title: string; body: string }> = {
     title: "One measurement is a sample, not a pattern.",
     body: "A single tank reflects the driving you happened to do: weather, traffic, load and terrain all move the figure. Take several measurements across different conditions before treating any one of them as your vehicle's real economy, and recalculate when fuel prices move.",
   },
+  fueling: {
+    title: "A starting point, not a tune.",
+    body: "Fuel system sizing depends on assumptions — BSFC, target duty cycle, fuel pressure — that vary by engine and by how hard it is actually driven. Use these figures to shortlist hardware, then verify the actual mixture with wideband data before trusting the car to it.",
+  },
+  "forced-induction": {
+    title: "An estimate of potential, not a promise.",
+    body: "Pressure ratio is exact arithmetic. What it produces in real power depends on the fuel system, ignition timing, intercooling and how much of that pressure ratio the engine can actually use — all of which vary by build. Confirm on a dyno before trusting a number this page produced.",
+  },
+  brake: {
+    title: "The chain is exact; the outcome on the road is not.",
+    body: "Force and torque calculated through a hydraulic chain are geometry and arithmetic. What that torque actually does — how the car stops — depends on tire grip, road surface, weight transfer, ABS behaviour and brake temperature, none of which this page can see. Treat force and torque figures as design inputs, not a stopping-distance guarantee.",
+  },
+  suspension: {
+    title: "Geometry is exact; your specific suspension may not match the assumption.",
+    body: "Motion ratio, in particular, changes through the suspension's travel on most real cars rather than staying constant — these formulas use a single fixed value, which is a reasonable approximation near ride height and a worse one at the extremes of travel. Measure your own motion ratio directly where precision matters.",
+  },
 };
 
 export type ToolSection = {

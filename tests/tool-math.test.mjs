@@ -166,3 +166,97 @@ ok("axle ratio for 2500 rpm @ 70mph, 0.8 OD, 265/70R17", targetAxle, 4.196, 0.01
 const T = await import("../app/tools/tire-math.ts");
 const checkRpm = T.engineRpm({ mph: 70, axleRatio: targetAxle, gearRatio: 0.8, tireDiameter: 31.606 });
 ok("regear solve round-trips through engineRpm", checkRpm, 2500, 1);
+
+console.log("\n--- fuel/air math ---");
+const F = await import("../app/tools/fuel-air-math.ts");
+// Cylinder volume: SBC 350, swept per cyl ~89.6cc, at CR 9.84:1 clearance was ~81.1cc earlier test.
+ok("cylinder volumes: swept 716.6cc @ CR 10.19 -> clearance", F.cylinderVolumes(716.6, 10.185).clearanceCc, 78.02, 0.5);
+ok("cylinder volumes: total = swept + clearance", F.cylinderVolumes(716.6, 10.185).totalCc, 716.6 + 78.02, 0.5);
+// VE: 350ci at 6000rpm, 100% VE -> theoretical CFM.
+ok("theoretical airflow 350ci @ 6000rpm", F.theoreticalAirflowCfm(350, 6000), 607.6, 0.5);
+ok("VE 100% when actual = theoretical", F.volumetricEfficiency(F.theoreticalAirflowCfm(350, 6000), 350, 6000), 100, 0.01);
+ok("VE 85%", F.volumetricEfficiency(0.85 * F.theoreticalAirflowCfm(350, 6000), 350, 6000), 85, 0.01);
+// AFR/Lambda round trip and known fuel stoich values.
+const gas = F.FUELS.find((f) => f.key === "gasoline");
+ok("gasoline stoich AFR", gas.stoichAfr, 14.7, 0.01);
+ok("lambda 1.0 at stoich AFR", F.afrToLambda(14.7, gas.stoichAfr), 1.0, 0.001);
+ok("AFR 12.0 -> lambda", F.afrToLambda(12.0, gas.stoichAfr), 0.8163, 0.001);
+ok("lambda round trip", F.lambdaToAfr(F.afrToLambda(13.2, gas.stoichAfr), gas.stoichAfr), 13.2, 1e-9);
+const e85 = F.FUELS.find((f) => f.key === "e85");
+ok("E85 lambda 1.0 AFR", F.lambdaToAfr(1.0, e85.stoichAfr), 9.8, 0.01);
+// Injector conversion, verified constant 10.5.
+ok("550cc/min to lb/hr", F.ccMinToLbHr(550), 52.38, 0.05);
+ok("52.38 lb/hr to cc/min", F.lbHrToCcMin(52.38), 550, 1);
+ok("flow at higher pressure (2bar->3bar, sqrt law)", F.flowAtPressure(100, 2, 3), 122.47, 0.05);
+// Injector sizing: 400hp, BSFC 0.55, 8cyl, 80% max duty -> lb/hr per injector.
+const reqFlow = F.requiredInjectorFlow({ targetHp: 400, bsfc: 0.55, cylinders: 8, maxDutyCycle: 0.8 });
+ok("required injector flow, 400hp/8cyl/0.55 bsfc/80% duty", reqFlow, 34.375, 0.01);
+// Duty cycle round-trips against the sizing formula.
+ok("duty cycle at exactly-sized injector = target duty", F.injectorDutyCycle({ targetHp: 400, bsfc: 0.55, cylinders: 8, injectorLbHr: reqFlow }), 0.8, 0.001);
+// Pump sizing sanity: bigger HP needs proportionally more flow.
+const pump300 = F.requiredPumpFlowLph({ targetHp: 300, bsfc: 0.5 });
+const pump600 = F.requiredPumpFlowLph({ targetHp: 600, bsfc: 0.5 });
+ok("pump flow scales linearly with HP", pump600 / pump300, 2.0, 0.001);
+
+console.log("\n--- forced induction ---");
+ok("sea level atmospheric pressure", F.atmosphericPressureAtAltitude(0), 14.696, 0.01);
+ok("atmospheric pressure at 5000ft (Denver-ish)", F.atmosphericPressureAtAltitude(5000), 12.23, 0.1);
+const pr = F.boostPressureRatio({ boostPsi: 15, altitudeFt: 0 });
+ok("PR at sea level, 15psi boost", pr.pressureRatio, 2.021, 0.01);
+const prAlt = F.boostPressureRatio({ boostPsi: 15, altitudeFt: 5000 });
+console.log(`${prAlt.pressureRatio > pr.pressureRatio ? "PASS" : "FAIL"}  higher altitude increases PR for same boost psi (${pr.pressureRatio.toFixed(3)} -> ${prAlt.pressureRatio.toFixed(3)})`);
+ok("boosted power estimate, 300hp NA at PR 2.0", F.boostedPowerEstimate(300, 2.0), 600, 0.01);
+ok("intercooler efficiency 70%", F.intercoolerEfficiency({ hotInF: 250, hotOutF: 130, ambientF: 80 }), 70.588, 0.01);
+
+console.log("\n--- brake math ---");
+const Bk = await import("../app/tools/brake-math.ts");
+ok("piston area, 1.75in bore", Bk.pistonArea(1.75), 2.4053, 0.001);
+// Full chain: 80lb pedal, 4:1 ratio, 0.875in MC, 2x1.75in caliper pistons (2 areas), 0.4 pad mu, 5.5in effective radius.
+const chain = Bk.brakePressureChain({
+  pedalForceLb: 80,
+  pedalRatio: 4,
+  masterCylinderBoreIn: 0.875,
+  caliperPistonAreaIn2: Bk.pistonArea(1.75) * 2,
+  padFriction: 0.4,
+  effectiveRadiusIn: 5.5,
+});
+ok("pushrod force", chain.pushrodForceLb, 320, 0.01);
+ok("line pressure", chain.linePsi, 532.4, 0.5);
+ok("clamp force", chain.clampForceLb, 2561.9, 2);
+ok("friction force (both pad faces)", chain.frictionForceLb, 2049.5, 2);
+ok("torque", chain.torqueLbFt, 939.4, 1);
+// Bias
+const bias = Bk.brakeBias(700, 300);
+ok("brake bias front %", bias.frontPct, 70, 0.01);
+ok("static bias from weight", Bk.staticBiasFromWeight(2100, 1400), 60, 0.01);
+// Braking force / idealized stopping distance: 3500lb car, 1.0g, 60mph.
+const bf = Bk.brakingForceFromDecel({ weightLb: 3500, decelG: 1.0, speedMph: 60 });
+ok("braking force at 1.0g", bf.totalForceLb, 3500, 0.01);
+ok("idealized stopping distance, 60mph @ 1.0g", bf.stoppingDistanceFt, 120.35, 0.1);
+// Stop energy: 3500lb from 60mph.
+const energy = Bk.stopEnergy({ weightLb: 3500, speedMph: 60 });
+ok("kinetic energy, 3500lb @ 60mph (BTU)", energy.kineticEnergyBtu, 541.3, 0.5);
+
+console.log("\n--- suspension math ---");
+const S = await import("../app/tools/suspension-math.ts");
+// Wheel rate scales with motion ratio squared: 400lb/in spring, 0.7 motion ratio.
+const spr = S.springRateResult(400, 0.7, 850);
+ok("wheel rate = spring rate x MR^2", spr.wheelRate, 196, 0.01);
+ok("natural frequency, 196lb/in wheel rate, 850lb corner", spr.naturalFrequencyHz, 1.503, 0.01);
+// Round trip: spring rate for a target wheel rate.
+ok("spring rate for wheel rate round trip", S.springRateForWheelRate(196, 0.7), 400, 0.01);
+// Round trip: spring rate for target frequency.
+ok("spring rate for frequency round trip", S.springRateForFrequency(1.503, 850, 0.7), 400, 0.5);
+// Ride height / wheel travel via motion ratio, inverse of each other's direction.
+ok("ride height change from spring change", S.rideHeightChange(1.0, 0.7), 1.4286, 0.001);
+ok("spring change for ride height round trip", S.springChangeForRideHeight(1.4286, 0.7), 1.0, 0.001);
+ok("wheel travel from shock travel", S.wheelTravelFromShockTravel(3.0, 0.6), 5.0, 0.001);
+ok("shock travel for wheel travel round trip", S.shockTravelForWheelTravel(5.0, 0.6), 3.0, 0.001);
+// Camber: a 20in wheel with a 1in offset top-to-bottom over an 18in span.
+ok("camber from offset", S.camberFromOffset(1.0, 18), 3.1758, 0.01);
+ok("offset from camber round trip", S.offsetFromCamber(3.1758, 18), 1.0, 0.01);
+// Caster sweep: camber changes 4 deg across a 40deg total sweep (20 each way).
+ok("caster from sweep", S.casterFromSweep(4, 40), 5.807, 0.05);
+// Toe: 0.25in difference over a 24in tire diameter.
+ok("toe angle from distance", S.toeAngleFromDistance(0.25, 24), 0.5968, 0.01);
+ok("toe distance from angle round trip", S.toeDistanceFromAngle(0.5968, 24), 0.25, 0.001);

@@ -26,7 +26,11 @@ export type ToolEntry = {
     | "running-cost"
     | "identity"
     | "performance"
-    | "conversion";
+    | "conversion"
+    | "fueling"
+    | "forced-induction"
+    | "brake"
+    | "suspension";
   /** Slugs of tools worth offering next. */
   related: string[];
 };
@@ -394,6 +398,222 @@ export const tools: ToolEntry[] = [
     family: "engine",
     related: ["engine-displacement-calculator", "compression-ratio-calculator", "piston-speed-calculator"],
   },
+  {
+    slug: "cylinder-volume-calculator",
+    name: "Cylinder Volume Calculator",
+    title: "Cylinder Volume Calculator",
+    metaTitle: "Cylinder Volume Calculator — Swept, Clearance & Total Volume",
+    description:
+      "Work out swept, clearance and total cylinder volume from bore, stroke and static compression ratio — the quick reference version of the full compression ratio breakdown.",
+    blurb: "Swept, clearance and total volume per cylinder, from bore, stroke and CR.",
+    icon: "diagram",
+    family: "engine",
+    related: ["compression-ratio-calculator", "engine-displacement-calculator", "bore-stroke-calculator"],
+  },
+  {
+    slug: "volumetric-efficiency-calculator",
+    name: "Volumetric Efficiency Calculator",
+    title: "Volumetric Efficiency Calculator",
+    metaTitle: "Volumetric Efficiency Calculator — VE From Airflow & Displacement",
+    description:
+      "Calculate volumetric efficiency from measured airflow, displacement and RPM — the figure that describes how well an engine actually fills its cylinders.",
+    blurb: "VE from actual airflow against the theoretical 100% figure.",
+    icon: "valve",
+    family: "engine",
+    related: ["engine-displacement-calculator", "air-fuel-lambda-calculator", "boost-pressure-ratio-calculator"],
+  },
+  {
+    slug: "air-fuel-lambda-calculator",
+    name: "Air-Fuel Ratio & Lambda Calculator",
+    title: "Air-Fuel Ratio and Lambda Calculator",
+    metaTitle: "AFR to Lambda Converter — Multi-Fuel Stoichiometric Ratios",
+    description:
+      "Convert between air-fuel ratio and lambda for gasoline, E85, ethanol, methanol, diesel and more, with each fuel's stoichiometric ratio shown.",
+    blurb: "AFR and lambda together, across eight fuels with real stoichiometric figures.",
+    icon: "fluid",
+    family: "fueling",
+    related: ["fuel-injector-calculator", "volumetric-efficiency-calculator", "boost-pressure-ratio-calculator"],
+  },
+  {
+    slug: "fuel-injector-calculator",
+    name: "Fuel Injector Size & Duty Cycle Calculator",
+    title: "Fuel Injector Size and Duty Cycle Calculator",
+    metaTitle: "Fuel Injector Calculator — Size From HP, or Duty Cycle From Injector",
+    description:
+      "Solve for the injector size a target horsepower needs, or check the duty cycle a specific injector will run at — both directions of the same BSFC-based formula.",
+    blurb: "Solve for injector size, or check the duty cycle of injectors you already have.",
+    icon: "fluid",
+    family: "fueling",
+    related: ["fuel-pump-calculator", "air-fuel-lambda-calculator", "horsepower-torque-rpm-calculator"],
+  },
+  {
+    slug: "fuel-pump-calculator",
+    name: "Fuel Pump Size Calculator",
+    title: "Fuel Pump Size Calculator",
+    metaTitle: "Fuel Pump Size Calculator — Required Flow in LPH",
+    description:
+      "Work out the fuel pump flow rate a target horsepower figure needs, in litres per hour, with a safety margin built in for voltage sag and line loss.",
+    blurb: "Required pump flow in LPH from target horsepower and fuel type.",
+    icon: "fluid",
+    family: "fueling",
+    related: ["fuel-injector-calculator", "air-fuel-lambda-calculator", "compression-ratio-calculator"],
+  },
+  {
+    slug: "turbo-boost-calculator",
+    name: "Turbo Boost Calculator",
+    title: "Turbo Boost Power Potential Calculator",
+    metaTitle: "Turbo Boost Calculator — Power Potential From Boost Pressure",
+    description:
+      "Estimate the power potential of adding boost to a naturally aspirated baseline, using absolute pressure ratio — an honest ceiling estimate, not a prediction.",
+    blurb: "A ceiling estimate of boosted power from a NA baseline and boost pressure.",
+    icon: "firing",
+    family: "forced-induction",
+    related: ["boost-pressure-ratio-calculator", "intercooler-efficiency-calculator", "power-to-weight-calculator"],
+  },
+  {
+    slug: "boost-pressure-ratio-calculator",
+    name: "Boost Pressure Ratio Calculator",
+    title: "Boost Pressure Ratio Calculator",
+    metaTitle: "Boost Pressure Ratio Calculator — PR From Boost & Altitude",
+    description:
+      "Calculate the absolute pressure ratio a given boost level produces, correcting for altitude — the figure a compressor map is actually read against.",
+    blurb: "The compressor-map pressure ratio, corrected for altitude.",
+    icon: "firing",
+    family: "forced-induction",
+    related: ["turbo-boost-calculator", "intercooler-efficiency-calculator", "volumetric-efficiency-calculator"],
+  },
+  {
+    slug: "intercooler-efficiency-calculator",
+    name: "Intercooler Efficiency Calculator",
+    title: "Intercooler Efficiency Calculator",
+    metaTitle: "Intercooler Efficiency Calculator — Charge Air Cooler Effectiveness",
+    description:
+      "Work out intercooler effectiveness from measured inlet and outlet charge temperatures against ambient — the same formula used for any heat exchanger.",
+    blurb: "Real intercooler effectiveness from measured temperatures.",
+    icon: "fluid",
+    family: "forced-induction",
+    related: ["boost-pressure-ratio-calculator", "turbo-boost-calculator", "compression-ratio-calculator"],
+  },
+  {
+    slug: "brake-pressure-calculator",
+    name: "Brake Pressure Calculator",
+    title: "Brake Pressure Calculator",
+    metaTitle: "Brake Pressure Calculator — Pedal Force to Rotor Torque",
+    description:
+      "Follow the full hydraulic chain from pedal force through master cylinder pressure, caliper clamp force and pad friction to torque at the rotor.",
+    blurb: "The full chain: pedal force to line pressure to clamp force to torque.",
+    icon: "torque",
+    family: "brake",
+    related: ["brake-bias-calculator", "braking-force-calculator", "brake-rotor-size-calculator"],
+  },
+  {
+    slug: "brake-bias-calculator",
+    name: "Brake Bias Calculator",
+    title: "Brake Bias Calculator",
+    metaTitle: "Brake Bias Calculator — Front/Rear Torque Distribution",
+    description:
+      "Work out front-to-rear brake bias from each axle's actual torque output, and compare it against a static-weight baseline.",
+    blurb: "Front/rear bias from actual torque, against a weight-based baseline.",
+    icon: "torque",
+    family: "brake",
+    related: ["brake-pressure-calculator", "braking-force-calculator", "brake-rotor-size-calculator"],
+  },
+  {
+    slug: "braking-force-calculator",
+    name: "Braking Force Calculator",
+    title: "Braking Force Calculator",
+    metaTitle: "Braking Force Calculator — Force & Deceleration From Target G",
+    description:
+      "Calculate total braking force from a target deceleration, plus an idealized theoretical-minimum stopping distance — clearly labelled as a ceiling, not a prediction.",
+    blurb: "Braking force from target g-force, with an idealized stopping distance.",
+    icon: "torque",
+    family: "brake",
+    related: ["brake-pressure-calculator", "brake-rotor-size-calculator", "brake-bias-calculator"],
+  },
+  {
+    slug: "brake-rotor-size-calculator",
+    name: "Brake Rotor Size Calculator",
+    title: "Brake Rotor Size Calculator",
+    metaTitle: "Brake Rotor Size Calculator — Stop Energy & Sizing Guidance",
+    description:
+      "Work out the kinetic energy a rotor must dissipate per stop, and see rule-of-thumb rotor diameter guidance by use case, from street to track.",
+    blurb: "Kinetic energy per stop, plus sizing guidance by use case.",
+    icon: "diagram",
+    family: "brake",
+    related: ["braking-force-calculator", "brake-pressure-calculator", "brake-bias-calculator"],
+  },
+  {
+    slug: "suspension-spring-rate-calculator",
+    name: "Suspension Spring Rate Calculator",
+    title: "Suspension Spring Rate Calculator",
+    metaTitle: "Spring Rate Calculator — Wheel Rate & Natural Frequency",
+    description:
+      "Convert spring rate to wheel rate through motion ratio, and to natural frequency through corner weight — solve any one of the three from the others.",
+    blurb: "Spring rate, wheel rate and natural frequency, solved either direction.",
+    icon: "sequence",
+    family: "suspension",
+    related: ["ride-height-calculator", "wheel-travel-calculator", "camber-calculator"],
+  },
+  {
+    slug: "ride-height-calculator",
+    name: "Ride Height Calculator",
+    title: "Ride Height Change Calculator",
+    metaTitle: "Ride Height Calculator — Change From Spring Length & Motion Ratio",
+    description:
+      "Work out how a spring length change translates into a ride height change at the wheel, through the suspension's motion ratio.",
+    blurb: "Ride height change from spring length change, via motion ratio.",
+    icon: "diagram",
+    family: "suspension",
+    related: ["suspension-spring-rate-calculator", "wheel-travel-calculator", "camber-calculator"],
+  },
+  {
+    slug: "wheel-travel-calculator",
+    name: "Wheel Travel Calculator",
+    title: "Wheel Travel Calculator",
+    metaTitle: "Wheel Travel Calculator — From Shock Travel & Motion Ratio",
+    description:
+      "Convert shock (damper) travel into wheel travel through the suspension's motion ratio, or work out the shock travel a target wheel travel needs.",
+    blurb: "Wheel travel from shock travel, or the reverse, via motion ratio.",
+    icon: "diagram",
+    family: "suspension",
+    related: ["suspension-spring-rate-calculator", "ride-height-calculator", "regear-calculator"],
+  },
+  {
+    slug: "camber-calculator",
+    name: "Camber Calculator",
+    title: "Camber Angle Calculator",
+    metaTitle: "Camber Calculator — Measure Camber Without a Gauge",
+    description:
+      "Work out camber angle from a level and a tape measure, using the top-to-bottom offset across a wheel — the same trig a camber gauge automates.",
+    blurb: "Camber angle from a measured offset, no gauge required.",
+    icon: "sequence",
+    family: "suspension",
+    related: ["caster-calculator", "toe-angle-calculator", "wheel-offset-calculator"],
+  },
+  {
+    slug: "caster-calculator",
+    name: "Caster Calculator",
+    title: "Caster Angle Calculator",
+    metaTitle: "Caster Calculator — Sweep Method Caster Angle",
+    description:
+      "Work out caster angle from the sweep method — turning the wheel a set angle each way and reading the camber change — the formula built into caster gauges.",
+    blurb: "Caster angle from a two-position sweep measurement.",
+    icon: "sequence",
+    family: "suspension",
+    related: ["camber-calculator", "toe-angle-calculator", "final-drive-ratio-calculator"],
+  },
+  {
+    slug: "toe-angle-calculator",
+    name: "Toe Angle Calculator",
+    title: "Toe Angle Calculator",
+    metaTitle: "Toe Angle Calculator — Convert Toe Inches to Degrees",
+    description:
+      "Convert a toe-plate distance measurement into toe angle in degrees, or work out the distance a target toe angle implies, using tire diameter.",
+    blurb: "Toe distance to angle and back, using tire diameter.",
+    icon: "sequence",
+    family: "suspension",
+    related: ["camber-calculator", "caster-calculator", "tire-size-calculator"],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((tool) => tool.slug === slug);
@@ -438,5 +658,25 @@ export const FAMILIES: { key: ToolEntry["family"]; title: string; note: string }
     key: "conversion",
     title: "Unit conversion",
     note: "Torque and pressure between the units specifications actually use",
+  },
+  {
+    key: "fueling",
+    title: "Fueling",
+    note: "Air-fuel mixture, injector sizing and fuel delivery",
+  },
+  {
+    key: "forced-induction",
+    title: "Forced induction",
+    note: "Boost pressure, compressor maps and charge cooling",
+  },
+  {
+    key: "brake",
+    title: "Brakes",
+    note: "The hydraulic chain from pedal to rotor, bias and stopping force",
+  },
+  {
+    key: "suspension",
+    title: "Suspension and alignment",
+    note: "Spring rate, travel and the angles a wheel actually sits at",
   },
 ];
