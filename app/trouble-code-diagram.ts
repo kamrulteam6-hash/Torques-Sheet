@@ -76,7 +76,7 @@ export function buildTroubleCodeSvg(guide: TroubleCodeGuide): TroubleCodeDiagram
   const causes = guide.causes.slice(0, 5);
   if (causes.length < 2) return null;
 
-  const height = TOP + causes.length * ROW_H + 46;
+  const height = TOP + causes.length * ROW_H + 64;
   const codeX = 78;
   const causeX = 168;
   const causeW = 196;
@@ -117,7 +117,8 @@ ${label(testX + 12, 78, "FIRST USEFUL TEST", 8.5, C.muted, "start")}
 <rect x="24" y="${TOP + 6}" width="${codeX - 34}" height="${causes.length * ROW_H - 14}" rx="6" fill="${C.panel}" stroke="${C.orange}" stroke-width="1.6"/>
 ${label(24 + (codeX - 34) / 2, TOP + (causes.length * ROW_H) / 2, guide.code, 13, C.orange, "middle", 800)}
 ${rows}
-${label(W / 2, height - 16, "Order is evidence-driven, not a probability ranking — start from freeze-frame data", 8, C.dim)}
+${label(W / 2, height - 32, "Order is evidence-driven, not a probability ranking — start from freeze-frame data", 8, C.dim)}
+${label(W / 2, height - 13, "TORQUESHEET.COM · MECHANICAL REFERENCE", 8.5, C.orange, "middle", 800)}
 </svg>`;
 
   return {
