@@ -64,6 +64,28 @@ import { troubleCodeCruze } from "./trouble-code-cruze";
 import { troubleCodeTahoe } from "./trouble-code-tahoe";
 import { troubleCodeCamry } from "./trouble-code-camry";
 import { troubleCodeRav4 } from "./trouble-code-rav4";
+import { troubleCodeCorolla } from "./trouble-code-corolla";
+import { troubleCodeTacoma } from "./trouble-code-tacoma";
+import { troubleCodeHighlander } from "./trouble-code-highlander";
+import { troubleCode4Runner } from "./trouble-code-4runner";
+import { troubleCodeAccord } from "./trouble-code-accord";
+import { troubleCodeCivic } from "./trouble-code-civic";
+import { troubleCodeCrv } from "./trouble-code-crv";
+import { troubleCodePilot } from "./trouble-code-pilot";
+import { troubleCodeOdyssey } from "./trouble-code-odyssey";
+import { troubleCodeWrangler } from "./trouble-code-wrangler";
+import { troubleCodeGrandCherokee, troubleCodeRam1500 } from "./trouble-code-grand-cherokee-ram";
+import { troubleCodeCharger, troubleCodeTownCountry } from "./trouble-code-charger-town-country";
+import { troubleCodeAltima, troubleCodeRogue } from "./trouble-code-nissan-altima-rogue";
+import { troubleCodeSentra, troubleCodeFrontier } from "./trouble-code-nissan-sentra-frontier";
+import { troubleCodeOutback, troubleCodeForester } from "./trouble-code-subaru-outback-forester";
+import { troubleCodeWrx, troubleCodeElantra } from "./trouble-code-wrx-elantra";
+import { troubleCodeSantaFe, troubleCodeOptima } from "./trouble-code-santa-fe-optima";
+import { troubleCodeSorento, troubleCodeJetta } from "./trouble-code-sorento-jetta";
+import { troubleCodeTiguan, troubleCodeA4 } from "./trouble-code-tiguan-a4";
+import { troubleCodeAudiQ5, troubleCodeBmw328i } from "./trouble-code-audi-q5-bmw-328i";
+import { troubleCodeBmwX5, troubleCodeBmw335i } from "./trouble-code-bmw-x5-335i";
+import { troubleCodeBmw528i, troubleCodeBmwX3 } from "./trouble-code-bmw-528i-x3";
 
 const troubleCodeBatch1: TroubleCodeGuide[] = [
   {
@@ -237,7 +259,7 @@ const troubleCodeBatch1: TroubleCodeGuide[] = [
   },
 ];
 
-export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions, ...troubleCodeMustang, ...troubleCodeMustangB, ...troubleCodeMustangC, ...troubleCodeFocus, ...troubleCodeSilverado, ...troubleCodeEquinox, ...troubleCodeMalibu, ...troubleCodeTraverse, ...troubleCodeSierra, ...troubleCodeCruze, ...troubleCodeTahoe, ...troubleCodeCamry, ...troubleCodeRav4];
+export const troubleCodeGuides: TroubleCodeGuide[] = [...troubleCodeBatch1, ...troubleCodeBatch2a, ...troubleCodeBatch2b, ...troubleCodeEscape, ...troubleCodeEscapeBoost, ...troubleCodeEscapeMisfire, ...troubleCodeEscapeEmissions, ...troubleCodeExplorer, ...troubleCodeExplorerBoost, ...troubleCodeExplorerEmissions, ...troubleCodeFusion, ...troubleCodeFusionBoost, ...troubleCodeFusionEmissions, ...troubleCodeMustang, ...troubleCodeMustangB, ...troubleCodeMustangC, ...troubleCodeFocus, ...troubleCodeSilverado, ...troubleCodeEquinox, ...troubleCodeMalibu, ...troubleCodeTraverse, ...troubleCodeSierra, ...troubleCodeCruze, ...troubleCodeTahoe, ...troubleCodeCamry, ...troubleCodeRav4, ...troubleCodeCorolla, ...troubleCodeTacoma, ...troubleCodeHighlander, ...troubleCode4Runner, ...troubleCodeAccord, ...troubleCodeCivic, ...troubleCodeCrv, ...troubleCodePilot, ...troubleCodeOdyssey, ...troubleCodeWrangler, ...troubleCodeGrandCherokee, ...troubleCodeRam1500, ...troubleCodeCharger, ...troubleCodeTownCountry, ...troubleCodeAltima, ...troubleCodeRogue, ...troubleCodeSentra, ...troubleCodeFrontier, ...troubleCodeOutback, ...troubleCodeForester, ...troubleCodeWrx, ...troubleCodeElantra, ...troubleCodeSantaFe, ...troubleCodeOptima, ...troubleCodeSorento, ...troubleCodeJetta, ...troubleCodeTiguan, ...troubleCodeA4, ...troubleCodeAudiQ5, ...troubleCodeBmw328i, ...troubleCodeBmwX5, ...troubleCodeBmw335i, ...troubleCodeBmw528i, ...troubleCodeBmwX3];
 
 export function troubleCodePath(item: TroubleCodeGuide) {
   return `/trouble-codes/${item.slug}`;
