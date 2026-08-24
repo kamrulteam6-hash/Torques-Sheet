@@ -36,6 +36,10 @@ const CAVEATS: Record<ToolEntry["family"], { title: string; body: string }> = {
     title: "Nominal dimensions, not checked ones.",
     body: "These results are only as good as the figures entered. On a rebuilt engine, bore, chamber volume and deck clearance all differ from the published specification — sometimes considerably. Where the answer matters, measure the chamber with a burette and check deck clearance rather than trusting a casting number.",
   },
+  identity: {
+    title: "A decode describes the build, not the vehicle today.",
+    body: "This tells you what left the factory. It does not know about a replaced engine, a dealer-fitted option, an accident, the mileage or who owns it. And treat the number itself as identifying information: redact the last six characters before posting a VIN anywhere public.",
+  },
   "running-cost": {
     title: "One measurement is a sample, not a pattern.",
     body: "A single tank reflects the driving you happened to do: weather, traffic, load and terrain all move the figure. Take several measurements across different conditions before treating any one of them as your vehicle's real economy, and recalculate when fuel prices move.",

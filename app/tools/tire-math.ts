@@ -286,3 +286,106 @@ export const tireFromSlug = (slug: string): TireSize | null => {
   const cleaned = slug.replace(/-/g, "/");
   return parseTireSize(cleaned) ?? parseTireSize(slug);
 };
+
+/* ------------------------------------------------------------ reverse lookup */
+
+/** Section widths that are actually manufactured, in millimetres. */
+export const STANDARD_WIDTHS = [
+  155, 165, 175, 185, 195, 205, 215, 225, 235, 245, 255, 265, 275, 285, 295, 305, 315, 325, 335,
+  345,
+];
+
+/** Aspect ratios that are actually manufactured. */
+export const STANDARD_ASPECTS = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85];
+
+/**
+ * Which aspect ratios are actually manufactured at a given section width.
+ *
+ * The full grid of standard widths against standard aspect ratios contains
+ * thousands of combinations, and a large share of them have never been made:
+ * nobody produces a 345/85 or a 155/30. Searching the whole grid made the
+ * reverse lookup confidently suggest sizes that cannot be bought, which is
+ * worse than returning nothing. The bands below follow how the market actually
+ * narrows — tall sidewalls exist on narrow sections, low profiles on wide ones.
+ */
+export function plausibleAspects(sectionWidthMm: number): number[] {
+  let min: number;
+  let max: number;
+  if (sectionWidthMm <= 195) {
+    min = 45;
+    max = 85;
+  } else if (sectionWidthMm <= 235) {
+    min = 40;
+    max = 80;
+  } else if (sectionWidthMm <= 275) {
+    min = 35;
+    max = 80;
+  } else if (sectionWidthMm <= 305) {
+    min = 30;
+    max = 75;
+  } else {
+    min = 30;
+    max = 70;
+  }
+  return STANDARD_ASPECTS.filter((aspect) => aspect >= min && aspect <= max);
+}
+
+export type SizeMatch = {
+  geometry: TireGeometry;
+  /** Difference from the requested diameter, inches. */
+  diff: number;
+  diffPct: number;
+};
+
+/**
+ * The inverse of the usual calculation: given a target overall diameter and a
+ * rim, which real sizes actually land there?
+ *
+ * This is the question people are really asking when they want "a 33-inch tire
+ * on a 17-inch wheel" — a diameter is easy to state and impossible to buy,
+ * because tires are sold by section width and aspect ratio. Searching only the
+ * combinations that exist keeps the answer orderable.
+ */
+export function sizesForDiameter({
+  targetDiameter,
+  rim,
+  tolerancePct = 3,
+  limit = 12,
+}: {
+  targetDiameter: number;
+  rim: number;
+  tolerancePct?: number;
+  limit?: number;
+}): SizeMatch[] {
+  const matches: SizeMatch[] = [];
+  for (const width of STANDARD_WIDTHS) {
+    for (const aspect of plausibleAspects(width)) {
+      const geometry = tireGeometry({
+        width,
+        aspect,
+        rim,
+        label: `${width}/${aspect}R${rim}`,
+        flotation: false,
+      });
+      const diff = geometry.diameter - targetDiameter;
+      const diffPct = (diff / targetDiameter) * 100;
+      if (Math.abs(diffPct) <= tolerancePct) matches.push({ geometry, diff, diffPct });
+    }
+  }
+  return matches.sort((a, b) => Math.abs(a.diff) - Math.abs(b.diff)).slice(0, limit);
+}
+
+/** Rim diameters worth offering in a reverse lookup. */
+export const COMMON_RIMS = [15, 16, 17, 18, 19, 20, 22];
+
+/**
+ * Approved rim-width band for a section width, following the convention that
+ * the ideal rim sits near 85% of the section width in inches with roughly an
+ * inch of latitude either side. TRA and ETRTO publish exact tables per size;
+ * this is the working approximation those tables cluster around.
+ */
+export function rimWidthRangeFor(sectionWidthMm: number) {
+  const ideal = (sectionWidthMm / MM_PER_INCH) * 0.85;
+  const round5 = (value: number) => Math.round(value * 2) / 2;
+  return { ideal: round5(ideal), min: round5(ideal - 1), max: round5(ideal + 1) };
+}

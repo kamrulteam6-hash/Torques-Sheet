@@ -159,3 +159,12 @@
 .tool-metrics,.tool-metrics.wide,.decode-row{grid-template-columns:1fr 1fr}
 .pair-grid{grid-template-columns:1fr}
 }
+.height-drawing{width:100%;height:auto;display:block;border:1px solid #2f3f47;border-radius:8px;background:#0b1216}
+.height-drawing .ground{stroke:#3d525c;stroke-width:1.5}
+.height-drawing .tire-bar{fill:#16232a;stroke:#ff8b3a;stroke-width:2}
+.height-drawing .rim-bar{fill:#111c22;stroke:#55b8f6;stroke-width:2}
+.vin-progress{padding:0 24px 16px}
+.vin-progress small{display:block;font:800 9px var(--font-mono);letter-spacing:1px;color:#6f8189;margin-bottom:7px}
+.vin-bar{height:5px;border-radius:3px;background:#1b262c;overflow:hidden}
+.vin-bar span{display:block;height:100%;background:linear-gradient(90deg,#55b8f6,#ff8b3a);transition:width .18s ease}
+.vin-chunk{font:800 13px var(--font-mono);color:#ff8b3a;letter-spacing:1px}

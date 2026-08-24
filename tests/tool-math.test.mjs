@@ -59,3 +59,37 @@ ok("L/100km at 17.78 MPG", f.litresPer100Km, 13.23, 0.05);
 ok("cost per mile at $3.45", f.costPerMile, 0.1941, 0.001);
 ok("tank range 23 gal", f.tankRange, 408.9, 1);
 ok("cc per cubic inch constant", CI_PER_CC, 16.387064, 0.000001);
+
+console.log("\n--- reverse lookup + circumference ---");
+const { sizesForDiameter, rimWidthRangeFor, STANDARD_WIDTHS } = await import("../app/tools/tire-math.ts");
+const m33 = sizesForDiameter({ targetDiameter: 33, rim: 17, tolerancePct: 3 });
+console.log(`${m33.length > 0 ? "PASS" : "FAIL"}  reverse lookup 33in on 17in returns ${m33.length} sizes`);
+console.log(`${m33[0] && Math.abs(m33[0].diff) < 0.6 ? "PASS" : "FAIL"}  closest is ${m33[0]?.geometry.size.label} at ${m33[0]?.geometry.diameter.toFixed(2)}in`);
+const allReal = m33.every((x) => STANDARD_WIDTHS.includes(x.geometry.size.width) && x.geometry.size.aspect % 5 === 0);
+console.log(`${allReal ? "PASS" : "FAIL"}  every suggested size uses a manufactured width and aspect`);
+const sorted = m33.every((x, i) => i === 0 || Math.abs(m33[i - 1].diff) <= Math.abs(x.diff));
+console.log(`${sorted ? "PASS" : "FAIL"}  results ordered by closeness to target`);
+const none = sizesForDiameter({ targetDiameter: 40, rim: 22, tolerancePct: 3 });
+console.log(`${Array.isArray(none) ? "PASS" : "FAIL"}  impossible target returns an array (${none.length} results) rather than throwing`);
+ok("225/65R17 circumference", measure("225/65R17").circumference, 89.59, 0.05);
+ok("rim width band for 245 section (ideal)", rimWidthRangeFor(245).ideal, 8.0, 0.3);
+
+console.log("\n--- VIN ---");
+const V = await import("../app/tools/vin.ts");
+// Known-good VINs whose check digits are documented.
+console.log(`${V.computeCheckDigit("1M8GDM9AXKP042788") === "X" ? "PASS" : "FAIL"}  NHTSA reference VIN check digit is X (got ${V.computeCheckDigit("1M8GDM9AXKP042788")})`);
+console.log(`${V.checkVin("1M8GDM9AXKP042788").checkDigitValid ? "PASS" : "FAIL"}  reference VIN validates`);
+const bad = V.checkVin("1M8GDM9A1KP042788");
+console.log(`${!bad.checkDigitValid ? "PASS" : "FAIL"}  altered check digit is rejected`);
+const io = V.checkVin("1M8GDM9AXKP04I788");
+console.log(`${!io.wellFormed ? "PASS" : "FAIL"}  VIN containing I is rejected`);
+console.log(`${V.normaliseVin("1m8-gdm 9axkp042788").length === 17 ? "PASS" : "FAIL"}  normalise strips punctuation and uppercases`);
+console.log(`${V.checkVin("1M8GDM9AXKP0427").problems.length > 0 ? "PASS" : "FAIL"}  short VIN reports a problem`);
+console.log(`${V.vinRegion("1") === "United States" ? "PASS" : "FAIL"}  region code 1 is United States`);
+console.log(`${V.vinRegion("W") === "Germany" ? "PASS" : "FAIL"}  region code W is Germany`);
+// Position 10: D = 1983 or 2013; a letter in position 7 means the later cycle.
+console.log(`${V.modelYearFromCode("D", "T") === "2013" ? "PASS" : "FAIL"}  year code D with letter in position 7 resolves to 2013 (got ${V.modelYearFromCode("D", "T")})`);
+console.log(`${V.modelYearFromCode("D", "5") === "1983" ? "PASS" : "FAIL"}  year code D with digit in position 7 resolves to 1983 (got ${V.modelYearFromCode("D", "5")})`);
+console.log(`${V.modelYearFromCode("D").includes("1983") && V.modelYearFromCode("D").includes("2013") ? "PASS" : "FAIL"}  year code D alone is reported as ambiguous`);
+console.log(`${V.vinSections("1M8GDM9AXKP042788").length === 6 ? "PASS" : "FAIL"}  a valid VIN splits into six sections`);
+console.log(`${V.vinSections("SHORT").length === 0 ? "PASS" : "FAIL"}  a short VIN yields no sections`);

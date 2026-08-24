@@ -93,6 +93,26 @@ export const grassrootsOctane: ToolSource = {
   note: "Useful counterweight: chamber design, quench and cam timing move the detonation threshold as much as the static ratio does.",
 };
 
+/* ------------------------------------------------------------ vin decoding */
+
+export const nhtsaVpic: ToolSource = {
+  label: "NHTSA vPIC — Vehicle Product Information Catalog",
+  url: "https://vpic.nhtsa.dot.gov/api/",
+  note: "The free public API this page decodes against, populated from what manufacturers file for vehicles sold in the United States.",
+};
+
+export const nhtsaVpicDocs: ToolSource = {
+  label: "NHTSA — VIN decoder and recall lookup",
+  url: "https://www.nhtsa.gov/recalls",
+  note: "The official front end, and the separate lookup to use for recalls — a decode does not include them.",
+};
+
+export const iso3779: ToolSource = {
+  label: "ISO 3779 — vehicle identification number content and structure",
+  url: "https://en.wikipedia.org/wiki/Vehicle_identification_number",
+  note: "The standard that fixes the 17-character format, the excluded letters and the check-digit calculation.",
+};
+
 /* ---------------------------------------------------------------- reference */
 
 export const REVIEWED = "August 23, 2026";

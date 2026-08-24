@@ -18,7 +18,7 @@ export type ToolEntry = {
   blurb: string;
   icon: IconName;
   /** Grouping on the hub page. */
-  family: "tire" | "drivetrain" | "fitment" | "engine" | "running-cost";
+  family: "tire" | "drivetrain" | "fitment" | "engine" | "running-cost" | "identity";
   /** Slugs of tools worth offering next. */
   related: string[];
 };
@@ -146,6 +146,42 @@ export const tools: ToolEntry[] = [
     family: "running-cost",
     related: ["tire-size-calculator", "gear-ratio-calculator", "engine-displacement-calculator"],
   },
+  {
+    slug: "tire-diameter-calculator",
+    name: "Tire Diameter Calculator",
+    title: "Tire Diameter Calculator",
+    metaTitle: "Tire Diameter Calculator — Find Sizes by Overall Height",
+    description:
+      "Work out a tire's overall diameter, or go the other way: name the height you want and see which real sizes actually reach it on your rim.",
+    blurb: "Diameter from a size, and — the useful direction — real sizes that hit a target height.",
+    icon: "diagram",
+    family: "tire",
+    related: ["tire-size-calculator", "tire-circumference-calculator", "tire-size-comparison"],
+  },
+  {
+    slug: "tire-circumference-calculator",
+    name: "Tire Circumference Calculator",
+    title: "Tire Circumference Calculator",
+    metaTitle: "Tire Circumference Calculator — Rolling Distance & Revs Per Mile",
+    description:
+      "Rolling circumference and revolutions per mile for any tire size — the two figures your speedometer, odometer, ABS and traction control are all calibrated against.",
+    blurb: "Rolling distance per revolution and revs per mile, the figures the ECU actually uses.",
+    icon: "timing",
+    family: "tire",
+    related: ["tire-diameter-calculator", "speedometer-error-calculator", "tire-size-calculator"],
+  },
+  {
+    slug: "vin-decoder",
+    name: "VIN Decoder",
+    title: "VIN Decoder",
+    metaTitle: "Free VIN Decoder — Check Digit Validation & NHTSA Lookup",
+    description:
+      "Decode any 17-character VIN against NHTSA's public database, and validate the check digit in your browser first so a mistyped VIN is caught before anything is sent.",
+    blurb: "Check-digit validation in the browser, then a full decode from NHTSA. Nothing logged.",
+    icon: "sequence",
+    family: "identity",
+    related: ["tire-size-calculator", "engine-displacement-calculator", "fuel-cost-calculator"],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((tool) => tool.slug === slug);
@@ -175,5 +211,10 @@ export const FAMILIES: { key: ToolEntry["family"]; title: string; note: string }
     key: "running-cost",
     title: "Running costs",
     note: "What the vehicle actually costs to fuel, per mile and per year",
+  },
+  {
+    key: "identity",
+    title: "Vehicle identity",
+    note: "Reading what a vehicle actually is, from the number stamped on it",
   },
 ];
