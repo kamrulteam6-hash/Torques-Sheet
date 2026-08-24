@@ -193,6 +193,56 @@ export function wheelTorque({
   };
 }
 
+/* -------------------------------------------------------------- drivetrain ratios */
+
+/**
+ * Axle (final drive) ratio, measured directly from the ring gear and pinion
+ * tooth counts rather than derived from RPM and road speed. This is the
+ * physical definition of the ratio — the RPM-based method in the gear-ratio
+ * and RPM/speed calculators infers the same number indirectly.
+ */
+export const ringPinionRatio = (ringTeeth: number, pinionTeeth: number) =>
+  pinionTeeth > 0 ? ringTeeth / pinionTeeth : 0;
+
+/**
+ * A single transmission gear's ratio, measured on a lift: run the engine in
+ * gear, compare input shaft (engine/converter) speed against output shaft
+ * (driveshaft) speed. Numerically identical to counting gear teeth, but
+ * measurable without disassembly.
+ */
+export const transmissionRatioFromRpm = (inputRpm: number, outputRpm: number) =>
+  outputRpm > 0 ? inputRpm / outputRpm : 0;
+
+/**
+ * Total multiplication from the transmission output to the road, including an
+ * optional transfer case ratio. On a two-wheel-drive vehicle, or a 4WD system
+ * in high range, the transfer case ratio is 1.
+ */
+export const overallDriveRatio = (gearRatio: number, finalDrive: number, transferCase = 1) =>
+  gearRatio * finalDrive * transferCase;
+
+/**
+ * The final drive ratio that puts the engine at a specific target RPM at a
+ * given road speed, in a known transmission gear — the regear question asked
+ * from the RPM side rather than from a tire-size percentage change.
+ *
+ * Rearranges RPM = (mph × gear × axle × 1056) ÷ (π × diameter) for axle ratio.
+ */
+export function axleRatioForTargetRpm({
+  targetRpm,
+  mph,
+  gearRatio,
+  tireDiameter,
+}: {
+  targetRpm: number;
+  mph: number;
+  gearRatio: number;
+  tireDiameter: number;
+}): number {
+  if (mph <= 0 || gearRatio <= 0) return 0;
+  return (targetRpm * Math.PI * tireDiameter) / (mph * gearRatio * 1056);
+}
+
 /* ------------------------------------------------------------- unit conversion */
 
 export const PRESSURE_UNITS = ["psi", "bar", "kPa", "atm", "kgf/cm²"] as const;

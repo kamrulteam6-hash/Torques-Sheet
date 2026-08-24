@@ -43,6 +43,25 @@ export function displacement(bore: number, stroke: number, cylinders: number): D
 /** Standard overbore steps, in inches, used when a block is rebored. */
 export const OVERBORES = [0, 0.02, 0.03, 0.04, 0.06];
 
+/**
+ * Solves the displacement formula backwards for bore, given a target total
+ * displacement, a fixed stroke and cylinder count. Because bore is squared in
+ * the forward formula, this is a square root rather than a division.
+ */
+export function boreForDisplacement(totalCi: number, strokeIn: number, cylinders: number): number {
+  if (strokeIn <= 0 || cylinders <= 0) return 0;
+  const perCylinderCi = totalCi / cylinders;
+  return Math.sqrt(perCylinderCi / (quarterPi * strokeIn));
+}
+
+/** The companion solve: stroke for a target displacement at a fixed bore. */
+export function strokeForDisplacement(totalCi: number, boreIn: number, cylinders: number): number {
+  if (boreIn <= 0 || cylinders <= 0) return 0;
+  const perCylinderCi = totalCi / cylinders;
+  return perCylinderCi / (quarterPi * boreIn * boreIn);
+}
+
+
 /* ---------------------------------------------------------- compression ratio */
 
 export type CompressionInput = {
@@ -161,3 +180,13 @@ export function fuelFigures({
 /** Annual cost, for comparing two vehicles or two driving patterns. */
 export const annualCost = (milesPerYear: number, costPerMile: number) =>
   milesPerYear * costPerMile;
+
+/**
+ * MPG and litres-per-100km are reciprocal measures of the same thing — one
+ * counts distance per unit fuel, the other counts fuel per unit distance —
+ * which is why the same constant converts in both directions.
+ */
+export const MPG_L100KM_CONSTANT = 235.214583;
+export const mpgToL100km = (mpg: number) => (mpg > 0 ? MPG_L100KM_CONSTANT / mpg : 0);
+export const l100kmToMpg = (l100km: number) => (l100km > 0 ? MPG_L100KM_CONSTANT / l100km : 0);
+

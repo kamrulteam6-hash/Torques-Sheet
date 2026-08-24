@@ -136,3 +136,33 @@ console.log(`${near[0].interchangeable ? "PASS" : "FAIL"}  5x114.3 matches itsel
 const risky = near.filter((m) => m.deceptivelyClose).map((m) => m.pattern.label);
 console.log(`${risky.length > 0 ? "PASS" : "FAIL"}  5x114.3 flags close-but-wrong patterns: ${risky.join(", ")}`);
 console.log(`${B.nearbyPatterns(5, 114.3).every((m) => m.pattern.lugs === 5) ? "PASS" : "FAIL"}  never suggests a different lug count`);
+
+console.log("\n--- bore/stroke solve ---");
+const E = await import("../app/tools/engine-math.ts");
+// Chevy 350 forward: bore 4.00, stroke 3.48, 8cyl -> 349.85 ci. Solve backward for bore.
+ok("solve bore for 350ci target, 3.48 stroke, 8cyl", E.boreForDisplacement(350, 3.48, 8), 4.001, 0.002);
+ok("solve stroke for 350ci target, 4.00 bore, 8cyl", E.strokeForDisplacement(350, 4.0, 8), 3.482, 0.005);
+// Round trip: forward then backward should recover the input.
+const fwd350 = E.displacement(4.03, 3.75, 8); // 383 stroker
+ok("round trip bore solve (383)", E.boreForDisplacement(fwd350.totalCi, 3.75, 8), 4.03, 0.001);
+ok("round trip stroke solve (383)", E.strokeForDisplacement(fwd350.totalCi, 4.03, 8), 3.75, 0.001);
+
+console.log("\n--- mpg <-> l/100km ---");
+ok("30 mpg to L/100km", E.mpgToL100km(30), 7.8405, 0.001);
+ok("7.84 L/100km to mpg", E.l100kmToMpg(7.8405), 30, 0.01);
+ok("mpg/l100km round trip", E.l100kmToMpg(E.mpgToL100km(25)), 25, 1e-6);
+ok("mpg constant matches fuelFigures", E.mpgToL100km(17.778), E.fuelFigures({ miles: 320, gallons: 18, pricePerGallon: 3.45, tankGallons: 23 }).litresPer100Km, 0.01);
+
+console.log("\n--- drivetrain ratios ---");
+ok("ring/pinion 41/10 teeth -> 4.10 ratio", P.ringPinionRatio(41, 10), 4.1, 0.001);
+ok("ring/pinion 41/12 teeth -> 3.42 ratio", P.ringPinionRatio(41, 12), 3.4167, 0.001);
+ok("transmission ratio from rpm 3500/1000", P.transmissionRatioFromRpm(3500, 1000), 3.5, 0.001);
+ok("overall ratio, no transfer case", P.overallDriveRatio(3.5, 3.55), 12.425, 0.001);
+ok("overall ratio, 2.72 low-range transfer case", P.overallDriveRatio(1.0, 3.55, 2.72), 9.656, 0.001);
+// Axle ratio to hit 2500 rpm at 70 mph in a 0.8 overdrive, on a 31.6in tire (265/70R17).
+const targetAxle = P.axleRatioForTargetRpm({ targetRpm: 2500, mph: 70, gearRatio: 0.8, tireDiameter: 31.606 });
+ok("axle ratio for 2500 rpm @ 70mph, 0.8 OD, 265/70R17", targetAxle, 4.196, 0.01);
+// Cross-check against forward engineRpm from tire-math.
+const T = await import("../app/tools/tire-math.ts");
+const checkRpm = T.engineRpm({ mph: 70, axleRatio: targetAxle, gearRatio: 0.8, tireDiameter: 31.606 });
+ok("regear solve round-trips through engineRpm", checkRpm, 2500, 1);
