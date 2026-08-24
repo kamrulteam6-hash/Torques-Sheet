@@ -18,7 +18,15 @@ export type ToolEntry = {
   blurb: string;
   icon: IconName;
   /** Grouping on the hub page. */
-  family: "tire" | "drivetrain" | "fitment" | "engine" | "running-cost" | "identity";
+  family:
+    | "tire"
+    | "drivetrain"
+    | "fitment"
+    | "engine"
+    | "running-cost"
+    | "identity"
+    | "performance"
+    | "conversion";
   /** Slugs of tools worth offering next. */
   related: string[];
 };
@@ -182,6 +190,102 @@ export const tools: ToolEntry[] = [
     family: "identity",
     related: ["tire-size-calculator", "engine-displacement-calculator", "fuel-cost-calculator"],
   },
+  {
+    slug: "bolt-pattern-calculator",
+    name: "Bolt Pattern Calculator",
+    title: "Bolt Pattern Calculator",
+    metaTitle: "Bolt Pattern Calculator — PCD, mm to Inch & Compatibility",
+    description:
+      "Convert a bolt pattern between millimetres and inches, work out PCD from a stud measurement, and see which patterns are genuinely interchangeable rather than merely close.",
+    blurb: "PCD in both units, measured from your own wheel, with the close-but-wrong patterns flagged.",
+    icon: "sequence",
+    family: "fitment",
+    related: ["wheel-offset-calculator", "wheel-backspacing-calculator", "tire-size-calculator"],
+  },
+  {
+    slug: "torque-converter",
+    name: "Torque Converter",
+    title: "Torque Unit Converter",
+    metaTitle: "Nm to lb-ft Converter — Torque Units Including kgf·m",
+    description:
+      "Convert torque between newton-metres, pound-feet, kilogram-force metres and pound-inches, with the tolerance guidance a specification actually needs.",
+    blurb: "Nm, lb·ft, kgf·m and lb·in, with a note on how much rounding a spec can take.",
+    icon: "torque",
+    family: "conversion",
+    related: ["horsepower-torque-rpm-calculator", "wheel-torque-calculator", "tire-pressure-converter"],
+  },
+  {
+    slug: "tire-pressure-converter",
+    name: "Tire Pressure Converter",
+    title: "Tire Pressure Converter",
+    metaTitle: "PSI to Bar & kPa Converter — Tire Pressure Units",
+    description:
+      "Convert tire pressure between psi, bar, kPa, atmospheres and kgf/cm², with the cold-pressure and temperature rules that decide what to actually set.",
+    blurb: "psi, bar, kPa and more — plus why the placard figure is a cold pressure.",
+    icon: "fluid",
+    family: "conversion",
+    related: ["tire-size-calculator", "torque-converter", "tire-size-comparison"],
+  },
+  {
+    slug: "rpm-speed-calculator",
+    name: "RPM and Speed Calculator",
+    title: "Engine RPM and Road Speed Calculator",
+    metaTitle: "Engine RPM at Speed Calculator — Speed at RPM & Overall Ratio",
+    description:
+      "Solve engine RPM from road speed or road speed from RPM, through every transmission gear, with the overall drivetrain ratio shown for each.",
+    blurb: "RPM at any speed and speed at any RPM, gear by gear, with overall ratios.",
+    icon: "timing",
+    family: "drivetrain",
+    related: ["gear-ratio-calculator", "wheel-torque-calculator", "tire-size-calculator"],
+  },
+  {
+    slug: "power-to-weight-calculator",
+    name: "Power-to-Weight Calculator",
+    title: "Power-to-Weight Ratio Calculator",
+    metaTitle: "Power-to-Weight Ratio Calculator — hp/ton, lb/hp & W/kg",
+    description:
+      "Work out power to weight in every unit it gets quoted in, and see what the figure actually predicts about how a vehicle performs.",
+    blurb: "hp per ton, pounds per hp, W/kg and kW/tonne, with what each figure implies.",
+    icon: "firing",
+    family: "performance",
+    related: ["quarter-mile-calculator", "horsepower-torque-rpm-calculator", "wheel-torque-calculator"],
+  },
+  {
+    slug: "quarter-mile-calculator",
+    name: "Quarter Mile & 0–60 Calculator",
+    title: "Quarter Mile and 0–60 MPH Calculator",
+    metaTitle: "Quarter Mile Calculator — ET, Trap Speed & 0-60 MPH Estimate",
+    description:
+      "Estimate quarter-mile elapsed time and trap speed with the Hale formulas, plus a 0–60 figure from the energy method, and see why trap speed is the number to trust.",
+    blurb: "ET and trap speed from the drag-strip formulas, plus an honest 0–60 estimate.",
+    icon: "firing",
+    family: "performance",
+    related: ["power-to-weight-calculator", "horsepower-torque-rpm-calculator", "rpm-speed-calculator"],
+  },
+  {
+    slug: "wheel-torque-calculator",
+    name: "Wheel Torque Calculator",
+    title: "Wheel Torque Calculator",
+    metaTitle: "Wheel Torque Calculator — Torque at the Drive Wheels",
+    description:
+      "Work out torque at the drive wheels through the transmission and final drive, and the tractive force it puts at the contact patch.",
+    blurb: "Engine torque multiplied through the drivetrain, and the force it produces.",
+    icon: "torque",
+    family: "performance",
+    related: ["rpm-speed-calculator", "gear-ratio-calculator", "power-to-weight-calculator"],
+  },
+  {
+    slug: "piston-speed-calculator",
+    name: "Piston Speed Calculator",
+    title: "Mean Piston Speed Calculator",
+    metaTitle: "Piston Speed Calculator — Mean Piston Speed & Safe RPM Limit",
+    description:
+      "Calculate mean piston speed from stroke and RPM, and find the engine speed at which a given stroke reaches each accepted durability threshold.",
+    blurb: "Mean piston speed from stroke and RPM — the real limit on a long-stroke engine.",
+    icon: "valve",
+    family: "engine",
+    related: ["engine-displacement-calculator", "compression-ratio-calculator", "horsepower-torque-rpm-calculator"],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((tool) => tool.slug === slug);
@@ -216,5 +320,15 @@ export const FAMILIES: { key: ToolEntry["family"]; title: string; note: string }
     key: "identity",
     title: "Vehicle identity",
     note: "Reading what a vehicle actually is, from the number stamped on it",
+  },
+  {
+    key: "performance",
+    title: "Performance estimates",
+    note: "What the numbers predict about acceleration and force at the road",
+  },
+  {
+    key: "conversion",
+    title: "Unit conversion",
+    note: "Torque and pressure between the units specifications actually use",
   },
 ];

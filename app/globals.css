@@ -168,3 +168,13 @@
 .vin-bar{height:5px;border-radius:3px;background:#1b262c;overflow:hidden}
 .vin-bar span{display:block;height:100%;background:linear-gradient(90deg,#55b8f6,#ff8b3a);transition:width .18s ease}
 .vin-chunk{font:800 13px var(--font-mono);color:#ff8b3a;letter-spacing:1px}
+.tool-select{flex:1;min-width:0;border:0;background:transparent;color:#e8eef0;font:700 15px var(--font-mono);padding:12px 13px;outline:none;appearance:none;cursor:pointer}
+.tool-select option{background:#0b1216;color:#e8eef0}
+.pattern-drawing{width:100%;height:auto;display:block;border:1px solid #2f3f47;border-radius:8px;background:#0b1216}
+.pattern-drawing .pitch-circle{fill:none;stroke:#2f3f47;stroke-width:1.5;stroke-dasharray:4 3}
+.pattern-drawing .hub-bore{fill:#16232a;stroke:#4a5b63;stroke-width:1.5}
+.pattern-drawing .stud{fill:#ff8b3a;stroke:#1d140e;stroke-width:1.5}
+.pattern-drawing .chord-line{stroke:#55b8f6;stroke-width:1.5;stroke-dasharray:3 2}
+.tool-subhead{padding-top:4px}
+.tool-inputs.five{grid-template-columns:repeat(5,1fr)}
+@media(max-width:650px){.tool-inputs.five{grid-template-columns:1fr 1fr}}

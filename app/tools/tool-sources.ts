@@ -93,6 +93,12 @@ export const grassrootsOctane: ToolSource = {
   note: "Useful counterweight: chamber design, quench and cam timing move the detonation threshold as much as the static ratio does.",
 };
 
+export const fmvss138: ToolSource = {
+  label: "NHTSA — FMVSS No. 138, Tire Pressure Monitoring Systems",
+  url: "https://www.nhtsa.gov/sites/nhtsa.gov/files/fmvss/TPMS-2005-FMVSS-No138.pdf",
+  note: "Sets the mandatory TPMS warning threshold at 25% below the vehicle placard cold inflation pressure.",
+};
+
 /* ------------------------------------------------------------ vin decoding */
 
 export const nhtsaVpic: ToolSource = {

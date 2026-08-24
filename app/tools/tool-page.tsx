@@ -36,6 +36,14 @@ const CAVEATS: Record<ToolEntry["family"], { title: string; body: string }> = {
     title: "Nominal dimensions, not checked ones.",
     body: "These results are only as good as the figures entered. On a rebuilt engine, bore, chamber volume and deck clearance all differ from the published specification — sometimes considerably. Where the answer matters, measure the chamber with a burette and check deck clearance rather than trusting a casting number.",
   },
+  performance: {
+    title: "Estimates, not timeslips.",
+    body: "These are empirical formulas fitted to real results, not a simulation of your vehicle. Traction, gearing, transmission type, altitude, temperature and the driver all move the outcome — often by more than the difference between two engines. Treat the figures as a range to expect rather than a time to quote.",
+  },
+  conversion: {
+    title: "Convert, then check the tolerance.",
+    body: "A converted figure is exact, but the specification it came from was not. Torque specs carry a tolerance and pressure figures are stated cold, so rounding to a value your tool can actually set is normally fine — provided you know which way you rounded and by how much.",
+  },
   identity: {
     title: "A decode describes the build, not the vehicle today.",
     body: "This tells you what left the factory. It does not know about a replaced engine, a dealer-fitted option, an accident, the mileage or who owns it. And treat the number itself as identifying information: redact the last six characters before posting a VIN anywhere public.",

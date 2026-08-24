@@ -93,3 +93,46 @@ console.log(`${V.modelYearFromCode("D", "5") === "1983" ? "PASS" : "FAIL"}  year
 console.log(`${V.modelYearFromCode("D").includes("1983") && V.modelYearFromCode("D").includes("2013") ? "PASS" : "FAIL"}  year code D alone is reported as ambiguous`);
 console.log(`${V.vinSections("1M8GDM9AXKP042788").length === 6 ? "PASS" : "FAIL"}  a valid VIN splits into six sections`);
 console.log(`${V.vinSections("SHORT").length === 0 ? "PASS" : "FAIL"}  a short VIN yields no sections`);
+
+console.log("\n--- performance ---");
+const P = await import("../app/tools/perf-math.ts");
+// Hale: a 3500 lb car with 300 hp runs a mid-13. Trap around 103 mph.
+ok("Hale ET, 3500 lb / 300 hp", P.dragEstimate({ weightLb: 3500, hp: 300, efficiency: 0.5 }).etHale, 13.24, 0.05);
+ok("trap speed, 3500 lb / 300 hp", P.dragEstimate({ weightLb: 3500, hp: 300, efficiency: 0.5 }).trapSpeed, 103.0, 0.5);
+ok("Fox ET is slower than Hale", P.dragEstimate({ weightLb: 3500, hp: 300, efficiency: 0.5 }).etFox, 14.30, 0.06);
+ok("0-60, 3300 lb / 300 hp @ 0.48", P.zeroToSixty({ weightLb: 3300, hp: 300, efficiency: 0.48 }), 4.99, 0.15);
+ok("power to weight, hp per ton", P.powerToWeight(3500, 300).hpPerTon, 171.4, 0.2);
+ok("power to weight, lb per hp", P.powerToWeight(3500, 300).poundsPerHp, 11.67, 0.02);
+// Mean piston speed: 3.48in stroke at 6000 rpm = 3480 ft/min.
+ok("piston speed 3.48in @ 6000", P.pistonSpeed(3.48, 6000).feetPerMinute, 3480, 1);
+ok("piston speed in m/s", P.pistonSpeed(3.48, 6000).metresPerSecond, 17.68, 0.05);
+ok("rpm at 4000 ft/min, 3.48 stroke", P.rpmAtPistonSpeed(3.48, 4000), 6896.6, 1);
+// Wheel torque: 400 lb-ft, 3.0 first gear, 3.55 axle, 85% efficient.
+const wt = P.wheelTorque({ engineTorque: 400, gearRatio: 3.0, finalDrive: 3.55, tireDiameter: 30 });
+ok("overall ratio 3.0 x 3.55", wt.overallRatio, 10.65, 0.001);
+ok("wheel torque at 85% efficiency", wt.wheelTorque, 3621, 1);
+ok("tractive force on a 30in tire", wt.tractiveForce, 2896.8, 2);
+
+console.log("\n--- unit conversion ---");
+ok("1 bar to psi", P.convertPressure(1, "bar", "psi"), 14.5038, 0.001);
+ok("35 psi to kPa", P.convertPressure(35, "psi", "kPa"), 241.32, 0.02);
+ok("35 psi to bar", P.convertPressure(35, "psi", "bar"), 2.4132, 0.001);
+ok("round trip psi->kPa->psi", P.convertPressure(P.convertPressure(32, "psi", "kPa"), "kPa", "psi"), 32, 1e-9);
+ok("100 lb-ft to Nm", P.convertTorque(100, "lb·ft", "N·m"), 135.582, 0.01);
+ok("100 Nm to lb-ft", P.convertTorque(100, "N·m", "lb·ft"), 73.756, 0.01);
+ok("1 lb-ft to lb-in", P.convertTorque(1, "lb·ft", "lb·in"), 12, 0.001);
+ok("10 kgf-m to Nm", P.convertTorque(10, "kgf·m", "N·m"), 98.0665, 0.001);
+
+console.log("\n--- bolt pattern ---");
+const B = await import("../app/tools/bolt-pattern.ts");
+ok("5x114.3 in inches", B.boltPattern(5, 114.3).pcdIn, 4.5, 0.001);
+ok("5x127 in inches", B.boltPattern(5, 127).pcdIn, 5.0, 0.001);
+ok("5x139.7 in inches", B.boltPattern(5, 139.7).pcdIn, 5.5, 0.001);
+ok("adjacent stud chord on 5x114.3", B.chordFor(114.3, 5), 67.17, 0.02);
+ok("chord round trip", B.pcdFromChord(B.chordFor(114.3, 5), 5), 114.3, 1e-9);
+ok("chord on 4x100 (adjacent)", B.chordFor(100, 4), 70.71, 0.02);
+const near = B.nearbyPatterns(5, 114.3);
+console.log(`${near[0].interchangeable ? "PASS" : "FAIL"}  5x114.3 matches itself as interchangeable`);
+const risky = near.filter((m) => m.deceptivelyClose).map((m) => m.pattern.label);
+console.log(`${risky.length > 0 ? "PASS" : "FAIL"}  5x114.3 flags close-but-wrong patterns: ${risky.join(", ")}`);
+console.log(`${B.nearbyPatterns(5, 114.3).every((m) => m.pattern.lugs === 5) ? "PASS" : "FAIL"}  never suggests a different lug count`);
