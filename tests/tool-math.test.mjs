@@ -260,3 +260,55 @@ ok("caster from sweep", S.casterFromSweep(4, 40), 5.807, 0.05);
 // Toe: 0.25in difference over a 24in tire diameter.
 ok("toe angle from distance", S.toeAngleFromDistance(0.25, 24), 0.5968, 0.01);
 ok("toe distance from angle round trip", S.toeDistanceFromAngle(0.5968, 24), 0.25, 0.001);
+
+console.log("\n--- tire identification ---");
+const I = await import("../app/tools/tire-id-math.ts");
+ok("load index 91 -> lbs", I.loadIndexCapacity(91).lbs, 1356, 0.5);
+ok("load index 100 -> kg", I.loadIndexCapacity(100).kg, 800, 0.5);
+ok("load index for 1500 lbs target", I.loadIndexForCapacityLbs(1500).index, 95, 0);
+ok("speed rating H -> mph", I.speedRating("h").mph, 130, 0.5);
+ok("speed rating V -> kmh", I.speedRating("V").kmh, 240, 0.5);
+// DOT decode: "2318" = week 23, 2018.
+const dot = I.decodeDotDate("DOT XXXX XXXX 2318", new Date("2026-08-24T00:00:00Z"));
+ok("DOT week", dot.week, 23, 0);
+ok("DOT full year", dot.fullYear, 2018, 0);
+console.log(`${Math.round(dot.ageYears) === 8 ? "PASS" : "FAIL"}  DOT age ~8 years as of Aug 2026 (got ${dot.ageYears.toFixed(2)})`);
+console.log(`${I.tireAgeBand(3) === "new" ? "PASS" : "FAIL"}  age band: 3yr = new`);
+console.log(`${I.tireAgeBand(7) === "inspect" ? "PASS" : "FAIL"}  age band: 7yr = inspect`);
+console.log(`${I.tireAgeBand(11) === "replace" ? "PASS" : "FAIL"}  age band: 11yr = replace`);
+ok("aspect ratio from dimensions (146.25/225)", I.aspectRatioFromDimensions(146.25, 225), 65, 0.01);
+ok("sidewall from aspect ratio round trip", I.sidewallFromAspectRatio(225, 65), 146.25, 0.01);
+
+console.log("\n--- turning and fitment ---");
+const Fi = await import("../app/tools/fitment-math.ts");
+// Wheelbase 108in, 35deg avg steer, 62in track.
+const turn = Fi.turningRadius({ wheelbaseIn: 108, steeringAngleDeg: 35, trackWidthIn: 62 });
+ok("centreline radius (tan model)", turn.centrelineRadiusFt, 12.86, 0.05);
+ok("curb-to-curb radius (sin model + track/2)", turn.curbToCurbRadiusFt, 18.29, 0.05);
+ok("turning circle = 2x curb-to-curb radius", turn.turningCircleFt, turn.curbToCurbRadiusFt * 2, 1e-9);
+// Wheel width range: 245mm section -> ideal ~8.2in.
+const ww = Fi.wheelWidthRange(245);
+ok("wheel width ideal, 245mm section", ww.idealIn, 8.196, 0.01);
+ok("wheel width range spans 2in", ww.maxIn - ww.minIn, 2, 0.001);
+// Fitment edges cross-check against wheel-backspacing-calculator's own formula.
+const T2 = await import("../app/tools/tire-math.ts");
+const edges = Fi.fitmentEdges({ wheelWidthIn: 9, offsetMm: 20, tireSectionWidthMm: 285 });
+const expectedBackspacing = T2.offsetToBackspacing(9, 20);
+ok("fitment inner edge matches backspacing when tire = wheel width", Fi.fitmentEdges({ wheelWidthIn: 9, offsetMm: 20, tireSectionWidthMm: 9 * 25.4 }).innerEdgeIn, expectedBackspacing, 0.01);
+console.log(`${edges.outerEdgeIn > 0 && edges.innerEdgeIn > 0 ? "PASS" : "FAIL"}  fitment edges both positive for a plausible setup`);
+
+console.log("\n--- bolt and thread math ---");
+const Bo = await import("../app/tools/bolt-math.ts");
+ok("mm pitch to TPI (1.5mm -> 16.93 TPI)", Bo.mmPitchToTpi(1.5), 16.933, 0.01);
+ok("TPI to mm pitch round trip", Bo.tpiToMmPitch(Bo.mmPitchToTpi(1.5)), 1.5, 1e-9);
+ok("pitch diameter, M10x1.5", Bo.pitchDiameter(10, 1.5), 9.026, 0.01);
+const nearestM = Bo.nearestMetricBolt(0.5); // 1/2" -> ~12.7mm -> M12
+console.log(`${nearestM.metric === "M12" ? "PASS" : "FAIL"}  1/2 inch nearest metric = M12 (got ${nearestM.metric})`);
+const nearestI = Bo.nearestImperialBolt(10); // M10 -> ~0.394in -> 3/8"
+console.log(`${nearestI.fraction === '3/8"' ? "PASS" : "FAIL"}  M10 nearest imperial = 3/8in (got ${nearestI.fraction})`);
+// Bolt torque: 1/2-13 Grade 5 (K=0.20) should be roughly 75 ft-lb per the commonly cited reference example.
+const half13 = Bo.boltTorque({ diameterMm: 12.7, pitchMm: Bo.tpiToMmPitch(13), proofMpa: 585, k: 0.2 });
+console.log(`torque check: 1/2-13 Grade 5 dry ~= ${half13.torqueLbFt.toFixed(1)} ft-lb (reference ~75 ft-lb)`);
+ok("1/2-13 Grade 5 dry torque within reference range", half13.torqueLbFt, 75, 15);
+// Torque angle: M12x1.75, 90deg turn -> quarter of a pitch travel.
+ok("torque angle travel, M12x1.75 @ 90deg", Bo.torqueAngleTravel(1.75, 90).additionalTravelMm, 0.4375, 0.001);

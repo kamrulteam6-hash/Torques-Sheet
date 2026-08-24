@@ -68,6 +68,10 @@ const CAVEATS: Record<ToolEntry["family"], { title: string; body: string }> = {
     title: "Geometry is exact; your specific suspension may not match the assumption.",
     body: "Motion ratio, in particular, changes through the suspension's travel on most real cars rather than staying constant — these formulas use a single fixed value, which is a reasonable approximation near ride height and a worse one at the extremes of travel. Measure your own motion ratio directly where precision matters.",
   },
+  fastener: {
+    title: "A starting point — always check the manufacturer's own specification.",
+    body: "Torque figures here come from generic formulas and standard grade tables, not from any specific vehicle's service manual. Critical fasteners — wheels, suspension, engine and safety-related hardware — have a torque specification set by the manufacturer, verified for that exact application, and it takes priority over a generic calculation every time.",
+  },
 };
 
 export type ToolSection = {

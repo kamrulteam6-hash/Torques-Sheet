@@ -178,3 +178,4 @@
 .tool-subhead{padding-top:4px}
 .tool-inputs.five{grid-template-columns:repeat(5,1fr)}
 @media(max-width:650px){.tool-inputs.five{grid-template-columns:1fr 1fr}}
+.safety-note-tight{margin-top:0}

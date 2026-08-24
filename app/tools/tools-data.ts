@@ -30,7 +30,8 @@ export type ToolEntry = {
     | "fueling"
     | "forced-induction"
     | "brake"
-    | "suspension";
+    | "suspension"
+    | "fastener";
   /** Slugs of tools worth offering next. */
   related: string[];
 };
@@ -614,6 +615,186 @@ export const tools: ToolEntry[] = [
     family: "suspension",
     related: ["camber-calculator", "caster-calculator", "tire-size-calculator"],
   },
+  {
+    slug: "turning-radius-calculator",
+    name: "Turning Radius & Turning Circle Calculator",
+    title: "Turning Radius and Turning Circle Calculator",
+    metaTitle: "Turning Radius Calculator — Wheelbase, Steering Angle & Turning Circle",
+    description:
+      "Calculate turning radius and turning circle from wheelbase, steering angle and track width, using the same curb-to-curb model manufacturers publish figures from.",
+    blurb: "Centreline and curb-to-curb turning radius, plus the full turning circle.",
+    icon: "sequence",
+    family: "fitment",
+    related: ["wheel-fitment-calculator", "tire-size-calculator", "final-drive-ratio-calculator"],
+  },
+  {
+    slug: "tire-revolutions-per-mile-calculator",
+    name: "Tire Revolutions Per Mile Calculator",
+    title: "Tire Revolutions Per Mile Calculator",
+    metaTitle: "Tire Revolutions Per Mile Calculator — Revs From Any Size",
+    description:
+      "Work out how many times a tire turns per mile from its size, plus the same figure per kilometre — the number your speedometer and odometer are calibrated against.",
+    blurb: "Revolutions per mile and per kilometre from any tire size.",
+    icon: "timing",
+    family: "tire",
+    related: ["tire-size-calculator", "speedometer-error-calculator", "gear-ratio-calculator"],
+  },
+  {
+    slug: "tire-load-index-calculator",
+    name: "Tire Load Index Calculator",
+    title: "Tire Load Index Calculator",
+    metaTitle: "Tire Load Index Chart — Decode the Number to lbs & kg",
+    description:
+      "Decode a tire's load index number into its maximum load capacity in pounds and kilograms, or find the minimum index a target load requires.",
+    blurb: "Load index decoded to lbs/kg, or the index a target load needs.",
+    icon: "diagram",
+    family: "tire",
+    related: ["tire-speed-rating-decoder", "tire-size-calculator", "wheel-width-calculator"],
+  },
+  {
+    slug: "tire-speed-rating-decoder",
+    name: "Tire Speed Rating Decoder",
+    title: "Tire Speed Rating Decoder",
+    metaTitle: "Tire Speed Rating Chart — Decode the Letter to MPH & KM/H",
+    description:
+      "Decode a tire's speed rating letter into its maximum sustained speed in mph and km/h, from L through Y.",
+    blurb: "Every speed rating letter decoded to mph and km/h.",
+    icon: "timing",
+    family: "tire",
+    related: ["tire-load-index-calculator", "tire-size-calculator", "speedometer-error-calculator"],
+  },
+  {
+    slug: "tire-dot-date-age-calculator",
+    name: "Tire DOT Date & Age Calculator",
+    title: "Tire DOT Date and Age Calculator",
+    metaTitle: "Tire Age Calculator — Decode the DOT Date Code",
+    description:
+      "Decode the four-digit DOT date code on a tire's sidewall into its manufacture date, then see its current age against industry replacement guidance.",
+    blurb: "DOT code decoded to a manufacture date, plus how old that makes it.",
+    icon: "diagram",
+    family: "tire",
+    related: ["tire-load-index-calculator", "tire-speed-rating-decoder", "tire-size-calculator"],
+  },
+  {
+    slug: "tire-size-converter",
+    name: "Tire Size Converter",
+    title: "Tire Size Converter",
+    metaTitle: "Tire Size Converter — Metric, Flotation & Inches Together",
+    description:
+      "Convert a tire size between metric (225/65R17), flotation (33x12.50R17) and plain inch measurements, seeing all three notations for the same size at once.",
+    blurb: "One size, shown in metric, flotation and inches simultaneously.",
+    icon: "diagram",
+    family: "tire",
+    related: ["tire-size-calculator", "tire-aspect-ratio-calculator", "tire-size-comparison"],
+  },
+  {
+    slug: "tire-aspect-ratio-calculator",
+    name: "Tire Aspect Ratio Calculator",
+    title: "Tire Aspect Ratio Calculator",
+    metaTitle: "Tire Aspect Ratio Calculator — Solve From Sidewall or Width",
+    description:
+      "Calculate aspect ratio from a measured sidewall height and section width, or work out the sidewall height a given aspect ratio implies.",
+    blurb: "Aspect ratio from a real sidewall measurement, or the reverse.",
+    icon: "diagram",
+    family: "tire",
+    related: ["tire-size-calculator", "tire-size-converter", "wheel-width-calculator"],
+  },
+  {
+    slug: "wheel-width-calculator",
+    name: "Wheel Width Calculator",
+    title: "Wheel Width Calculator",
+    metaTitle: "Wheel Width Calculator — Ideal Rim Width for a Tire Size",
+    description:
+      "Find the recommended rim width range for a given tire section width, following the same TRA/ETRTO convention tire manufacturers publish charts from.",
+    blurb: "The approved rim-width band for any tire section width.",
+    icon: "sequence",
+    family: "fitment",
+    related: ["wheel-fitment-calculator", "tire-size-calculator", "wheel-offset-calculator"],
+  },
+  {
+    slug: "wheel-fitment-calculator",
+    name: "Wheel Fitment Calculator",
+    title: "Wheel Fitment Calculator",
+    metaTitle: "Wheel Fitment Calculator — Tire Bulge Plus Wheel Offset",
+    description:
+      "Combine wheel width and offset with tire section width to find where the tire's actual outer and inner edges sit — the wheel offset calculation plus the tire bulge it leaves out.",
+    blurb: "Tire edge position from wheel width, offset and tire section width together.",
+    icon: "sequence",
+    family: "fitment",
+    related: ["wheel-offset-calculator", "fender-clearance-calculator", "suspension-clearance-calculator"],
+  },
+  {
+    slug: "fender-clearance-calculator",
+    name: "Fender Clearance Calculator",
+    title: "Fender Clearance Calculator",
+    metaTitle: "Fender Clearance Calculator — Remaining Clearance After a Size Change",
+    description:
+      "Work out remaining outer clearance after a tire or wheel change, from a measured baseline and the diameter or width increase involved.",
+    blurb: "Remaining fender clearance from a baseline measurement and a size change.",
+    icon: "diagram",
+    family: "fitment",
+    related: ["wheel-fitment-calculator", "tire-size-comparison", "suspension-clearance-calculator"],
+  },
+  {
+    slug: "suspension-clearance-calculator",
+    name: "Suspension Clearance Calculator",
+    title: "Suspension Clearance Calculator",
+    metaTitle: "Suspension Clearance Calculator — Inner Clearance After a Fitment Change",
+    description:
+      "Work out remaining inner clearance to the strut or control arm after a wheel fitment change, from a measured baseline and the inward movement involved.",
+    blurb: "Remaining inner (strut/control arm) clearance after a fitment change.",
+    icon: "diagram",
+    family: "fitment",
+    related: ["wheel-fitment-calculator", "wheel-offset-calculator", "fender-clearance-calculator"],
+  },
+  {
+    slug: "bolt-thread-converter",
+    name: "Bolt & Thread Size Converter",
+    title: "Bolt and Thread Size Converter",
+    metaTitle: "Metric to Imperial Bolt Converter — Size & Thread Reference",
+    description:
+      "Convert bolt sizes between metric and imperial, with standard coarse and fine thread pitches for each — covers metric-to-imperial, thread size and bolt size conversion together.",
+    blurb: "Metric and imperial bolt sizes side by side, with standard thread pitches.",
+    icon: "sequence",
+    family: "fastener",
+    related: ["thread-pitch-calculator", "bolt-torque-calculator", "torque-converter"],
+  },
+  {
+    slug: "thread-pitch-calculator",
+    name: "Thread Pitch Calculator",
+    title: "Thread Pitch Calculator",
+    metaTitle: "Thread Pitch Calculator — mm to TPI, Lead Angle & Pitch Diameter",
+    description:
+      "Convert thread pitch between millimetres and threads per inch, and work out lead angle and pitch diameter for a given major diameter and pitch.",
+    blurb: "Pitch to TPI and back, plus lead angle and pitch diameter.",
+    icon: "sequence",
+    family: "fastener",
+    related: ["bolt-thread-converter", "bolt-torque-calculator", "torque-angle-calculator"],
+  },
+  {
+    slug: "torque-angle-calculator",
+    name: "Torque Angle Calculator",
+    title: "Torque-to-Angle Calculator",
+    metaTitle: "Torque Angle Calculator — Additional Turn Travel for TTY Fasteners",
+    description:
+      "Work out the additional linear clamp travel a torque-to-yield angle specification produces, from thread pitch and the specified turn angle.",
+    blurb: "The clamp travel a torque-to-yield angle spec actually produces.",
+    icon: "sequence",
+    family: "fastener",
+    related: ["bolt-torque-calculator", "thread-pitch-calculator", "torque-converter"],
+  },
+  {
+    slug: "bolt-torque-calculator",
+    name: "Bolt Torque Calculator",
+    title: "Bolt Torque Calculator",
+    metaTitle: "Bolt Torque Calculator — Torque From Grade, Diameter & Friction",
+    description:
+      "Estimate tightening torque from bolt diameter, thread pitch, grade and friction condition, using the standard T = K x D x P relationship.",
+    blurb: "Starting torque from bolt grade, size and friction condition.",
+    icon: "torque",
+    family: "fastener",
+    related: ["torque-angle-calculator", "bolt-thread-converter", "torque-converter"],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((tool) => tool.slug === slug);
@@ -678,5 +859,10 @@ export const FAMILIES: { key: ToolEntry["family"]; title: string; note: string }
     key: "suspension",
     title: "Suspension and alignment",
     note: "Spring rate, travel and the angles a wheel actually sits at",
+  },
+  {
+    key: "fastener",
+    title: "Fasteners",
+    note: "Thread size, pitch and torque across metric and imperial",
   },
 ];

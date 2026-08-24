@@ -99,6 +99,12 @@ export const fmvss138: ToolSource = {
   note: "Sets the mandatory TPMS warning threshold at 25% below the vehicle placard cold inflation pressure.",
 };
 
+export const nhtsaTireAging: ToolSource = {
+  label: "NHTSA — Tire Aging Test Development Project",
+  url: "https://www.nhtsa.gov/sites/nhtsa.gov/files/811885_tireagingtestdevelopmentprojectphase2evallab.pdf",
+  note: "NHTSA research into rubber degradation with age, underlying the 6-year inspect / 10-year replace industry guidance regardless of tread depth or use.",
+};
+
 /* ------------------------------------------------------------ vin decoding */
 
 export const nhtsaVpic: ToolSource = {
